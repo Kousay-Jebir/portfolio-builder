@@ -5,15 +5,13 @@ import { INestApplication } from '@nestjs/common';
 
 @Injectable()
 export class SwaggerDocumentationService implements IApiDocumentation {
-    constructor(private readonly app: INestApplication) { }
-
-    setup(): void {
+    setup(app: INestApplication): void {
         const config = new DocumentBuilder()
             .setTitle('Portfolio builder')
-            .setDescription('web api documentation for portfolio-builder app')
+            .setDescription('Web API documentation for portfolio-builder app')
             .setVersion('1.0')
             .build();
-        const document = SwaggerModule.createDocument(this.app, config);
-        SwaggerModule.setup('api/docs', this.app, document);
+        const document = SwaggerModule.createDocument(app, config);
+        SwaggerModule.setup('api/docs', app, document);
     }
 }

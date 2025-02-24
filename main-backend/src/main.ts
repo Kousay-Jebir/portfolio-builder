@@ -5,7 +5,7 @@ import { SwaggerDocumentationService } from './api-documentation/swagger/swagger
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const swaggerService = app.get(SwaggerDocumentationService);
-  swaggerService.setup();
+  swaggerService.setup(app);
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
