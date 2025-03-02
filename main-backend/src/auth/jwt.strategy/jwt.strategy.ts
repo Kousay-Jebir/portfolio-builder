@@ -4,17 +4,18 @@ import { PassportStrategy } from '@nestjs/passport';
 import * as dotenv from "dotenv"
 
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config'
 
 dotenv.config()
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     super({
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        ignoreExpiration: false,
-        secretOrKey: 'secretKey',
-      });
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: configService.get<string>('SECRET')||'',
+    });
   }
 
   async validate(payload: any) {
