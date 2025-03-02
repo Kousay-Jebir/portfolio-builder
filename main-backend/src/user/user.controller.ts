@@ -7,6 +7,7 @@ import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard/jwt-auth.guard';
+import { PersonalDataDto } from './dto/personal-data.dto';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -36,6 +37,13 @@ export class UserController {
 
         return req.user
 
+    }
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @Post()
+    async addPersonalData(@Req() req:Request,@Body() personalDataDto:PersonalDataDto){
+        const user = req.user
+        return await this.userService.createPersonalData(personalDataDto,user)
     }
 }
 
