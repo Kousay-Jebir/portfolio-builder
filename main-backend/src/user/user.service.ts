@@ -7,14 +7,17 @@ import * as bcrypt from 'bcrypt'
 import { UserLoginDto } from './dto/user-login.dto';
 import { PersonalDataDto } from './dto/personal-data.dto';
 import { UserPersonalData , UserDataDocument } from './entities/user-personal.entity';
+import { BaseService } from 'src/services/base.service';
 
 @Injectable()
-export class UserService {
+export class UserService extends BaseService<UserDocument>{
 
-    constructor(@InjectModel(User.name) private userModel : Model<UserDocument>, @InjectModel(UserPersonalData.name) private userDataModel: Model<UserDataDocument>,){}
+    constructor(@InjectModel(User.name) private userModel : Model<UserDocument>, @InjectModel(UserPersonalData.name) private userDataModel: Model<UserDataDocument>,){
+        super(userModel)
+    }
 
 
-    async create (createUserDto : CreateUserDto):Promise<User>{
+    async createUser (createUserDto : CreateUserDto):Promise<User>{
         const {username,email,password}=createUserDto
         const salt = await bcrypt.genSalt();
         const hashedPass=await bcrypt.hash(password,salt)
