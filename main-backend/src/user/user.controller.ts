@@ -8,6 +8,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard/jwt-auth.guard';
 import { PersonalDataDto } from './dto/personal-data.dto';
+import { ConnectedUser } from 'src/decorator/user.decorator';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -33,9 +34,9 @@ export class UserController {
     @ApiBearerAuth('JWT-auth')
 
     @Get()
-    async getConnectedUser(@Req() req:Request){
+    async getConnectedUser(@Req() req:Request,@ConnectedUser() user : Partial<User>){
 
-        return req.user
+        return user
 
     }
     @UseGuards(JwtAuthGuard)
