@@ -9,6 +9,7 @@ import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard/jwt-auth.guard';
 import { PersonalDataDto } from './dto/personal-data.dto';
 import { ConnectedUser } from 'src/decorator/user.decorator';
+import { AdminGuard } from 'src/auth/jwt-auth.guard/admin.guard';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -20,7 +21,8 @@ export class UserController {
         return await this.userService.createUser(createUserDto)
 
     }
-
+  
+     
     @Post('login')
     async login (@Body()userLoginDto : UserLoginDto){
         const user = await this.userService.findUser(userLoginDto)

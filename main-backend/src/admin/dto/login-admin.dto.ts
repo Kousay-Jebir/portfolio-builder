@@ -1,12 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { IsString } from "class-validator"
 
-export class CreateAdminDto{
-@ApiProperty({example:"test"})
-@IsString()
+export class AdminLoginDto{
+       
+    @ApiProperty({example:"xxxx"})
+    @IsString()
     identifiant : string
-   
-    @ApiProperty({example:"password"})
+    @ApiProperty({example:"xx"})
     @IsString()
     key:string
 }
