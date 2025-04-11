@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal:true}),  MongooseModule.forRootAsync({
@@ -14,7 +15,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       uri: configService.get<string>('MONGO_URI'),
     }),
     inject: [ConfigService], 
-  }),ApiDocumentationModule, AuthModule, UserModule],
+  }),ApiDocumentationModule, AuthModule, UserModule, AdminModule],
   controllers: [AppController],
   providers: [AppService],
 })
