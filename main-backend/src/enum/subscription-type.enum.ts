@@ -1,7 +1,7 @@
 export enum SubscriptionType {
-    SILVER = '1month',
-    GOLD = '3month',
-    DIAMOND = '6month'
+    SILVER = '1months',
+    GOLD = '3months',
+    DIAMOND = '6months'
 
 
 

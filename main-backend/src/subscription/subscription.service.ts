@@ -6,6 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Subscription, SubscriptionDocument } from './entities/subscription.entity';
 import { Model } from 'mongoose';
 import { BaseService } from 'src/services/base.service';
+import axios from 'axios';
 
 @Injectable()
 export class SubscriptionService extends BaseService<SubscriptionDocument> {
@@ -13,7 +14,25 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
             super(subscriptionModel)
         }
 
-    async proceedPaiement(){
+    async proceedPaiement(amount:number){
+        console.log(process.env.FLOUCI_APP_TOKEN)
+        const payload={
+            "app_token": `${process.env.FLOUCI_APP_TOKEN}`,
+            "app_secret": `${process.env.FLOUCI_APP_SECRET}`,
+            
+            "amount":"5000",
+            "accept_card":"true",
+            
+            "session_timeout_secs": amount,
+            "success_link": "https://example.website.com/success",
+            "fail_link": "https://example.website.com/fail",
+            "developer_tracking_id": "608f16e0-61dd-4ac1-b16b-f485f03afb16"
+          }
+        const url = `${process.env.FLOUCI_URL}`
+    
+        const res = await axios.post(url,payload);
+        console.log(res.data)
+       return res.data
 
 
     }
