@@ -14,11 +14,4 @@ export class AdminService extends BaseService<UserDocument> {
     super(userModel)
   }
   
-      
-      async createAdmin (createAdminDto : CreateUserDto){
-
-            
-              
-      
-          }
 }

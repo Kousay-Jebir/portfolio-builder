@@ -17,25 +17,7 @@ import { UserRole } from 'src/enum/user-role.enum';
 export class UserController {
     constructor(private readonly userService : UserService){}
 
-    // @Post('register')
-    // async register (@Body() createUserDto: CreateUserDto):Promise<User>{
-
-    //     return await this.userService.createUser(createUserDto)
-
-    // }
-  
-     
-    // @Post('login')
-    // async login (@Body()userLoginDto : UserLoginDto){
-    //     const user = await this.userService.findUser(userLoginDto)
-    //     if(user){
-    //         return this.authService.login(user)
-
-    //     }
-    //     else{throw new NotFoundException("bad credentials")}
-    // }
     @UseGuards(JwtAuthGuard)
-    // @Roles(UserRole.Admin)
     @ApiBearerAuth('JWT-auth')
 
     @Get()
@@ -44,8 +26,7 @@ export class UserController {
         return user
 
     }
-    @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth('JWT-auth')
+    
     @Post()
     async addPersonalData(@Req() req:Request,@Body() personalDataDto:PersonalDataDto){
         const user = req.user
