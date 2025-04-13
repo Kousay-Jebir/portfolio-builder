@@ -12,22 +12,22 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 export class AdminController {
   constructor(private readonly adminService: AdminService,private readonly authService : AuthService,private readonly userService : UserService) {}
 
-  @Post('login')
-  async adminLogin(@Body() adminLoginDto : UserLoginDto){
-      const admin = await this.userService.findUser(adminLoginDto)
-      console.log(admin)
-            if(admin){
-                return this.authService.login(admin)
+  // @Post('login')
+  // async adminLogin(@Body() adminLoginDto : UserLoginDto){
+  //     const admin = await this.userService.findUser(adminLoginDto)
+  //     console.log(admin)
+  //           if(admin){
+  //               return this.authService.login(admin)
     
-            }
-            else{throw new NotFoundException("bad credentials")}
-  }
+  //           }
+  //           else{throw new NotFoundException("bad credentials")}
+  // }
 
-  @Post('register')
-  async create(@Body() createAdminDto: CreateUserDto) {
-    console.log(createAdminDto)
-    return await this.userService.createUser(createAdminDto);
-  }
+  // @Post('register')
+  // async create(@Body() createAdminDto: CreateUserDto) {
+  //   console.log(createAdminDto)
+  //   return await this.userService.createUser(createAdminDto);
+  // }
 
   // @Get()
   // findAll() {
