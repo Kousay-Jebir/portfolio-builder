@@ -11,7 +11,7 @@ export class Subscription {
     title : string ; 
 
     @Prop({type:String,enum:SubscriptionType,required:true})
-    type : SubscriptionType
+    type : string
 
     @Prop()
     price : number

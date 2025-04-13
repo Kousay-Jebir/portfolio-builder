@@ -1,15 +1,24 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { SubscriptionService } from './subscription.service';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { ConnectedUser } from 'src/decorator/user.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { SubscriptionType } from 'src/enum/subscription-type.enum';
 
 @Controller('subscription')
 export class SubscriptionController {
 
     constructor(private readonly subscriptionService : SubscriptionService){}
-
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('JWT-auth')
     @Post('addSubscription')
-    async subscribe(){
-        const paiement = await this.subscriptionService.proceedPaiement();
+    async subscribe(@Body() createSubscriptionDto : CreateSubscriptionDto,@ConnectedUser() user : any){
+        const subscription =  await this.subscriptionService.createSubscription(createSubscriptionDto,user);
         
+
+        
+
     }
 
 }
