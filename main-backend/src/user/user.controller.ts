@@ -34,8 +34,8 @@ export class UserController {
     //     }
     //     else{throw new NotFoundException("bad credentials")}
     // }
-    @UseGuards(JwtAuthGuard,RolesGuard)
-    @Roles(UserRole.Admin)
+    @UseGuards(JwtAuthGuard)
+    // @Roles(UserRole.Admin)
     @ApiBearerAuth('JWT-auth')
 
     @Get()

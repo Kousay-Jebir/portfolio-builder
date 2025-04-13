@@ -14,10 +14,10 @@ export class User {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   password: string;
 
-  @Prop({required:true})
+  @Prop({required:false})
   salt : string
   @Prop({type:String, enum:UserRole,default:UserRole.User})
   role : UserRole

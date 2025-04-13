@@ -8,6 +8,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({transform:true,whitelist:true})); 
   const swaggerService = app.get(SwaggerDocumentationService);
   swaggerService.setup(app);
+  app.enableCors({
+    origin: '*', // Allow all origins for testing (can be more restrictive in production)
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true, // Allow credentials like cookies and tokens
+  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
