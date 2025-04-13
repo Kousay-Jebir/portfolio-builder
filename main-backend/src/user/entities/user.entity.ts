@@ -6,6 +6,8 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+  @Prop()
+  googleId : string
   @Prop({ required: true })
   username: string;
 

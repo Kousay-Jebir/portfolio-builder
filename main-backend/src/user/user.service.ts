@@ -59,5 +59,18 @@ export class UserService extends BaseService<UserDocument>{
             throw new NotFoundException("bad credentials")
         }
     }
+    async findByGoogleId(googleId: string) {
+        return this.userModel.findOne({ googleId });
+      }
+      
+      async createUserFromGoogle(profile: { googleId: string; email: string; name: string }) {
+        return this.userModel.create({
+          googleId: profile.googleId,
+          email: profile.email,
+          username: profile.name,
+          role: 'user', 
+        });
+      }
+      
 
 }

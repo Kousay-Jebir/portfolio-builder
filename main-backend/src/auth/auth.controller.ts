@@ -1,10 +1,11 @@
-import { Body, Controller, NotFoundException, Post } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Post, Req, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserLoginDto } from 'src/user/dto/user-login.dto';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -26,4 +27,14 @@ export class AuthController {
             }
             else{throw new NotFoundException("bad credentials")}
         }
+        @Get('google')
+        @UseGuards(AuthGuard('google'))
+        async googleAuth() {
+          // redirects to Google login
+        }
+        
+        @Get('google/redirect')
+        @UseGuards(AuthGuard('google'))
+        async googleRedirect(@Req() req) {
+          return this.authService.login(req.user);}
 }
