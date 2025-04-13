@@ -20,6 +20,9 @@ export class Subscription {
     @Prop({ required: true })
     deleteAt: Date;
 
+    @Prop({ required: true })
+    userId: string;
+
   
 }
 
