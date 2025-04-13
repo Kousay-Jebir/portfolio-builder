@@ -10,6 +10,7 @@ import { UserDataSchema, UserPersonalData } from './entities/user-personal.entit
   imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema },{ name: UserPersonalData.name, schema: UserDataSchema },]),AuthModule],
 
   providers: [UserService],
-  controllers: [UserController]
+  controllers: [UserController],
+  exports:[UserService]
 })
 export class UserModule {}

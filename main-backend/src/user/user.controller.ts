@@ -15,7 +15,7 @@ import { AdminGuard } from 'src/auth/jwt-auth.guard/admin.guard';
 export class UserController {
     constructor(private readonly userService : UserService, private authService : AuthService){}
 
-    @Post('/register')
+    @Post('register')
     async register (@Body() createUserDto: CreateUserDto):Promise<User>{
 
         return await this.userService.createUser(createUserDto)
