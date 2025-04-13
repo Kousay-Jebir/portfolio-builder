@@ -13,7 +13,7 @@ export class AuthService {
         return {
           status: 'success',
           message: 'Logged in successfully',
-          access_token: this.jwtService.sign(payload,),
+          access_token: this.jwtService.sign(payload),
           data: payload,
         };
     }

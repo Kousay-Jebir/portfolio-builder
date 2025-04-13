@@ -7,7 +7,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UserDataSchema, UserPersonalData } from './entities/user-personal.entity';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema },{ name: UserPersonalData.name, schema: UserDataSchema },]),AuthModule],
+  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema },{ name: UserPersonalData.name, schema: UserDataSchema },])],
 
   providers: [UserService],
   controllers: [UserController],

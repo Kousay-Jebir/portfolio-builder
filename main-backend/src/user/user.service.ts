@@ -17,13 +17,14 @@ export class UserService extends BaseService<UserDocument>{
     }
 
 
-    async createUser (createUserDto : CreateUserDto):Promise<User>{
+    async createUser (createUserDto : CreateUserDto):Promise<Partial<User>>{
+        console.log(createUserDto)
         const {username,email,password}=createUserDto
         const salt = await bcrypt.genSalt();
         const hashedPass=await bcrypt.hash(password,salt)
-        const createdUser = new this.userModel({username,email,password:hashedPass,salt:salt})
-        return createdUser.save();
-      
+        const createdUser = new this.userModel({username:username,email,password:hashedPass,salt:salt})
+        const user = await createdUser.save();
+      return {username:user.username,email:user.email,role:user.role}
         
 
     }
@@ -48,7 +49,7 @@ export class UserService extends BaseService<UserDocument>{
         if(user){
             const isMatch = await bcrypt.compare(userLoginDto.password,user.password)
             if(isMatch){
-                return {username:user.username,id:user._id,email:user.email}
+                return {username:user.username,id:user._id,email:user.email,role : user.role}
             }
             else{
                 throw new NotFoundException("bad credentials")

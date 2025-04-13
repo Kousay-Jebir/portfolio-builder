@@ -9,34 +9,37 @@ import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard/jwt-auth.guard';
 import { PersonalDataDto } from './dto/personal-data.dto';
 import { ConnectedUser } from 'src/decorator/user.decorator';
-import { AdminGuard } from 'src/auth/jwt-auth.guard/admin.guard';
+import { RolesGuard } from 'src/auth/jwt-auth.guard/role.guard';
+import { Roles } from 'src/decorator/role.decorator';
+import { UserRole } from 'src/enum/user-role.enum';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService : UserService, private authService : AuthService){}
+    constructor(private readonly userService : UserService){}
 
-    @Post('register')
-    async register (@Body() createUserDto: CreateUserDto):Promise<User>{
+    // @Post('register')
+    // async register (@Body() createUserDto: CreateUserDto):Promise<User>{
 
-        return await this.userService.createUser(createUserDto)
+    //     return await this.userService.createUser(createUserDto)
 
-    }
+    // }
   
      
-    @Post('login')
-    async login (@Body()userLoginDto : UserLoginDto){
-        const user = await this.userService.findUser(userLoginDto)
-        if(user){
-            return this.authService.login(user)
+    // @Post('login')
+    // async login (@Body()userLoginDto : UserLoginDto){
+    //     const user = await this.userService.findUser(userLoginDto)
+    //     if(user){
+    //         return this.authService.login(user)
 
-        }
-        else{throw new NotFoundException("bad credentials")}
-    }
-    @UseGuards(JwtAuthGuard)
+    //     }
+    //     else{throw new NotFoundException("bad credentials")}
+    // }
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(UserRole.Admin)
     @ApiBearerAuth('JWT-auth')
 
     @Get()
-    async getConnectedUser(@Req() req:Request,@ConnectedUser() user : Partial<User>){
+    async getConnectedUser(@Req() req:Request,@ConnectedUser() user : any){
 
         return user
 

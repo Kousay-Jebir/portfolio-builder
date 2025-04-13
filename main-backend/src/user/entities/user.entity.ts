@@ -17,7 +17,7 @@ export class User {
 
   @Prop({required:true})
   salt : string
-  @Prop({required:true , type:String, enum:UserRole,default:UserRole.User})
+  @Prop({type:String, enum:UserRole,default:UserRole.User})
   role : UserRole
 
 
