@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { SubscriptionType } from 'src/enum/subscription-type.enum';
-import { UserRole } from 'src/enum/user-role.enum';
 
 export type SubscriptionDocument = Subscription & Document;
 
@@ -13,6 +12,9 @@ export class Subscription {
 
     @Prop({type:String,enum:SubscriptionType,required:true})
     type : SubscriptionType
+
+    @Prop()
+    price : number
 
 
     @Prop({ default: Date.now })
