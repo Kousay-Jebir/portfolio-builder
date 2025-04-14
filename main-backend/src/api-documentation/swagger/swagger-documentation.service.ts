@@ -25,7 +25,7 @@ export class SwaggerDocumentationService implements IApiDocumentation {
                 type: 'apiKey',
                 in: 'cookie',
                 name: 'pay_token',
-              }) // Cookie for paym
+              })
             .build();
         const document = SwaggerModule.createDocument(app, config);
         SwaggerModule.setup('api/docs', app, document, {

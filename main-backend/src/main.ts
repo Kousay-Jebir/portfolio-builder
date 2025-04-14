@@ -12,9 +12,9 @@ async function bootstrap() {
   const swaggerService = app.get(SwaggerDocumentationService);
   swaggerService.setup(app);
   app.enableCors({
-    origin: '*', // Allow all origins for testing (can be more restrictive in production)
+    origin: '*', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, // Allow credentials like cookies and tokens
+    credentials: true, 
   });
   await app.listen(process.env.PORT ?? 3000);
 }
