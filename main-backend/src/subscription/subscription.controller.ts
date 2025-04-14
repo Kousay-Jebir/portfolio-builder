@@ -36,35 +36,31 @@ export class SubscriptionController {
     const price = PRICE_MAP[createSubscriptionDto.type];
     const token = req.headers.authorization?.split(' ')[1];
 
-    res.cookie('pay_token', token, {
+    res.cookie('pay_token', {token:token,title:createSubscriptionDto.title,type:createSubscriptionDto.type,userId:user.id}, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 60,
       secure: false,
     });
-    const paiement = await this.subscriptionService.proceedPaiement(
-      createSubscriptionDto,
-      user.id,
-      price,
-    );
+    const paiement = await this.subscriptionService.proceedPaiement(price);
     return paiement.result.link;
   }
 
   // @UseGuards(JwtAuthGuard,BlacklistGuard)
   // @ApiBearerAuth('JWT-auth')
   @Get('success')
-  async verifyPaiement(@Query() query: QueryDataDto, @Req() req: Request) {
-    const token = req.cookies?.pay_token;
+  async verifyPaiement(@Req() req: Request,@Query('payment_id') payment_id : string) {
+    const payload = req.cookies?.pay_token;
 
     const res = await this.subscriptionService.verifyPaiemenet(
-      query.payment_id,
+      payment_id
     );
     const subscription =
       res.result.status == 'SUCCESS'
         ? await this.subscriptionService.createSubscription(
-            { title: query.title, type: query.type },
-            query.userId,
+            { title: payload.title, type: payload.type },
+            payload.userId,
           )
         : null;
-    return this.subscriptionService.updateRole(query.userId, token);
+    return this.subscriptionService.updateRole(payload.userId, payload.token);
   }
 }

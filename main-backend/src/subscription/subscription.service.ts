@@ -29,8 +29,6 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
   }
 
   async proceedPaiement(
-    createSubscriptionDto: CreateSubscriptionDto,
-    userId: string,
     price: number,
   ) {
     console.log(process.env.FLOUCI_APP_TOKEN);
@@ -42,7 +40,7 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
       accept_card: 'true',
 
       session_timeout_secs: 5000,
-      success_link: `${process.env.BACKEND}/subscription/success?title=${createSubscriptionDto.title}&type=${createSubscriptionDto.type}&userId=${userId}`,
+      success_link: `${process.env.BACKEND}/subscription/success`,
       fail_link: 'https://example.website.com/fail',
       developer_tracking_id: '608f16e0-61dd-4ac1-b16b-f485f03afb16',
     };
