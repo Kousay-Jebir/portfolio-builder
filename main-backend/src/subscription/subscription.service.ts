@@ -94,7 +94,6 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
 
     user.role = UserRole.VIP;
     const newUser = await user.save();
-    console.log(`token : ${token}`);
     await this.blacklistedTokenService.blacklistToken(token);
     return this.authService.login(newUser);
   }
