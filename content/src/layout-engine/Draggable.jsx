@@ -1,21 +1,17 @@
+import React from 'react';
 import { useNode } from '@craftjs/core';
 
-const Draggable = ({ element: ElementComponent, children, ...props }) => {
+export default function Draggable({ element: Component = 'div', children, ...props }) {
     const {
         connectors: { connect, drag },
     } = useNode();
 
-    return (
-        <div ref={(ref) => ref && connect(drag(ref))}>
-            {ElementComponent ?
-                <ElementComponent {...props}>
-                    {children}
-                </ElementComponent> :
-                <div {...props}>
-                    {children}
-                </div>}
-        </div>
-    );
-};
+    const refCallback = (ref) => {
+        if (ref) {
+            connect(drag(ref));
+        }
+    };
 
-export default Draggable;
+    // Render the passed component with the ref callback.
+    return <Component ref={refCallback} {...props}>{children}</Component>;
+}

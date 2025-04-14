@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@craftjs/core": "^0.2.12",
+    "nanoid": "^5.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-grid-system": "^8.2.1",
