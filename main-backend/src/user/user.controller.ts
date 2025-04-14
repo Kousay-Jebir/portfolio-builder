@@ -12,12 +12,13 @@ import { ConnectedUser } from 'src/decorator/user.decorator';
 import { RolesGuard } from 'src/auth/jwt-auth.guard/role.guard';
 import { Roles } from 'src/decorator/role.decorator';
 import { UserRole } from 'src/enum/user-role.enum';
+import { BlacklistGuard } from 'src/auth/jwt-auth.guard/blacklist.guard';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
     constructor(private readonly userService : UserService){}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,BlacklistGuard)
     @ApiBearerAuth('JWT-auth')
 
     @Get()
