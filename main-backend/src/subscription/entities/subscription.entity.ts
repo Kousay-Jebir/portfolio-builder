@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { SubscriptionType } from 'src/enum/subscription-type.enum';
 
 export type SubscriptionDocument = Subscription & Document;
@@ -22,7 +22,7 @@ export class Subscription {
     @Prop({ required: true })
     deleteAt: Date;
 
-    @Prop({ required: true })
+    @Prop({ type: Types.ObjectId, ref: 'User', required: true })
     userId: string;
 
   
