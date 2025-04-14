@@ -8,11 +8,12 @@ import { SubscriptionType } from 'src/enum/subscription-type.enum';
 import { Response } from 'express';
 import { PRICE_MAP } from './maps/price.map';
 import { QueryDataDto } from './dto/query-data.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('subscription')
 export class SubscriptionController {
 
-    constructor(private readonly subscriptionService : SubscriptionService){}
+    constructor(private readonly subscriptionService : SubscriptionService,){}
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('JWT-auth')
     @Post('addSubscription')
@@ -31,12 +32,14 @@ export class SubscriptionController {
         
 
     }
+    
 
     @Get('success')
     async verifyPaiement(@Query() query : QueryDataDto){
         
         const res= await this.subscriptionService.verifyPaiemenet(query.payment_id)
-        return res.result.status=="SUCCESS"?await this.subscriptionService.createSubscription({title:query.title,type:query.type},query.userId):null
+        const subscription= res.result.status=="SUCCESS"?await this.subscriptionService.createSubscription({title:query.title,type:query.type},query.userId):null
+        return this.subscriptionService.updateRole(query.userId) 
 
     }
 

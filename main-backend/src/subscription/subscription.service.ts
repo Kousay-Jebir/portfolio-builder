@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { PRICE_MAP } from './maps/price.map';
 import { EXPIRATION_MAP } from './maps/expiration.map';
@@ -7,10 +7,14 @@ import { Subscription, SubscriptionDocument } from './entities/subscription.enti
 import { Model } from 'mongoose';
 import { BaseService } from 'src/services/base.service';
 import axios from 'axios';
+import { AuthService } from 'src/auth/auth.service';
+import { UserService } from 'src/user/user.service';
+import { UserRole } from 'src/enum/user-role.enum';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class SubscriptionService extends BaseService<SubscriptionDocument> {
-    constructor(@InjectModel(Subscription.name) private subscriptionModel : Model<SubscriptionDocument>){
+    constructor(@InjectModel(Subscription.name) private subscriptionModel : Model<SubscriptionDocument>,private readonly authService : AuthService,private readonly userService : UserService){
             super(subscriptionModel)
         }
 
@@ -57,6 +61,18 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
           }})
         return res.data
 
+
+    }
+    async updateRole(userId : string){
+        const user =await this.userService.findById(userId)
+
+        if(!user){
+            throw new NotFoundException()
+        }
+
+        user.role = UserRole.VIP;
+        const newUser = await user.save()
+        return this.authService.login(newUser)
 
     }
    
