@@ -2,14 +2,14 @@ import { Body, Controller, Get, Param, Post, Query, Req, Res, UseGuards } from '
 import { SubscriptionService } from './subscription.service';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { ConnectedUser } from 'src/decorator/user.decorator';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { SubscriptionType } from 'src/enum/subscription-type.enum';
 import { Request, Response } from 'express';
 import { PRICE_MAP } from './maps/price.map';
 import { QueryDataDto } from './dto/query-data.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { BlacklistGuard } from 'src/auth/jwt-auth.guard/blacklist.guard';
+import { BlacklistGuard } from 'src/auth/guard/blacklist.guard';
 
 @Controller('subscription')
 export class SubscriptionController {

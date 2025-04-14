@@ -6,13 +6,13 @@ import { User } from './entities/user.entity';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { PersonalDataDto } from './dto/personal-data.dto';
 import { ConnectedUser } from 'src/decorator/user.decorator';
-import { RolesGuard } from 'src/auth/jwt-auth.guard/role.guard';
+import { RolesGuard } from 'src/auth/guard/role.guard';
 import { Roles } from 'src/decorator/role.decorator';
 import { UserRole } from 'src/enum/user-role.enum';
-import { BlacklistGuard } from 'src/auth/jwt-auth.guard/blacklist.guard';
+import { BlacklistGuard } from 'src/auth/guard/blacklist.guard';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
