@@ -8,12 +8,12 @@ import { DroppableBox } from "./layout-engine/utils/components/Box";
 import { withDroppable } from "./layout-engine/utils/hocs/droppable-hoc";
 import ToolBox from "./user-components/ToolBox";
 import Section, { GridColumn, GridRow, } from "./user-components/layout/Section";
-import { EditableTypography } from "./user-components/typography/Typography";
+import { EditableHyperLink, EditableParagraph, EditableTypography } from "./user-components/typography/Typography";
 
 function App() {
   return (
     <>
-      <Editor resolver={{ Draggable, GridEngine, Grid, GridBody, Row, Col, Box, DroppableBox, Container, EditableCol, Section, GridColumn, GridRow, EditableTypography }}>
+      <Editor resolver={{ Draggable, GridEngine, Grid, GridBody, Row, Col, Box, DroppableBox, Container, EditableCol, Section, GridColumn, GridRow, EditableTypography, EditableParagraph, EditableHyperLink }}>
 
         <Frame>
           <Element is={GridEngine} canvas fluid >

@@ -2,7 +2,7 @@ import { useEditor } from "@craftjs/core";
 import Grid from "./layout/Grid";
 import Section, { defaultSectionStyles, GridColumn, GridRow, } from "./layout/Section";
 import { Col, Container, Row } from "react-grid-system";
-import { EditableTypography } from "./typography/Typography";
+import { EditableHyperLink, EditableParagraph, EditableTypography } from "./typography/Typography";
 
 export default function ToolBox() {
     const { connectors, query } = useEditor();
@@ -29,6 +29,13 @@ export default function ToolBox() {
                 Drag a H1 header typography
                 <button ref={ref => connectors.create(ref, <EditableTypography component="h1" />)} >Section</button>
             </div>
+
+            <div>
+                Drag a Paragraph
+                <button ref={ref => connectors.create(ref, <EditableParagraph />)} >Section</button>
+            </div>
+
+
         </section>
 
 

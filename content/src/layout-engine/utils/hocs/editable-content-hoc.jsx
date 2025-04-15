@@ -4,7 +4,7 @@ import { useNode } from '@craftjs/core';
 export const withEditableContent = (WrappedComponent) => {
     return function EditableContentComponent(props) {
 
-        const { text, ...rest } = props;
+        const { text, children, ...rest } = props;
         const {
             actions: { setProp },
         } = useNode();
@@ -23,6 +23,7 @@ export const withEditableContent = (WrappedComponent) => {
                 style={{ minHeight: '30px', outline: 'none' }}
                 {...rest}>
                 {text}
+                {children}
             </WrappedComponent>
         );
     };
