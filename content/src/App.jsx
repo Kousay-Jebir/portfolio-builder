@@ -7,12 +7,12 @@ import { Col, Container, Row } from "react-grid-system";
 import { DroppableBox } from "./layout-engine/utils/components/Box";
 import { withDroppable } from "./layout-engine/utils/hocs/droppable-hoc";
 import ToolBox from "./user-components/ToolBox";
-import Section, { SectionBody } from "./user-components/layout/Section";
+import Section, { GridColumn, GridRow, } from "./user-components/layout/Section";
 
 function App() {
   return (
     <>
-      <Editor resolver={{ Draggable, GridEngine, Grid, GridBody, Row, Col, Box, DroppableBox, Container, EditableCol, Section, SectionBody }}>
+      <Editor resolver={{ Draggable, GridEngine, Grid, GridBody, Row, Col, Box, DroppableBox, Container, EditableCol, Section, GridColumn, GridRow }}>
 
         <Frame>
           <Element is={GridEngine} canvas fluid >
