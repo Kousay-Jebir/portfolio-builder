@@ -13,10 +13,23 @@ function App() {
       <Editor resolver={{ Draggable, GridEngine, Grid, GridBody, Row, Col, Box, DroppableBox, Container }}>
         <Frame>
           <Element is={GridEngine} canvas fluid >
-            <Grid rows={5} cols={2} ></Grid>
-
-
-            <Grid rows={2} cols={4} />
+            <Element
+              is={DroppableBox}
+              element={Container}
+              fluid
+              canvas
+            >
+              <Grid rows={5} cols={2}>
+                <Element
+                  is={DroppableBox}
+                  element={Container}
+                  fluid
+                  canvas
+                >
+                  <Grid rows={1} cols={4} />
+                </Element>
+              </Grid>
+            </Element>
 
           </Element>
         </Frame>

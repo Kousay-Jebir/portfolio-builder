@@ -6,15 +6,13 @@ import uniqueId from "../../libs/nanoid";
 import { useRef } from "react";
 import Box from "../../layout-engine/grid/Box";
 
-
-
-export const DroppableBox = withDroppable(Box);
+export const DroppableBox = withDroppable(Box, { enableDrag: true });
 
 export function GridBody({ rows, cols }) {
     const rowsArr = Array.from({ length: rows });
     const colsArr = Array.from({ length: cols });
     return (
-        <Element style={{ padding: '10px', border: '1px solid red' }} is={DroppableBox} id={`grid-row-${uniqueId()}`} canvas>
+        <Element style={{ border: '1px solid red' }} is={DroppableBox} id={`grid-row-${uniqueId()}`} canvas>
             {
                 rowsArr.map((_, rowIndex) => (
                     <Draggable element={Row} key={rowIndex} style={{ border: '1px solid green' }} >
@@ -34,16 +32,10 @@ export function GridBody({ rows, cols }) {
 export default function Grid({ rows, cols, children }) {
     const gridIdRef = useRef(`grid-${uniqueId()}`);
     return (
-        <Draggable
-            id={gridIdRef.current}
-            is={DroppableBox}
-            element={Element}
-            fluid
-            canvas
-        >
+        <Draggable>
             <GridBody rows={rows} cols={cols} />
-
-        </Draggable >
+            {children}
+        </Draggable>
     );
 }
 
