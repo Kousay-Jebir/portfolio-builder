@@ -21,8 +21,17 @@ export class SwaggerDocumentationService implements IApiDocumentation {
                 },
                 'JWT-auth',
               )
+              .addCookieAuth('pay_token', {
+                type: 'apiKey',
+                in: 'cookie',
+                name: 'pay_token',
+              })
             .build();
         const document = SwaggerModule.createDocument(app, config);
-        SwaggerModule.setup('api/docs', app, document);
+        SwaggerModule.setup('api/docs', app, document, {
+            swaggerOptions: {
+              withCredentials: true,
+            },
+          });
     }
 }
