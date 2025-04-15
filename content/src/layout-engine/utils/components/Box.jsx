@@ -1,3 +1,5 @@
+import { withDroppable } from "../hocs/droppable-hoc";
+
 export default function Box({
     element: Component = 'div',
     children,
@@ -9,3 +11,5 @@ export default function Box({
         </Component>
     );
 }
+
+export const DroppableBox = withDroppable(Box, { enableDrag: true });

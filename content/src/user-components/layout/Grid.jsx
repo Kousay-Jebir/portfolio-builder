@@ -1,23 +1,31 @@
 import { Col, Container, Row } from "react-grid-system";
-import Draggable from "../../layout-engine/Draggable";
-import { withDroppable } from "../../layout-engine/grid/droppable-hoc";
+import Draggable from "../../layout-engine/utils/components/Draggable";
+import { withDroppable } from "../../layout-engine/utils/hocs/droppable-hoc";
 import { Element } from "@craftjs/core";
 import uniqueId from "../../libs/nanoid";
 import { useRef } from "react";
-import Box from "../../layout-engine/grid/Box";
+import Box from "../../layout-engine/utils/components/Box";
+import { withEditableContent } from "../../layout-engine/utils/hocs/editable-content-hoc";
+import { DroppableBox } from "../../layout-engine/utils/components/Box";
 
-export const DroppableBox = withDroppable(Box, { enableDrag: true });
+export const EditableCol = withEditableContent(Col);
+
+const defaultContainerStyles = {
+    padding: '10px',
+    border: '1px solid gray',
+    borderRadius: '5px'
+}
 
 export function GridBody({ rows, cols }) {
     const rowsArr = Array.from({ length: rows });
     const colsArr = Array.from({ length: cols });
     return (
-        <Element style={{ border: '1px solid red' }} is={DroppableBox} id={`grid-row-${uniqueId()}`} canvas>
+        <Element style={defaultContainerStyles} is={DroppableBox} id={`grid-row-${uniqueId()}`} canvas>
             {
                 rowsArr.map((_, rowIndex) => (
-                    <Draggable element={Row} key={rowIndex} style={{ border: '1px solid green' }} >
+                    <Draggable element={Row} key={rowIndex}>
                         {colsArr.map((_, colIndex) => (
-                            <Col key={colIndex}>{`Row: ${rowIndex}, Column: ${colIndex}`}</Col>
+                            <EditableCol />
                         ))}
                     </Draggable>
 
@@ -26,8 +34,6 @@ export function GridBody({ rows, cols }) {
         </Element>
     );
 }
-
-
 
 export default function Grid({ rows, cols, children }) {
     const gridIdRef = useRef(`grid-${uniqueId()}`);
@@ -38,22 +44,3 @@ export default function Grid({ rows, cols, children }) {
         </Draggable>
     );
 }
-
-
-
-/* {rowsArr.map((_, rowIndex) => (
-    <Element canvas key={`${rowIndex}`} id={`grid-row-${rowIndex}`}>
-        <Row key={rowIndex}>
-            {colsArr.map((_, colIndex) => (
-                <Element
-                    is={Box}
-                    key={`${rowIndex}-${colIndex}`}
-                    id={`grid-col-${rowIndex}-${colIndex}`}
-                    canvas
-                >
-                    <Col>Hello world</Col>
-                </Element>
-            ))}
-        </Row>
-    </Element>
-))} */
