@@ -20,7 +20,6 @@ export const withEditableContent = (WrappedComponent) => {
                 contentEditable
                 suppressContentEditableWarning
                 onBlur={handleBlur}
-                style={{ minHeight: '30px', outline: 'none' }}
                 {...rest}>
                 {text}
                 {children}
