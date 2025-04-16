@@ -1,4 +1,7 @@
+import React from "react";
 import { usePropSettings } from "../../customization-engine/shared-customization/customization-hook";
+import { AVAILABLE_FONTS } from "./fonts";
+
 export function TypographySettings() {
     const { values, updateProp } = usePropSettings(["style"]);
 
@@ -12,6 +15,22 @@ export function TypographySettings() {
     return (
         <div className="space-y-4 p-4 border rounded-xl shadow-sm max-w-md">
             <h2 className="text-lg font-semibold">Typography Settings</h2>
+
+            {/* Font Family */}
+            <div>
+                <label>Font Family: </label>
+                <select
+                    value={values.style?.fontFamily || ""}
+                    onChange={(e) => handleStyleChange("fontFamily", e.target.value)}
+                >
+                    <option value="">Default</option>
+                    {AVAILABLE_FONTS.map((font) => (
+                        <option key={font} value={font} style={{ fontFamily: font }}>
+                            {font}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             {/* Background & Text Color */}
             <div>

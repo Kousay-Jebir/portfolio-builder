@@ -13,7 +13,7 @@ const EditableTypography = withEditableContent(Typography)
 EditableTypography.craft = {
     props: {
         style: {
-            backgroundColor: '#ffffff',
+            backgroundColor: 'none',
             color: '#000000',
             textAlign: 'left',
             textDecoration: 'none',
@@ -29,6 +29,7 @@ EditableTypography.craft = {
             marginLeft: 0,
             marginRight: 0,
             borderRadius: 0,
+            fontFamily: 'sans-serif'
         },
         text: "Change me!"
     },

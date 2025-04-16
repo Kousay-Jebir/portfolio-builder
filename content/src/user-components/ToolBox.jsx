@@ -26,13 +26,14 @@ export default function ToolBox() {
             </div>
 
             <div>
-                Drag a H1 header typography
-                <button ref={ref => connectors.create(ref, <Typography component="h1" />)} >Section</button>
-            </div>
-
-            <div>
                 Drag a Paragraph
                 <button ref={ref => connectors.create(ref, <EditableTypography component="p" />)} >Section</button>
+            </div>
+
+
+            <div>
+                Drag a hyperlink
+                <button ref={ref => connectors.create(ref, <EditableTypography href="#" component="a"></EditableTypography>)} >Section</button>
             </div>
 
 
