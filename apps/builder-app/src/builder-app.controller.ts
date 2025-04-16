@@ -1,6 +1,8 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { BuilderAppService } from './builder-app.service';
 import { JwtAuthGuard } from '@portfolio-builder/shared';
+import { ConnectedUser } from '@portfolio-builder/shared';
+
 
 
 @Controller()
@@ -13,8 +15,8 @@ export class BuilderAppController {
   }
   @UseGuards(JwtAuthGuard)
   @Get('connectedUser')
-  async getUser(@Req() req : any) {
-    return req?.user;
+  async getUser(@ConnectedUser() user : any) {
+    return user;
   }
 
 }
