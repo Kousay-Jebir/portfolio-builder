@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { SubscriptionService } from './subscription.service';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
-import { ConnectedUser } from '../decorator/user.decorator';
+import { ConnectedUser } from '@portfolio-builder/shared';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { SubscriptionType } from '../enum/subscription-type.enum';

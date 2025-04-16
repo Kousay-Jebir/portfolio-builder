@@ -8,11 +8,11 @@ import { AuthService } from '../auth/auth.service';
 import { Request } from 'express';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { PersonalDataDto } from './dto/personal-data.dto';
-import { ConnectedUser } from '../decorator/user.decorator';
 import { RolesGuard } from '../auth/guard/role.guard';
 import { Roles } from '../decorator/role.decorator';
 import { UserRole } from '../enum/user-role.enum';
 import { BlacklistGuard } from '../auth/guard/blacklist.guard';
+import { ConnectedUser } from '@portfolio-builder/shared';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
