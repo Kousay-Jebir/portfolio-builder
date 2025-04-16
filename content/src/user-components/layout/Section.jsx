@@ -1,9 +1,9 @@
 import { Element } from "@craftjs/core"
 import Draggable from "../../layout-engine/utils/components/Draggable"
-import Box, { DroppableBox } from "../../layout-engine/utils/components/Box"
+import { DroppableBox } from "../../layout-engine/utils/components/Box"
 import uniqueId from "../../libs/nanoid"
-import React from "react"
-import { useNode } from "@craftjs/core"
+
+
 import { Col, Container, Row } from "react-grid-system"
 
 export const defaultSectionStyles = {

@@ -1,14 +1,13 @@
-import { Editor, Element, Frame, useEditor } from "@craftjs/core"
+import { Editor, Element, Frame } from "@craftjs/core"
 import GridEngine from "./layout-engine/grid/GridEngine";
 import Draggable from "./layout-engine/utils/components/Draggable";
 import Grid, { EditableCol, GridBody } from "./user-components/layout/Grid";
 import Box from "./layout-engine/utils/components/Box";
 import { Col, Container, Row } from "react-grid-system";
 import { DroppableBox } from "./layout-engine/utils/components/Box";
-import { withDroppable } from "./layout-engine/utils/hocs/droppable-hoc";
 import ToolBox from "./user-components/ToolBox";
 import Section, { GridColumn, GridRow, } from "./user-components/layout/Section";
-import { EditableHyperLink, EditableParagraph, TypographySettings, Typography, EditableTypography } from "./user-components/typography/Typography";
+import { EditableHyperLink, EditableParagraph, Typography, EditableTypography } from "./user-components/typography/Typography";
 import { CustomizationMenu } from "./customization-engine/CustomizationMenu";
 
 

@@ -11,7 +11,5 @@ export default function Draggable({ element: Component = 'div', children, ...pro
             connect(drag(ref));
         }
     };
-
-    // Render the passed component with the ref callback.
     return <Component ref={refCallback} {...props}>{children}</Component>;
 }

@@ -1,4 +1,3 @@
-// hooks/usePropSettings.js
 import { useNode } from "@craftjs/core";
 
 export function usePropSettings(fields) {
