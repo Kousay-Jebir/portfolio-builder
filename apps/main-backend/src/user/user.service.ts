@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt'
 import { UserLoginDto } from './dto/user-login.dto';
 import { PersonalDataDto } from './dto/personal-data.dto';
 import { UserPersonalData , UserDataDocument } from './entities/user-personal.entity';
-import { BaseService } from '../services/base.service';
+import { BaseService } from '@portfolio-builder/shared';
 
 @Injectable()
 export class UserService extends BaseService<UserDocument>{
