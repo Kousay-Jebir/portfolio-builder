@@ -1,6 +1,6 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { BuilderAppService } from './builder-app.service';
-import { JwtAuthGuard } from '@portfolio-builder/shared';
+import { JwtAuthGuard, Roles, RolesGuard } from '@portfolio-builder/shared';
 import { ConnectedUser } from '@portfolio-builder/shared';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
@@ -10,8 +10,11 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @ApiTags('builder')
 export class BuilderAppController {
   constructor(private readonly builderAppService: BuilderAppService) {}
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard,RolesGuard)
+
   @ApiBearerAuth('JWT-auth')
+
+  @Roles('admin')
 
   
   @Get()
