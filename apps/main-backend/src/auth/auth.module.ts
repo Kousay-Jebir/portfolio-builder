@@ -2,13 +2,13 @@ import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './strategy/jwt.strategy';
+import { JwtStrategy } from '@portfolio-builder/shared';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { JwtAuthGuard } from '@portfolio-builder/shared';
 import { BlacklistGuard } from '@portfolio-builder/shared';
 import { TokenModule } from '@portfolio-builder/shared';
 

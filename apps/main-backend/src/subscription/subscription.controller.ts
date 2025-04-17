@@ -14,7 +14,7 @@ import {
 import { SubscriptionService } from './subscription.service';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { ConnectedUser } from '@portfolio-builder/shared';
-import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { JwtAuthGuard } from '@portfolio-builder/shared';
 import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { SubscriptionType } from '../enum/subscription-type.enum';
 import { Request, Response } from 'express';
@@ -57,7 +57,7 @@ export class SubscriptionController {
       payment_id
     );
     const payload = req.cookies?.pay_token;
-    
+
 
     if(!res || !payload){
       throw new NotAcceptableException('Payment failed')

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { mongooseConfig } from './database/mongoose.config'; 
+import { mongooseConfig } from '@portfolio-builder/shared'; 
 
 import { SwaggerModule, TokenModule } from '@portfolio-builder/shared';
 import { AuthModule } from './auth/auth.module';

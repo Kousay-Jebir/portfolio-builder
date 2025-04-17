@@ -6,10 +6,10 @@ import { User } from './entities/user.entity';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from '../auth/auth.service';
 import { Request } from 'express';
-import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { JwtAuthGuard } from '@portfolio-builder/shared';
 import { PersonalDataDto } from './dto/personal-data.dto';
-import { RolesGuard } from '../auth/guard/role.guard';
-import { Roles } from '../decorator/role.decorator';
+import { RolesGuard } from '@portfolio-builder/shared';
+import { Roles } from '@portfolio-builder/shared';
 import { UserRole } from '../enum/user-role.enum';
 import { BlacklistGuard } from '@portfolio-builder/shared';
 import { ConnectedUser } from '@portfolio-builder/shared';
@@ -18,8 +18,9 @@ import { ConnectedUser } from '@portfolio-builder/shared';
 export class UserController {
     constructor(private readonly userService : UserService){}
 
-    @UseGuards(JwtAuthGuard,BlacklistGuard)
+    @UseGuards(JwtAuthGuard,BlacklistGuard,RolesGuard)
     @ApiBearerAuth('JWT-auth')
+    @Roles('admin')
 
     @Get()
     async getConnectedUser(@Req() req:Request,@ConnectedUser() user : any){
