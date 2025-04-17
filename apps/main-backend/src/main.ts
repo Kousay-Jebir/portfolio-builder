@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerDocumentationService } from './api-documentation/swagger/swagger-documentation.service';
+import { SwaggerDocumentationService } from '@portfolio-builder/shared';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 

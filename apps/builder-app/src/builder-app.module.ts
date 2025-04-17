@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { BuilderAppController } from './builder-app.controller';
-import { SharedModule } from '@portfolio-builder/shared';
+import { SharedModule, SwaggerModule } from '@portfolio-builder/shared';
 import { BuilderAppService } from './builder-app.service';
 @Module({
   imports: [
@@ -12,12 +12,13 @@ import { BuilderAppService } from './builder-app.service';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        secret: configService.get<string>('SECRET') || 'secretKey',
         signOptions: { expiresIn: '3600s' },
       }),
       inject: [ConfigService],
     }),
-    SharedModule
+    SharedModule,
+    SwaggerModule
   ],
   controllers: [BuilderAppController],
   providers: [BuilderAppService], // Only provide what you actually use
