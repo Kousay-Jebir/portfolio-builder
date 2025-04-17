@@ -9,12 +9,13 @@ import ToolBox from "./user-components/ToolBox";
 import Section, { GridColumn, GridRow, } from "./user-components/layout/Section";
 import { Typography, EditableTypography } from "./user-components/typography/Typography";
 import { CustomizationMenu } from "./customization-engine/CustomizationMenu";
+import { EditableButton } from "./user-components/button/Button";
 
 
 function App() {
   return (
     <>
-      <Editor resolver={{ Draggable, GridEngine, Grid, GridBody, Row, Col, Box, DroppableBox, Container, EditableCol, Section, GridColumn, GridRow, Typography, EditableTypography }}>
+      <Editor resolver={{ Draggable, GridEngine, Grid, GridBody, Row, Col, Box, DroppableBox, Container, EditableCol, Section, GridColumn, GridRow, Typography, EditableTypography, EditableButton }}>
 
         <Frame>
           <Element is={GridEngine} canvas fluid >

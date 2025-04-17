@@ -3,6 +3,7 @@ import Grid from "./layout/Grid";
 import Section, { GridColumn, GridRow, } from "./layout/Section";
 import { Container, Row } from "react-grid-system";
 import { EditableTypography, Typography } from "./typography/Typography";
+import { EditableButton } from "./button/Button";
 
 export default function ToolBox() {
     const { connectors, query } = useEditor();
@@ -34,6 +35,11 @@ export default function ToolBox() {
             <div>
                 Drag a hyperlink
                 <button ref={ref => connectors.create(ref, <EditableTypography href="#" component="a"></EditableTypography>)} >Section</button>
+            </div>
+
+            <div>
+                Drag a button
+                <button ref={ref => connectors.create(ref, <EditableButton />)} >Section</button>
             </div>
 
 
