@@ -21,11 +21,11 @@ export class SwaggerDocumentationService implements IApiDocumentation {
         },
         'JWT-auth',
       )
-      .addCookieAuth('pay_token', {
-        type: 'apiKey',
-        in: 'cookie',
-        name: 'pay_token',
-      })
+      // .addCookieAuth('pay_token', {
+      //   type: 'apiKey',
+      //   in: 'cookie',
+      //   name: 'pay_token',
+      // })
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

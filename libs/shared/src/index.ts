@@ -2,8 +2,13 @@ export * from './shared.module';
 export * from './shared.service';
 export * from './guards/jwt-auth.guard';
 export * from './guards/role.guard'
+export * from './guards/blacklist.guard'
 export * from './strategies/jwt.strategy';
 export * from './decorators/user.decorator';
 export * from './decorators/role.decorator'
 export * from './swagger/swagger.module';
 export * from './swagger/swagger-documentation.service';
+export * from './database/mongoose.config'
+export * from './token/entity/blacklisted-token.entity'
+export * from './token/services/blacklisted-token.service'
+export * from './token/token.module'

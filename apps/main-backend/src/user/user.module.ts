@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
 import { AuthModule } from '../auth/auth.module';
 import { UserDataSchema, UserPersonalData } from './entities/user-personal.entity';
-import { TokenModule } from '../token/token.module';
+import { TokenModule } from '@portfolio-builder/shared';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema },{ name: UserPersonalData.name, schema: UserDataSchema },]),TokenModule],

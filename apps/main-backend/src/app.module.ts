@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongooseConfig } from './database/mongoose.config'; 
 
-import { SwaggerModule } from '@portfolio-builder/shared';
+import { SwaggerModule, TokenModule } from '@portfolio-builder/shared';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
@@ -24,6 +24,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
     UserModule,
     AdminModule,
     SubscriptionModule,
+    TokenModule
   ],
   controllers: [AppController],
   providers: [AppService],

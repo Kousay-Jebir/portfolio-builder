@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  NotAcceptableException,
+  NotFoundException,
   Param,
   Post,
   Query,
@@ -19,7 +21,7 @@ import { Request, Response } from 'express';
 import { PRICE_MAP } from './maps/price.map';
 import { QueryDataDto } from './dto/query-data.dto';
 import { AuthService } from '../auth/auth.service';
-import { BlacklistGuard } from '../auth/guard/blacklist.guard';
+import { BlacklistGuard } from '@portfolio-builder/shared';
 
 @Controller('subscription')
 export class SubscriptionController {
@@ -36,12 +38,13 @@ export class SubscriptionController {
     const price = PRICE_MAP[createSubscriptionDto.type];
     const token = req.headers.authorization?.split(' ')[1];
 
+    
+    const paiement = await this.subscriptionService.proceedPaiement(price);
     res.cookie('pay_token', {token:token,title:createSubscriptionDto.title,type:createSubscriptionDto.type,userId:user.id}, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 60,
+      maxAge: 1000 * 60 * 60,
       secure: false,
     });
-    const paiement = await this.subscriptionService.proceedPaiement(price);
     return paiement.result.link;
   }
 
@@ -49,18 +52,21 @@ export class SubscriptionController {
   // @ApiBearerAuth('JWT-auth')
   @Get('success')
   async verifyPaiement(@Req() req: Request,@Query('payment_id') payment_id : string) {
-    const payload = req.cookies?.pay_token;
 
     const res = await this.subscriptionService.verifyPaiemenet(
       payment_id
     );
-    const subscription =
-      res.result.status == 'SUCCESS'
-        ? await this.subscriptionService.createSubscription(
-            { title: payload.title, type: payload.type },
-            payload.userId,
-          )
-        : null;
+    const payload = req.cookies?.pay_token;
+    
+
+    if(!res || !payload){
+      throw new NotAcceptableException('Payment failed')
+    }
+    await this.subscriptionService.createSubscription(
+      { title: payload.title, type: payload.type },
+      payload.userId,
+    )
     return this.subscriptionService.updateRole(payload.userId, payload.token);
+
   }
 }

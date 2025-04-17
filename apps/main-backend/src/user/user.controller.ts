@@ -11,7 +11,7 @@ import { PersonalDataDto } from './dto/personal-data.dto';
 import { RolesGuard } from '../auth/guard/role.guard';
 import { Roles } from '../decorator/role.decorator';
 import { UserRole } from '../enum/user-role.enum';
-import { BlacklistGuard } from '../auth/guard/blacklist.guard';
+import { BlacklistGuard } from '@portfolio-builder/shared';
 import { ConnectedUser } from '@portfolio-builder/shared';
 @ApiTags('user')
 @Controller('user')

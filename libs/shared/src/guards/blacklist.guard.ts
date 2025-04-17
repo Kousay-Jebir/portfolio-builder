@@ -1,6 +1,6 @@
 // blacklist.guard.ts
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { BlacklistedTokenService } from '../../token/services/blacklisted-token.service';
+import { BlacklistedTokenService } from '../token/services/blacklisted-token.service';
 
 @Injectable()
 export class BlacklistGuard implements CanActivate {
