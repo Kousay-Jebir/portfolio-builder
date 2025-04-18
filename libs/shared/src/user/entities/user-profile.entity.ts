@@ -6,7 +6,7 @@ export type UserProfileDocument = UserProfile & Document;
 
 
 @Schema({ timestamps: true })
-export class UserProfile extends Document {
+export class UserProfile {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   user: User | Types.ObjectId;
 

@@ -12,6 +12,6 @@ export class BuilderAppService {
   }
 
   async createPortfolio(createPortfolioDto:CreatePortfolioDto,userId:string){
-    return this.portfolioService.create({code:createPortfolioDto.code,content:createPortfolioDto.content,userId:userId})
+    return this.portfolioService.create({code:createPortfolioDto.code,content:createPortfolioDto.content,user:userId})
   }
 }
