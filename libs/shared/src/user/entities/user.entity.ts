@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { UserRole } from '../../enum/user-role.enum';
+import { UserProfile } from './user-profile.entity';
 
 export type UserDocument = User & Document;
 
@@ -25,6 +26,9 @@ export class User {
 
   @Prop({ default: Date.now })
   createdAt: Date;
+  
+  @Prop({ type: Types.ObjectId, ref: 'UserProfile' })
+  profile: UserProfile | Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

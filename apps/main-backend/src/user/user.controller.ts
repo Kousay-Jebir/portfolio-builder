@@ -2,7 +2,7 @@ import { Body, Controller, NotFoundException, Post, Req,Get, UseGuards, UseInter
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
+import { User } from '@portfolio-builder/shared';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from '../auth/auth.service';
 import { Request } from 'express';

@@ -13,7 +13,7 @@ import axios from 'axios';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
 import { UserRole } from '../enum/user-role.enum';
-import { User } from '../user/entities/user.entity';
+import { User } from '@portfolio-builder/shared';
 import { BlacklistedTokenService } from '@portfolio-builder/shared';
 import { access } from 'fs';
 
