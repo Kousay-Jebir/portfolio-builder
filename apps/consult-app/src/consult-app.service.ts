@@ -25,7 +25,7 @@ export class ConsultAppService {
     const portfolios = await this.portfolioService.findAll();
     const usersData = await Promise.all(
       portfolios.map(async (item) => {
-        return await this.userModel.findById(item.userId);
+        return await item.populate('userId');
       }),
     );
     return usersData;

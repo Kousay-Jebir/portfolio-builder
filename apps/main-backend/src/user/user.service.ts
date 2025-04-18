@@ -30,11 +30,25 @@ export class UserService extends BaseService<UserDocument>{
     }
     async createProfileData(createProfileDto : CreateProfileDto,user:string,path:string){
        
-        const profile = await this.userPortfolioModel.create({...createProfileDto,profilePicture:path,user:user})
-        const saved= await profile.save()
-        await this.userModel.findByIdAndUpdate(user, { profile: saved._id });
+        const { contacts, socialLinks, ...rest } = createProfileDto;
 
-        return saved
+  const parsedContacts = typeof contacts === 'string' ? JSON.parse(contacts) : contacts;
+  const parsedSocialLinks = typeof socialLinks === 'string' ? JSON.parse(socialLinks) : socialLinks;
+
+  const profile = await this.userPortfolioModel.create({
+    ...rest,
+    contacts: parsedContacts,
+    socialLinks: parsedSocialLinks,
+    profilePicture: path,
+    user: user,
+  });
+
+  const saved = await profile.save();
+  await this.userModel.findByIdAndUpdate(user, { profile: saved._id });
+
+  return saved;
+        
+     
        
     }
 

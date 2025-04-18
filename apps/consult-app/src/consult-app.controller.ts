@@ -33,4 +33,6 @@ export class ConsultAppController {
   async getPortfolioByUrl(@Param('id') id :string){
     return await this.consultAppService.getPortfolioById(id)
   }
+
+  
 }
