@@ -15,8 +15,7 @@ export class Portfolio {
   
   @Prop({ default: Date.now })
   createdAt: Date;
-  @Prop()
-  deleteAt: Date;
+  
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
     userId: string;
 }

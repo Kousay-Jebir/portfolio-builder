@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { BuilderAppController } from './builder-app.controller';
-import { mongooseConfig, SharedModule, SwaggerModule, TokenModule } from '@portfolio-builder/shared';
+import { mongooseConfig, PortfolioModule, SharedModule, SwaggerModule, TokenModule } from '@portfolio-builder/shared';
 import { BuilderAppService } from './builder-app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 @Module({
@@ -25,7 +25,8 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
     SharedModule,
     SwaggerModule,
-    TokenModule
+    TokenModule,
+    PortfolioModule
   ],
   controllers: [BuilderAppController],
   providers: [BuilderAppService], // Only provide what you actually use

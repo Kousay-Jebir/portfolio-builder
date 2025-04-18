@@ -10,4 +10,4 @@ import { PortfolioService } from "./portfolio.service";
   controllers: [],
   exports:[PortfolioService]
 })
-export class SubscriptionModule {}
+export class PortfolioModule {}
