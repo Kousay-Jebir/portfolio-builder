@@ -21,10 +21,6 @@ export class UserPersonalData {
 
   @Prop()
   phone: string;
-  @Prop()
-  bio : string 
-  @Prop()
-  image : string
 
 }
 

@@ -8,13 +8,14 @@ import {
   SubscriptionDocument,
 } from './entities/subscription.entity';
 import { Model } from 'mongoose';
-import { BaseService } from '../services/base.service';
+import { BaseService } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
 import { UserRole } from '../enum/user-role.enum';
 import { User } from '../user/entities/user.entity';
-import { BlacklistedTokenService } from '../token/services/blacklisted-token.service';
+import { BlacklistedTokenService } from '@portfolio-builder/shared';
+import { access } from 'fs';
 
 @Injectable()
 export class SubscriptionService extends BaseService<SubscriptionDocument> {
@@ -31,7 +32,6 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
   async proceedPaiement(
     price: number,
   ) {
-    console.log(process.env.FLOUCI_APP_TOKEN);
     const payload = {
       app_token: `${process.env.FLOUCI_APP_TOKEN}`,
       app_secret: `${process.env.FLOUCI_APP_SECRET}`,
@@ -80,8 +80,8 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
         apppublic: `${process.env.FLOUCI_APP_TOKEN}`,
         appsecret: `${process.env.FLOUCI_APP_SECRET}`,
       },
-    });
-    return res.data;
+    }).then((res)=> {return res.data.result.status === 'SUCCESS';}).catch((err)=>{return false})
+    return res
   }
   async updateRole(userId: string, token: string) {
     const user = await this.userService.findById(userId);
@@ -93,6 +93,8 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
     user.role = UserRole.VIP;
     const newUser = await user.save();
     await this.blacklistedTokenService.blacklistToken(token);
-    return this.authService.login(newUser);
+    const newLoggedUser = await this.authService.login(newUser);
+    return {access_token : newLoggedUser.access_token}
+
   }
 }

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { mongooseConfig } from './database/mongoose.config'; 
+import { mongooseConfig } from '@portfolio-builder/shared'; 
 
-import { ApiDocumentationModule } from './api-documentation/api-documentation.module';
+import { SwaggerModule, TokenModule } from '@portfolio-builder/shared';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
@@ -19,11 +19,12 @@ import { SubscriptionModule } from './subscription/subscription.module';
       useFactory: mongooseConfig,
       inject: [ConfigService],
     }),
-    ApiDocumentationModule,
+    SwaggerModule,
     AuthModule,
     UserModule,
     AdminModule,
     SubscriptionModule,
+    TokenModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { BlacklistedToken, BlacklistedTokenSchema } from "./entity/blacklisted-token.entity";
 import { BlacklistedTokenService } from "./services/blacklisted-token.service";
-import { BlacklistGuard } from "../auth/guard/blacklist.guard";
+import { BlacklistGuard } from "../guards/blacklist.guard";
 
 @Module({
   imports: [

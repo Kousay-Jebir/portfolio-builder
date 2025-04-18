@@ -3,21 +3,30 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { BuilderAppController } from './builder-app.controller';
-import { SharedModule } from '@portfolio-builder/shared';
+import { mongooseConfig, PortfolioModule, SharedModule, SwaggerModule, TokenModule } from '@portfolio-builder/shared';
 import { BuilderAppService } from './builder-app.service';
+import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    MongooseModule.forRootAsync({
+          imports: [ConfigModule],
+          useFactory: mongooseConfig,
+          inject: [ConfigService],
+        }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        secret: configService.get<string>('SECRET') || 'secretKey',
         signOptions: { expiresIn: '3600s' },
       }),
       inject: [ConfigService],
     }),
-    SharedModule
+    SharedModule,
+    SwaggerModule,
+    TokenModule,
+    PortfolioModule
   ],
   controllers: [BuilderAppController],
   providers: [BuilderAppService], // Only provide what you actually use

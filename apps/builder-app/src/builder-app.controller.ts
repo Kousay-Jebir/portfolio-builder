@@ -1,22 +1,41 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { BuilderAppService } from './builder-app.service';
-import { JwtAuthGuard } from '@portfolio-builder/shared';
+import { BlacklistGuard, JwtAuthGuard, Roles, RolesGuard } from '@portfolio-builder/shared';
 import { ConnectedUser } from '@portfolio-builder/shared';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 
 
 
-@Controller()
+@Controller('builder')
+@ApiTags('builder')
 export class BuilderAppController {
   constructor(private readonly builderAppService: BuilderAppService) {}
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard,RolesGuard)
+
+  @ApiBearerAuth('JWT-auth')
+
+  @Roles('admin')
+
+  
   @Get()
   getHello(): string {
     return this.builderAppService.getHello();
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard,BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
+  
   @Get('connectedUser')
   async getUser(@ConnectedUser() user : any) {
     return user;
+  }
+
+  @UseGuards(JwtAuthGuard,BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
+
+  @Post('save')
+  async savePortfolio(@Body() createPortfolioDto:CreatePortfolioDto,@ConnectedUser() user : any){
+    return await this.builderAppService.createPortfolio(createPortfolioDto,user.id)
   }
 
 }
