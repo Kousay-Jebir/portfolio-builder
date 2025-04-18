@@ -28,13 +28,14 @@ export class UserService extends BaseService<UserDocument>{
         
 
     }
-    async createPersonalData(personalDataDto : PersonalDataDto,user:any){
+    async createPersonalData(personalDataDto : PersonalDataDto,user:any,path:string){
         const email = user.email
         const findUser= await this.userModel.findOne({email:email})
         if(findUser){
             const newUserData = new this.userDataModel({
                 ...personalDataDto,
                 user: findUser._id, 
+                image:path
               });
             return newUserData.save()
         }
