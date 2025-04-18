@@ -5,14 +5,14 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
 import { UserLoginDto } from './dto/user-login.dto';
-import { PersonalDataDto } from './dto/personal-data.dto';
+import {CreateProfileDto} from './dto/create-profile.dto';
 import { UserProfile , UserProfileDocument } from '@portfolio-builder/shared';
 import { BaseService } from '@portfolio-builder/shared';
 
 @Injectable()
 export class UserService extends BaseService<UserDocument>{
 
-    constructor(@InjectModel(User.name) private userModel : Model<UserDocument>, @InjectModel(UserProfile.name) private userDataModel: Model<UserProfileDocument>,){
+    constructor(@InjectModel(User.name) private userModel : Model<UserDocument>, @InjectModel(UserProfile.name) private userPortfolioModel: Model<UserProfileDocument>,){
         super(userModel)
     }
 
@@ -28,20 +28,13 @@ export class UserService extends BaseService<UserDocument>{
         
 
     }
-    async createPersonalData(personalDataDto : PersonalDataDto,user:any,path:string){
-        const email = user.email
-        const findUser= await this.userModel.findOne({email:email})
-        if(findUser){
-            const newUserData = new this.userDataModel({
-                ...personalDataDto,
-                user: findUser._id, 
-                image:path
-              });
-            return newUserData.save()
-        }
-        else{
-            throw new NotFoundException('not found')
-        }
+    async createProfileData(createProfileDto : CreateProfileDto,user:string,path:string){
+       
+        const profile = await this.userPortfolioModel.create({...createProfileDto,profilePicture:path,user:user})
+        const saved= await profile.save()
+        await this.userModel.findByIdAndUpdate(user, { profile: saved._id });
+
+        return saved
        
     }
 

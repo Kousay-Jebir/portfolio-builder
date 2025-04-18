@@ -28,7 +28,7 @@ export class User {
   createdAt: Date;
   
   @Prop({ type: Types.ObjectId, ref: 'UserProfile' })
-  profile: UserProfile | Types.ObjectId;
+  profile: UserProfile | Types.ObjectId | any;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

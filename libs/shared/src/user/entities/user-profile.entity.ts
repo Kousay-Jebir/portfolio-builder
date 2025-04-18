@@ -11,6 +11,11 @@ export class UserProfile extends Document {
   user: User | Types.ObjectId;
 
   @Prop()
+  firstName:string
+  @Prop()
+  lastName:string
+
+  @Prop()
   bio: string;
 
   @Prop()
@@ -25,23 +30,13 @@ export class UserProfile extends Document {
  
 
   @Prop({
-    type: [
-      {
-        type: { type: String },
-        value: String,
-      },
-    ],
-    default: [],
+    type:Object,
+    default: {},
   })
-  contacts: any[];
+  contacts: Record<string, string>;
 
   @Prop({
-    type: {
-      github: String,
-      linkedin: String,
-      twitter: String,
-      personalSite: String,
-    },
+    type:Object,
     default: {},
   })
   socialLinks: Record<string, string>;
