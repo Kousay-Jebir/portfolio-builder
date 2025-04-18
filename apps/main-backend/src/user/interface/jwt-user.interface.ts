@@ -1,4 +1,4 @@
-import { UserRole } from "../../enum/user-role.enum";
+import { UserRole } from "@portfolio-builder/shared";
 
 export interface JwtUser {
     id: string;

@@ -16,7 +16,7 @@ import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { ConnectedUser } from '@portfolio-builder/shared';
 import { JwtAuthGuard } from '@portfolio-builder/shared';
 import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
-import { SubscriptionType } from '../enum/subscription-type.enum';
+import { SubscriptionType } from '@portfolio-builder/shared';
 import { Request, Response } from 'express';
 import { PRICE_MAP } from './maps/price.map';
 import { QueryDataDto } from './dto/query-data.dto';

@@ -10,7 +10,7 @@ import { JwtAuthGuard } from '@portfolio-builder/shared';
 import { PersonalDataDto } from './dto/personal-data.dto';
 import { RolesGuard } from '@portfolio-builder/shared';
 import { Roles } from '@portfolio-builder/shared';
-import { UserRole } from '../enum/user-role.enum';
+import { UserRole } from '@portfolio-builder/shared';
 import { BlacklistGuard } from '@portfolio-builder/shared';
 import { ConnectedUser } from '@portfolio-builder/shared';
 import { FileInterceptor } from '@nestjs/platform-express';
