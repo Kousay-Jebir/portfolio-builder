@@ -26,7 +26,7 @@ export class ConsultAppService {
   
     const profiles = portfolios
       .map((p) => {
-        if (typeof p.user === 'object' && 'profile' in p.user) {
+        if (typeof p.user === 'object' && 'profile' in p.user && p.user.profile.visibility=='public') {
           return (p.user as User).profile;
         }
         return null;
@@ -39,7 +39,7 @@ export class ConsultAppService {
   
 
   async getUserPortfolios(id: string) {
-    return await this.portfolioModel.find({ userId: id });
+    return await this.portfolioModel.find({ user: id });
   }
 
   async getPortfolioById(id : string){

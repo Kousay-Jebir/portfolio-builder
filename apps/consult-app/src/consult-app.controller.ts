@@ -1,6 +1,6 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ConsultAppService } from './consult-app.service';
-import { BlacklistGuard, JwtAuthGuard } from '@portfolio-builder/shared';
+import { BlacklistGuard, ConnectedUser, JwtAuthGuard } from '@portfolio-builder/shared';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('consulting')
@@ -32,6 +32,15 @@ export class ConsultAppController {
   @Get('portfolios/:id')
   async getPortfolioByUrl(@Param('id') id :string){
     return await this.consultAppService.getPortfolioById(id)
+  }
+
+  @UseGuards(JwtAuthGuard, BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Get('portfolio/urls')
+  async getPortfolioUrls(@ConnectedUser() user:any) {
+    const portfolios=await this.consultAppService.getUserPortfolios(user.id)
+    const portfoliosUrl = await portfolios.map((item)=>{return item._id})
+    return portfoliosUrl
   }
 
   
