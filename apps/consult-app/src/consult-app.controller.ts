@@ -28,12 +28,14 @@ export class ConsultAppController {
     return await this.consultAppService.getUserPortfolios(id)
 
   }
-
+  @UseGuards(JwtAuthGuard, BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
   @Get('portfolios/:id')
-  async getPortfolioByUrl(@Param('id') id :string){
-    return await this.consultAppService.getPortfolioById(id)
+  async getPortfolioByUrl(@Param('id') id :string,@ConnectedUser() user : any ){
+    return await this.consultAppService.getPortfolioById(id,user)
   }
 
+  
   @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
   @Get('portfolio/urls')

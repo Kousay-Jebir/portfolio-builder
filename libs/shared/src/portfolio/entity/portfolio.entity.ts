@@ -19,7 +19,7 @@ export class Portfolio {
   createdAt: Date;
   
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-    user: User | Types.ObjectId | string;
+  user: User | Types.ObjectId | string;
 }
 
 export const PortfolioSchema = SchemaFactory.createForClass(Portfolio);

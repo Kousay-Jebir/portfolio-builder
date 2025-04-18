@@ -3,7 +3,7 @@ import { ConsultAppController } from './consult-app.controller';
 import { ConsultAppService } from './consult-app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { mongooseConfig, Portfolio, PortfolioModule, PortfolioSchema, SharedModule, SwaggerModule, TokenModule, User, UserProfile, UserProfileSchema, UserSchema } from '@portfolio-builder/shared';
+import { mongooseConfig, NotificationModule, Portfolio, PortfolioModule, PortfolioSchema, SharedModule, SwaggerModule, TokenModule, User, UserProfile, UserProfileSchema, UserSchema } from '@portfolio-builder/shared';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -28,6 +28,7 @@ import { JwtModule } from '@nestjs/jwt';
     SwaggerModule,
     TokenModule,
     PortfolioModule,
+    NotificationModule,
 
     MongooseModule.forFeature([
       { name: Portfolio.name, schema: PortfolioSchema },

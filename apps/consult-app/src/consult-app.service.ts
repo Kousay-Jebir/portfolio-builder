@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
+  NotificationService,
   Portfolio,
   PortfolioDocument,
   PortfolioService,
   User,
   UserDocument,
+  UserRole,
 } from '@portfolio-builder/shared';
 import { Model } from 'mongoose';
 
@@ -16,6 +18,7 @@ export class ConsultAppService {
     private readonly portfolioModel: Model<PortfolioDocument>,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly portfolioService: PortfolioService,
+    private readonly notificationService : NotificationService
   ) {}
   getHello(): string {
     return 'Hello World From Consult!';
@@ -42,8 +45,71 @@ export class ConsultAppService {
     return await this.portfolioModel.find({ user: id });
   }
 
-  async getPortfolioById(id : string){
-    return await this.portfolioService.findById(id)
+  async getPortfolioById(id : string,user : any){
+    // const portfolio = await this.portfolioService.findById(id)
+    // if(!portfolio){
+    //   return new NotFoundException('portfolio not found')
+    // }
+    // const viewer =user
+    // const portfolioOwner=(await portfolio.populate('user')).user
+    // const message = (portfolioOwner as User).role==UserRole.VIP?`${viewer.username} viewed your profile`:"One user viewed your profile"
+    // const recentNotif= await this.notificationService.findByCriteria({viewer:viewer.id,receiver:portfolio.user})
+    // if(!recentNotif){
+    //   await this.notificationService.create({message:message,viewer:viewer.id,portfolio:id,receiver:portfolio.user})
+    //   return portfolio
+
+    // }  
+    // const diffInMs = Math.abs(recentNotif.createdAt.getTime() - new Date().getTime());
+    // const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    // if(diffInMinutes >60)
+    //   {
+    //     await this.notificationService.create({message:message,viewer:viewer.id,portfolio:id,receiver:portfolio.user})
+    // }
+    // return portfolio
+    const portfolio = await this.portfolioService.findById(id);
+if (!portfolio) {
+  throw new NotFoundException('Portfolio not found');
+}
+const receiverId = portfolio.user
+
+const viewer = user;
+
+// Only populate 'user' once and cast safely
+const populatedPortfolio = await portfolio.populate<{ user: User }>('user');
+const portfolioOwner = populatedPortfolio.user;
+
+const message = portfolioOwner.role === UserRole.VIP
+  ? `${viewer.username} viewed your profile`
+  : 'One user viewed your profile';
+
+const recentNotif = await this.notificationService.findByCriteria({
+  viewer: viewer.id,
+  receiver: receiverId,
+});
+
+const shouldCreateNotification =
+  !recentNotif ||
+  (new Date().getTime() - new Date(recentNotif.createdAt).getTime()) > 60 * 60 * 1000;
+
+if (shouldCreateNotification) {
+  await this.notificationService.create({
+    message,
+    viewer: viewer.id,
+    portfolio: id,
+    receiver: portfolio.user,
+  });
+}
+
+return portfolio;
+
+    
+
+
+
+
+
+
+
   }
   async findAllWithUserProfileOnly() {
     return this.portfolioModel
