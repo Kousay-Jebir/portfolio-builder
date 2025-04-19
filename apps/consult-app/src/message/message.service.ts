@@ -12,6 +12,14 @@ export class MessageService extends BaseService<MessageDocument>{
         
       ){super(messageModel);}
 
+
+      async getMessagesOrdered(sender : string ,receiver : string): Promise<Message[]> {
+        return this.messageModel
+          .find({sender:sender,receiver:receiver})
+          .sort({ createdAt: 1 })
+          .exec();
+      }
+
     
 
 }

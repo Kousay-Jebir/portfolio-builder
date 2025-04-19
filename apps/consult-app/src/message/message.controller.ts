@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { MessageService } from "./message.service";
 import { BlacklistGuard, ConnectedUser, JwtAuthGuard } from "@portfolio-builder/shared";
 import { ApiBearerAuth } from "@nestjs/swagger";
@@ -16,5 +16,14 @@ export class MessageController{
         const sender = user.id
         return await this.messageService.create({content:createMessageDto.message,sender:sender,receiver:createMessageDto.receiver,})
 
+    }
+
+    @UseGuards(JwtAuthGuard,BlacklistGuard)
+    @ApiBearerAuth('JWT-auth')
+    @Get(':id')
+    async getConversation(@ConnectedUser() user :any,@Param('id') receiverId : string){
+
+        return await this.messageService.getMessagesOrdered(user.id,receiverId)
+        
     }
 }
