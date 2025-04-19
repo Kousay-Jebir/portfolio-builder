@@ -26,4 +26,11 @@ export class MessageController{
         return await this.messageService.getMessagesOrdered(user.id,receiverId)
         
     }
+    
+    @UseGuards(JwtAuthGuard,BlacklistGuard)
+    @ApiBearerAuth('JWT-auth')
+    @Post('seen/:id')
+    async makeSeen(@ConnectedUser() user :any,@Param('id') receiverId : string){
+        return await this.messageService.updateSeen(user.id,receiverId)
+    }
 }

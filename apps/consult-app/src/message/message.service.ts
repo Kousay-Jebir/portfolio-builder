@@ -14,10 +14,14 @@ export class MessageService extends BaseService<MessageDocument>{
 
 
       async getMessagesOrdered(sender : string ,receiver : string): Promise<Message[]> {
-        return this.messageModel
+        return await this.messageModel
           .find({sender:sender,receiver:receiver})
           .sort({ createdAt: 1 })
           .exec();
+      }
+
+      async updateSeen(sender:string,receiver:string){
+        return await this.messageModel.updateMany({sender:sender,receiver:receiver},{$set:{seen:true}})
       }
 
     
