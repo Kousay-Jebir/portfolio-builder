@@ -10,7 +10,11 @@ import {
   UserRole,
 } from '@portfolio-builder/shared';
 import { Model } from 'mongoose';
-import { Subject } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
+interface ConnectedClient {
+  userId: string;
+  subscriber: Subscriber<{ data: any; event?: string }>;
+}
 
 @Injectable()
 export class ConsultAppService {
@@ -79,6 +83,7 @@ if (shouldCreateNotification) {
     portfolio: id,
     receiver: portfolio.user,
   });
+  this.notifyUser(receiverId as string,message)
 }
 
 return portfolio;
@@ -104,4 +109,58 @@ return portfolio;
       })
       .exec();
   }
+
+
+
+
+
+
+
+  private clients: ConnectedClient[] = [];
+
+  connect(userId: string): Observable<{ data: any; event?: string }> {
+    return new Observable((subscriber) => {
+      const client: ConnectedClient = { userId,subscriber };
+      this.clients.push(client);
+
+      subscriber.add(() => {
+        this.clients = this.clients.filter(c => c !== client);
+      });
+    });
+  }
+
+  notifyUser(userId: string, message: string) {
+    for (const client of this.clients) {
+      if (client.userId === userId ) {
+        client.subscriber.next({
+          event: 'portfolio-view',
+          data: { message },
+        });
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
