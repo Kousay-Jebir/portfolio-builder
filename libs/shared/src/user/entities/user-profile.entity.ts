@@ -25,7 +25,7 @@ export class UserProfile {
   location: string;
 
   @Prop()
-  status: string;
+  field: string;
 
  
 
