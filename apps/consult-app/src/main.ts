@@ -11,7 +11,7 @@ async function bootstrap() {
     swaggerService.setup(app,'consulting backend');
     app.enableCors({
       origin: '*', 
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      methods: '*',
       credentials: true, 
     });
   await app.listen(process.env.PORT_CONSULT??3002);
