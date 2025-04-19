@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConsultUserModule } from './user/consult-user.module';
 import { ConsultEventModule } from './sse/consult-event.module';
 import { ChatGateway } from './ws/chat.gateway';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ChatGateway } from './ws/chat.gateway';
     NotificationModule,
     ConsultUserModule,
     ConsultEventModule,
+    MessageModule,
 
     MongooseModule.forFeature([
       { name: Portfolio.name, schema: PortfolioSchema },
