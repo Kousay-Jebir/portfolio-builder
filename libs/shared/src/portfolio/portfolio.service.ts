@@ -12,5 +12,22 @@ export class PortfolioService extends BaseService<PortfolioDocument> {
     private portfolioModel: Model<PortfolioDocument>,
     
   ){super(portfolioModel);}
-  
+
+  async findAllWithUserProfileOnly() {
+    return this.portfolioModel
+      .find()
+      .populate({
+        path: 'user',
+        populate: {
+          path: 'profile',
+          model: 'UserProfile',
+        },
+      })
+      .exec();
+  }
+
+
+  async findByCriteria(criteria : Partial<Portfolio>){
+    return await this.portfolioModel.find(criteria)
+  }
 }
