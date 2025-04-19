@@ -10,6 +10,7 @@ import {
   UserRole,
 } from '@portfolio-builder/shared';
 import { Model } from 'mongoose';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class ConsultAppService {
@@ -46,26 +47,6 @@ export class ConsultAppService {
   }
 
   async getPortfolioById(id : string,user : any){
-    // const portfolio = await this.portfolioService.findById(id)
-    // if(!portfolio){
-    //   return new NotFoundException('portfolio not found')
-    // }
-    // const viewer =user
-    // const portfolioOwner=(await portfolio.populate('user')).user
-    // const message = (portfolioOwner as User).role==UserRole.VIP?`${viewer.username} viewed your profile`:"One user viewed your profile"
-    // const recentNotif= await this.notificationService.findByCriteria({viewer:viewer.id,receiver:portfolio.user})
-    // if(!recentNotif){
-    //   await this.notificationService.create({message:message,viewer:viewer.id,portfolio:id,receiver:portfolio.user})
-    //   return portfolio
-
-    // }  
-    // const diffInMs = Math.abs(recentNotif.createdAt.getTime() - new Date().getTime());
-    // const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
-    // if(diffInMinutes >60)
-    //   {
-    //     await this.notificationService.create({message:message,viewer:viewer.id,portfolio:id,receiver:portfolio.user})
-    // }
-    // return portfolio
     const portfolio = await this.portfolioService.findById(id);
 if (!portfolio) {
   throw new NotFoundException('Portfolio not found');
@@ -74,7 +55,6 @@ const receiverId = portfolio.user
 
 const viewer = user;
 
-// Only populate 'user' once and cast safely
 const populatedPortfolio = await portfolio.populate<{ user: User }>('user');
 const portfolioOwner = populatedPortfolio.user;
 
@@ -92,6 +72,7 @@ const shouldCreateNotification =
   (new Date().getTime() - new Date(recentNotif.createdAt).getTime()) > 60 * 60 * 1000;
 
 if (shouldCreateNotification) {
+  if(recentNotif){await this.notificationService.delete(recentNotif.id)}
   await this.notificationService.create({
     message,
     viewer: viewer.id,
