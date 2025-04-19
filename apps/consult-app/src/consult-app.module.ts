@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { mongooseConfig, NotificationModule, Portfolio, PortfolioModule, PortfolioSchema, SharedModule, SwaggerModule, TokenModule, User, UserProfile, UserProfileSchema, UserSchema } from '@portfolio-builder/shared';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { ConsultUserModule } from './user/consult-user.module';
+import { ConsultEventModule } from './sse/consult-event.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { JwtModule } from '@nestjs/jwt';
     TokenModule,
     PortfolioModule,
     NotificationModule,
+    ConsultUserModule,
+    ConsultEventModule,
 
     MongooseModule.forFeature([
       { name: Portfolio.name, schema: PortfolioSchema },

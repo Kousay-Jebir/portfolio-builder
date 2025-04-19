@@ -1,11 +1,10 @@
-import { Controller, Get, Param, Sse, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Post, Sse, UseGuards } from '@nestjs/common';
 import { ConsultAppService } from './consult-app.service';
 import { BlacklistGuard, ConnectedUser, JwtAuthGuard } from '@portfolio-builder/shared';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 
-@ApiTags('consulting')
-@Controller('consulting')
+@Controller()
 export class ConsultAppController {
   constructor(private readonly consultAppService: ConsultAppService) {}
   @UseGuards(JwtAuthGuard,BlacklistGuard)
@@ -14,20 +13,6 @@ export class ConsultAppController {
   @Get()
   getHello(): string {
     return this.consultAppService.getHello();
-  }
-
-  @Get('users')
-  async getUsers(){
-
-    return await this.consultAppService.getUsersWithPortfolio()
-    
-
-  }
-
-  @Get('users/:id/portfolios')
-  async getPotfolios(@Param('id') id : string){
-    return await this.consultAppService.getUserPortfolios(id)
-
   }
   @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
@@ -46,14 +31,10 @@ export class ConsultAppController {
     return portfoliosUrl
   }
 
+  @Patch('notification/:id')
+  async seeNotification(@Param('id') id :string){
 
-
-  // @UseGuards(JwtAuthGuard, BlacklistGuard)
-  // @ApiBearerAuth('JWT-auth')
-  @Sse('events/:id')
-  getEvents(@Param('id') id :string): Observable<{ data: any; event?: string }> {
-    return this.consultAppService.connect(id);
+    return await this.consultAppService.updateNotfiStatus(id)
+    
   }
-
-  
 }
