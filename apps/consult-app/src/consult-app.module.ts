@@ -8,6 +8,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConsultUserModule } from './user/consult-user.module';
 import { ConsultEventModule } from './sse/consult-event.module';
+import { ChatGateway } from './ws/chat.gateway';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -33,6 +35,7 @@ import { ConsultEventModule } from './sse/consult-event.module';
     NotificationModule,
     ConsultUserModule,
     ConsultEventModule,
+    MessageModule,
 
     MongooseModule.forFeature([
       { name: Portfolio.name, schema: PortfolioSchema },
@@ -41,6 +44,6 @@ import { ConsultEventModule } from './sse/consult-event.module';
     ]),
   ],
   controllers: [ConsultAppController],
-  providers: [ConsultAppService],
+  providers: [ConsultAppService,ChatGateway],
 })
 export class ConsultAppModule {}
