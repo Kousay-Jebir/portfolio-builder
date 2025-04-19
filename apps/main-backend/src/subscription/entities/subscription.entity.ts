@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { SubscriptionType } from '../../enum/subscription-type.enum';
+import { SubscriptionType } from '@portfolio-builder/shared';
 
 export type SubscriptionDocument = Subscription & Document;
 

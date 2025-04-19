@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { SubscriptionType } from '../../enum/subscription-type.enum';
+import { SubscriptionType } from '@portfolio-builder/shared';
 
 export class CreateSubscriptionDto {
   @ApiProperty()

@@ -8,7 +8,7 @@ import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
-  app.useGlobalPipes(new ValidationPipe({transform:true,whitelist:true})); 
+  app.useGlobalPipes(new ValidationPipe({transform:true})); 
   const swaggerService = app.get(SwaggerDocumentationService);
   swaggerService.setup(app);
   app.enableCors({

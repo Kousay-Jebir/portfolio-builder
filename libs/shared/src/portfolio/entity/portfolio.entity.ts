@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { User } from '../../user/entities/user.entity';
+import { UserProfile } from '../../user/entities/user-profile.entity';
 
 export type PortfolioDocument = Portfolio & Document;
 
@@ -17,7 +19,7 @@ export class Portfolio {
   createdAt: Date;
   
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-    userId: string;
+  user: User | Types.ObjectId | string;
 }
 
 export const PortfolioSchema = SchemaFactory.createForClass(Portfolio);

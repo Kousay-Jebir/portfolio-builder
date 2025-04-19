@@ -2,15 +2,15 @@ import { Body, Controller, NotFoundException, Post, Req,Get, UseGuards, UseInter
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
+import { User } from '@portfolio-builder/shared';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from '../auth/auth.service';
 import { Request } from 'express';
 import { JwtAuthGuard } from '@portfolio-builder/shared';
-import { PersonalDataDto } from './dto/personal-data.dto';
+import { CreateProfileDto } from './dto/create-profile.dto';
 import { RolesGuard } from '@portfolio-builder/shared';
 import { Roles } from '@portfolio-builder/shared';
-import { UserRole } from '../enum/user-role.enum';
+import { UserRole } from '@portfolio-builder/shared';
 import { BlacklistGuard } from '@portfolio-builder/shared';
 import { ConnectedUser } from '@portfolio-builder/shared';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -46,9 +46,9 @@ export class UserController {
         }),
       }),
     )
-    async addPersonalData(@UploadedFile() file: Express.Multer.File,@Body() personalDataDto:PersonalDataDto,@ConnectedUser() user : any){
-        const filename='file'
-        return await this.userService.createPersonalData(personalDataDto,user,filename)
+    async addPersonalData(@UploadedFile() file: Express.Multer.File,@Body() createProfileDto:CreateProfileDto,@ConnectedUser() user : any){
+        const filePath=`/uploads/${file.filename}`
+        return await this.userService.createProfileData(createProfileDto,user.id,filePath)
     }
 }
 
