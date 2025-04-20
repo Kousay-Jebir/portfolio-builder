@@ -2,6 +2,10 @@
 
 - Python 3.10 or later
 - pip (Python package manager)
+- ollama (to run the LLM locally untill we get the openAI API):
+- -download Ollama (from google)
+- -once downloaded run the following command to download the mistral LLM
+- ollama run mistral
 
 ---
 
@@ -28,6 +32,7 @@
 
 - uvicorn main:app --reload
   visit http://localhost:8000
+- to test that mistral works just fine: try using postman (or other) POST /test {"prompt":"What's a good resume summary for a computer science student?"}
 
 ## Important !!
 

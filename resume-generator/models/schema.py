@@ -66,3 +66,5 @@ class ResumeRequest(BaseModel):
 class AnalysisResponse(BaseModel):
     missing_fields: List[str]
     questions: List[str]
+class PromptRequest(BaseModel):
+    prompt: str

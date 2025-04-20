@@ -1,22 +1,12 @@
-from models.schema import ResumeRequest, AnalysisResponse
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+import torch
+from models.schema import ResumeRequest,AnalysisResponse
+model_id = "google/gemma-2b"
 
-from transformers import pipeline
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto", torch_dtype="auto")
 
-from config import settings
 def analyze_resume(data: ResumeRequest) -> AnalysisResponse:
-    missing_fields = []
-    questions = []
-
-    generator = pipeline('text-generation', model='gpt2')
-
-    input_text = "give me a the perfect profile for a softwar engineer"
-    output = generator(input_text)
-
-    print(output[0]['generated_text'])
-
-    missing_fields.append(output[0]["generated_text"])
-
-
-
-
-    return AnalysisResponse(missing_fields=missing_fields, questions=questions)
+    pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
+    res = pipe("Give me 3 missing fields in this resume JSON:", max_new_tokens=200)
+    return AnalysisResponse(missing_fields=[res], questions=[])

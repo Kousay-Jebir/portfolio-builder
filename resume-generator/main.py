@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from api import analyze
+from api import ask
 
 app = FastAPI()
 
-app.include_router(analyze.router)
+app.include_router(ask.router)
 
 
