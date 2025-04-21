@@ -5,6 +5,7 @@ export default function Box({
     children,
     ...props
 }) {
+    console.log({ ...props })
     return (
         <Component {...props}>
             {children}

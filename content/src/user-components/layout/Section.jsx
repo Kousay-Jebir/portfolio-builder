@@ -6,6 +6,8 @@ import { GridColumnSettings } from "./GridColumnSettings"
 import { Hidden, Visible } from "react-grid-system"
 
 import { Col, Container, Row } from "react-grid-system"
+import { GridRowSettings } from "./GridRowSettings"
+import { useState } from "react"
 
 export const defaultSectionStyles = {
     padding: '10px',
@@ -68,13 +70,29 @@ GridColumn.craft = {
 
 export { GridColumn }
 
-export function GridRow({ children, style, ...props }) {
+function GridRow({ children, style, align, justify, ...props }) {
+    console.log(style)
     return (
-        <Draggable element={Container} fluid>
-            <Element canvas style={{ ...defaultSectionStyles, ...style }} id={uniqueId()} is={DroppableBox} element={Row} {...props}>{children}</Element >
+        <Draggable element={Container} fluid style={{ border: '1px solid gray', padding: '10px', minHeight: '100px', borderRadius: '5px', }}>
+            <Element canvas id={uniqueId()} is={DroppableBox} element={Row} style={{ ...style, minHeight: style.minHeight }} {...props} align={align} justify={justify}>{children}</Element >
         </Draggable>
     )
 }
+
+
+GridRow.craft = {
+    props: {
+        style: { padding: 0, border: 'none', borderRadius: '0', backgroundColor: 'red', minHeight: '100px' },
+        align: "normal",
+        justify: "start"
+    },
+    related: {
+        settings: GridRowSettings,
+    },
+};
+
+export { GridRow }
+
 
 //Droppable and draggable generic layout component
 export function Section({ component: Component, children, style, ...props }) {

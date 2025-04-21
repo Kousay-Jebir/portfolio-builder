@@ -23,7 +23,7 @@ export default function ToolBox() {
             </div>
             <div>
                 Drag a Grid Row
-                <button ref={ref => connectors.create(ref, <GridRow component={Row} />)} >Section</button>
+                <button ref={ref => connectors.create(ref, <GridRow />)} >Section</button>
             </div>
 
             <div>
