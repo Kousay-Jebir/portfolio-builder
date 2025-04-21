@@ -61,7 +61,7 @@ GridColumn.craft = {
         colSettings: {
 
         },
-        style: { ...defaultSectionStyles }
+        style: { ...defaultSectionStyles, padding: 0 }
     },
     related: {
         settings: GridColumnSettings,
@@ -73,8 +73,8 @@ export { GridColumn }
 function GridRow({ children, style, align, justify, ...props }) {
     console.log(style)
     return (
-        <Draggable element={Container} fluid style={{ border: '1px solid gray', padding: '10px', minHeight: '100px', borderRadius: '5px', }}>
-            <Element canvas id={uniqueId()} is={DroppableBox} element={Row} style={{ ...style, minHeight: style.minHeight }} {...props} align={align} justify={justify}>{children}</Element >
+        <Draggable element={Container} fluid style={{ minHeight: '100px', borderRadius: '5px', }}>
+            <Element canvas id={uniqueId()} is={DroppableBox} element={Row} style={style} {...props} align={align} justify={justify}>{children}</Element >
         </Draggable>
     )
 }
@@ -82,7 +82,7 @@ function GridRow({ children, style, align, justify, ...props }) {
 
 GridRow.craft = {
     props: {
-        style: { padding: 0, border: 'none', borderRadius: '0', backgroundColor: 'red', minHeight: '100px' },
+        style: { padding: 0, border: '1px solid gray', borderRadius: '5px', minHeight: '100px' },
         align: "normal",
         justify: "start"
     },
