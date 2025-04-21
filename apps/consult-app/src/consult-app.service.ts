@@ -74,7 +74,7 @@ export class ConsultAppService {
         receiver: portfolio.user,
       });
       console.log('viewed')
-      this.eventService.notifyUser(receiverId as string, message);
+      this.eventService.notifyUser(receiverId as string, message,'portfolio_view');
     }
     portfolio.user = receiverId;
 

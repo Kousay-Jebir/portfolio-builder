@@ -8,7 +8,7 @@ import {
   SubscriptionDocument,
 } from './entities/subscription.entity';
 import { Model } from 'mongoose';
-import { BaseService, EventService } from '@portfolio-builder/shared';
+import { BaseService, EventService, NotificationService } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
@@ -25,7 +25,8 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> imple
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly blacklistedTokenService: BlacklistedTokenService,
-    private readonly eventService : EventService
+    private readonly eventService : EventService,
+    private readonly notificationService : NotificationService
   ) {
     super(subscriptionModel);
   }
@@ -43,9 +44,11 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> imple
             throw new NotFoundException('user not found')
           }
           const newUser = await this.userService.updateRole(deletedDoc.userId,UserRole.User)
+          await this.notificationService.create({message: 'Your subscription has been expired',receiver:newUser.id})
           await axios.post(`http://localhost:5002/consulting/event/notify-user`, {
             userId: deletedDoc.userId,
-            message: 'Your subscription has been expired'
+            message: 'Your subscription has been expired',
+            eventType:'sub_expiration'
           })
 
   
