@@ -58,11 +58,7 @@ class JobTarget(BaseModel):
     description: Optional[str] = None
 
 class ResumeRequest(BaseModel):
-    user: User
-    portfolio: Portfolio
-    job_target: Optional[JobTarget] = None
-
-# === Analysis Response ===
+    portfolio: str
 class AnalysisResponse(BaseModel):
     missing_fields: List[str]
     questions: List[str]
