@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
+  EventService,
   NotificationService,
   Portfolio,
   PortfolioDocument,
@@ -10,7 +11,6 @@ import {
   UserRole,
 } from '@portfolio-builder/shared';
 import { Model } from 'mongoose';
-import { ConsultEventService } from './sse/consult-event.service';
 
 @Injectable()
 export class ConsultAppService {
@@ -20,7 +20,7 @@ export class ConsultAppService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly portfolioService: PortfolioService,
     private readonly notificationService: NotificationService,
-    private readonly consultEvenetService: ConsultEventService,
+    private readonly eventService : EventService
   ) {}
   getHello(): string {
     return 'Hello World From Consult!';
@@ -31,6 +31,7 @@ export class ConsultAppService {
   }
 
   async getPortfolioById(id: string, user: any): Promise<Portfolio> {
+    console.log('in')
     const portfolio = await this.portfolioService.findById(id);
     if (!portfolio) {
       throw new NotFoundException('Portfolio not found');
@@ -55,12 +56,13 @@ export class ConsultAppService {
       viewer: viewer.id,
       receiver: receiverId,
     });
+    console.log('recent notif',recentNotif)
 
     const shouldCreateNotification =
       !recentNotif ||
       new Date().getTime() - new Date(recentNotif.createdAt).getTime() >
         60 * 60 * 1000;
-
+     console.log(shouldCreateNotification)
     if (shouldCreateNotification) {
       if (recentNotif) {
         await this.notificationService.delete(recentNotif.id);
@@ -71,7 +73,8 @@ export class ConsultAppService {
         portfolio: id,
         receiver: portfolio.user,
       });
-      this.consultEvenetService.notifyUser(receiverId as string, message);
+      console.log('viewed')
+      this.eventService.notifyUser(receiverId as string, message,'portfolio_view');
     }
     portfolio.user = receiverId;
 

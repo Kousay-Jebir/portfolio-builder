@@ -3,7 +3,7 @@ import { ConnectedClient } from "./interface/connected-client.interface";
 import { Observable } from "rxjs";
 
 @Injectable()
-export class ConsultEventService{
+export class EventService{
 
     private clients: ConnectedClient[] = [];
     
@@ -18,11 +18,11 @@ export class ConsultEventService{
         });
       }
 
-      notifyUser(userId: string, message: string) {
+      notifyUser(userId: string, message: string,event:string) {
         for (const client of this.clients) {
           if (client.userId === userId ) {
             client.subscriber.next({
-              event: 'portfolio-view',
+              event: event,
               data: { message },
             });
           }

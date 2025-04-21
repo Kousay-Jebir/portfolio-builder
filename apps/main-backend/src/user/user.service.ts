@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument, UserSchema } from '@portfolio-builder/shared';
+import { User, UserDocument, UserRole, UserSchema } from '@portfolio-builder/shared';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
@@ -67,6 +67,18 @@ export class UserService extends BaseService<UserDocument>{
           role: 'user', 
         });
       }
+    
+    async updateRole(userId : string,role:string){
+        const user = await this.findById(userId);
+        if (!user) {
+              throw new NotFoundException();
+            }
+        
+        user.role = role=='subscribed'?UserRole.VIP:UserRole.User;
+        return await user.save();
+
+
+    }
 
     
       

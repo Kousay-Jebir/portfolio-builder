@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { PRICE_MAP } from './maps/price.map';
 import { EXPIRATION_MAP } from './maps/expiration.map';
@@ -8,7 +8,7 @@ import {
   SubscriptionDocument,
 } from './entities/subscription.entity';
 import { Model } from 'mongoose';
-import { BaseService } from '@portfolio-builder/shared';
+import { BaseService, EventService, NotificationService } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
@@ -18,15 +18,45 @@ import { BlacklistedTokenService } from '@portfolio-builder/shared';
 import { access } from 'fs';
 
 @Injectable()
-export class SubscriptionService extends BaseService<SubscriptionDocument> {
+export class SubscriptionService extends BaseService<SubscriptionDocument> implements OnModuleInit{
   constructor(
     @InjectModel(Subscription.name)
     private subscriptionModel: Model<SubscriptionDocument>,
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly blacklistedTokenService: BlacklistedTokenService,
+    private readonly eventService : EventService,
+    private readonly notificationService : NotificationService
   ) {
     super(subscriptionModel);
+  }
+  onModuleInit() {
+      console.log('init')
+      const changeStream = this.subscriptionModel.watch([{$match : {operationType : 'delete'}}],{ fullDocumentBeforeChange: 'required' })
+      changeStream.on('change',async (change)=>{
+        const deletedDoc = change.fullDocumentBeforeChange;
+        if(deletedDoc){
+          const deletedId = change.documentKey._id
+          console.log(`sub ${deletedId} deleted`)
+          const user = await this.userService.findById(deletedDoc.userId);
+          
+          if(!user){
+            throw new NotFoundException('user not found')
+          }
+          const newUser = await this.userService.updateRole(deletedDoc.userId,UserRole.User)
+          await this.notificationService.create({message: 'Your subscription has been expired',receiver:newUser.id})
+          await axios.post(`http://localhost:5002/consulting/event/notify-user`, {
+            userId: deletedDoc.userId,
+            message: 'Your subscription has been expired',
+            eventType:'sub_expiration'
+          })
+
+  
+        }
+
+       
+
+      })
   }
 
   async proceedPaiement(
@@ -83,15 +113,8 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
     }).then((res)=> {return res.data.result.status === 'SUCCESS';}).catch((err)=>{return false})
     return res
   }
-  async updateRole(userId: string, token: string) {
-    const user = await this.userService.findById(userId);
-
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    user.role = UserRole.VIP;
-    const newUser = await user.save();
+  async updateToken(userId: string, token: string,role:string) {
+    const newUser = await this.userService.updateRole(userId,role)
     await this.blacklistedTokenService.blacklistToken(token);
     const newLoggedUser = await this.authService.login(newUser);
     return {access_token : newLoggedUser.access_token}

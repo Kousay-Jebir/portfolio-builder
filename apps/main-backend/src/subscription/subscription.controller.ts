@@ -28,7 +28,7 @@ export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
-  @Post('addSubscription')
+  @Post()
   async subscribe(
     @Body() createSubscriptionDto: CreateSubscriptionDto,
     @ConnectedUser() user: any,
@@ -66,7 +66,7 @@ export class SubscriptionController {
       { title: payload.title, type: payload.type },
       payload.userId,
     )
-    return this.subscriptionService.updateRole(payload.userId, payload.token);
+    return this.subscriptionService.updateToken(payload.userId, payload.token,"subscribed");
 
   }
 }
