@@ -30,10 +30,25 @@ export function GridRow({ children, style, ...props }) {
 }
 
 //Droppable and draggable generic layout component
-export default function Section({ component: Component, children, style, ...props }) {
+export function Section({ component: Component, children, style, ...props }) {
     return (
         <Draggable>
             <Element canvas style={{ ...defaultSectionStyles, ...style }} id={uniqueId()} is={DroppableBox} element={Component} {...props}>{children}</Element >
         </Draggable>
     )
 }
+
+/* export const Section = new ComponentBuilder()
+    .setComponentResolver((props) => props.component || "div")
+    .useElement({ canvas: true }) // Make it a Craft canvas
+    .setDraggable(true)
+    .setCraftConfig({
+        props: {
+            style: {
+                padding: "20px",
+                backgroundColor: "#f8f9fa",
+                minHeight: '150px'
+            },
+        }
+    })
+    .build(); */

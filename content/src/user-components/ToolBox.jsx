@@ -1,8 +1,8 @@
 import { useEditor } from "@craftjs/core";
 import Grid from "./layout/Grid";
-import Section, { GridColumn, GridRow, } from "./layout/Section";
+import { GridColumn, GridRow, Section } from "./layout/Section";
 import { Container, Row } from "react-grid-system";
-import { EditableTypography, Typography } from "./typography/Typography";
+import { EditableTypography } from "./typography/Typography";
 import { EditableButton } from "./button/Button";
 
 export default function ToolBox() {
