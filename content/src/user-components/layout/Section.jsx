@@ -1,8 +1,9 @@
-import { Element } from "@craftjs/core"
+import { Element, useNode } from "@craftjs/core"
 import Draggable from "../../layout-engine/utils/components/Draggable"
 import { DroppableBox } from "../../layout-engine/utils/components/Box"
 import uniqueId from "../../libs/nanoid"
-
+import { GridColumnSettings } from "./GridColumnSettings"
+import { Hidden, Visible } from "react-grid-system"
 
 import { Col, Container, Row } from "react-grid-system"
 
@@ -14,12 +15,58 @@ export const defaultSectionStyles = {
 }
 
 
+function GridColumn({ colSettings = {}, children, style, ...props }) {
+    const spanProps = {};
+    const offsetProps = {};
+    const hiddenBreakpoints = [];
 
-export function GridColumn({ children, style, ...props }) {
-    return (
-        <Element canvas style={{ ...defaultSectionStyles }} id={uniqueId()} is={DroppableBox} element={Col} {...props}>{children}</Element >
-    )
+    Object.entries(colSettings).forEach(([breakpoint, { span, offset, hidden }]) => {
+        if (span != null) spanProps[breakpoint] = span;
+        if (offset != null) offsetProps[breakpoint] = offset;
+        if (hidden) hiddenBreakpoints.push(breakpoint);
+    });
+
+    const column = (
+        <Draggable
+            element={Col}
+            {...spanProps}
+            offset={Object.keys(offsetProps).length ? offsetProps : undefined}
+            style={style}
+            {...props}
+        >
+            <Element
+                canvas
+                id={uniqueId()}
+                is={DroppableBox}
+                element="div"
+                style={{ minHeight: style?.minHeight }}
+            >
+                {children}
+            </Element>
+        </Draggable>
+    );
+
+    // Only wrap in <Hidden> if needed
+    return hiddenBreakpoints.length > 0
+        ? <Hidden {...Object.fromEntries(hiddenBreakpoints.map(bp => [bp, true]))}>{column}</Hidden>
+        : column;
 }
+
+
+GridColumn.craft = {
+    props: {
+
+        colSettings: {
+
+        },
+        style: { ...defaultSectionStyles }
+    },
+    related: {
+        settings: GridColumnSettings,
+    },
+};
+
+export { GridColumn }
 
 export function GridRow({ children, style, ...props }) {
     return (

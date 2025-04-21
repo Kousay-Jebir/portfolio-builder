@@ -19,7 +19,7 @@ export default function ToolBox() {
             </div>
             <div>
                 Drag a Grid Column
-                <button ref={ref => connectors.create(ref, <GridColumn style={{ background: 'cyan' }} />)} >Section</button>
+                <button ref={ref => connectors.create(ref, <GridColumn />)} >Section</button>
             </div>
             <div>
                 Drag a Grid Row
