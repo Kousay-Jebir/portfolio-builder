@@ -31,6 +31,7 @@ export class ConsultAppService {
   }
 
   async getPortfolioById(id: string, user: any): Promise<Portfolio> {
+    console.log('in')
     const portfolio = await this.portfolioService.findById(id);
     if (!portfolio) {
       throw new NotFoundException('Portfolio not found');
@@ -55,12 +56,13 @@ export class ConsultAppService {
       viewer: viewer.id,
       receiver: receiverId,
     });
+    console.log('recent notif',recentNotif)
 
     const shouldCreateNotification =
       !recentNotif ||
       new Date().getTime() - new Date(recentNotif.createdAt).getTime() >
         60 * 60 * 1000;
-
+     console.log(shouldCreateNotification)
     if (shouldCreateNotification) {
       if (recentNotif) {
         await this.notificationService.delete(recentNotif.id);
@@ -71,6 +73,7 @@ export class ConsultAppService {
         portfolio: id,
         receiver: portfolio.user,
       });
+      console.log('viewed')
       this.eventService.notifyUser(receiverId as string, message);
     }
     portfolio.user = receiverId;
