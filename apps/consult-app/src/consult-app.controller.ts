@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Patch, Post, Sse, UseGuards } from '@nestjs/common';
 import { ConsultAppService } from './consult-app.service';
-import { BlacklistGuard, ConnectedUser, JwtAuthGuard } from '@portfolio-builder/shared';
+import { BlacklistGuard, ConnectedUser, JwtAuthGuard, Portfolio } from '@portfolio-builder/shared';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 
@@ -17,7 +17,7 @@ export class ConsultAppController {
   @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
   @Get('portfolios/:id')
-  async getPortfolioByUrl(@Param('id') id :string,@ConnectedUser() user : any ){
+  async getPortfolioByUrl(@Param('id') id :string,@ConnectedUser() user : any ):Promise<Portfolio>{
     return await this.consultAppService.getPortfolioById(id,user)
   }
 
@@ -25,9 +25,9 @@ export class ConsultAppController {
   @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
   @Get('portfolio/urls')
-  async getPortfolioUrls(@ConnectedUser() user:any) {
+  async getPortfolioUrls(@ConnectedUser() user:any) :Promise<String[]> {
     const portfolios=await this.consultAppService.getUserPortfolios(user.id)
-    const portfoliosUrl = await portfolios.map((item)=>{return item._id})
+    const portfoliosUrl = await portfolios.map((item)=>{return item.id})
     return portfoliosUrl
   }
 

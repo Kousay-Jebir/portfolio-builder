@@ -12,7 +12,6 @@ import {
 import { Model } from 'mongoose';
 import { ConsultEventService } from './sse/consult-event.service';
 
-
 @Injectable()
 export class ConsultAppService {
   constructor(
@@ -20,103 +19,66 @@ export class ConsultAppService {
     private readonly portfolioModel: Model<PortfolioDocument>,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly portfolioService: PortfolioService,
-    private readonly notificationService : NotificationService,
-    private readonly consultEvenetService : ConsultEventService
+    private readonly notificationService: NotificationService,
+    private readonly consultEvenetService: ConsultEventService,
   ) {}
   getHello(): string {
     return 'Hello World From Consult!';
   }
 
-  
-  
-  
-
-  async getUserPortfolios(id: string) {
+  async getUserPortfolios(id: string){
     return await this.portfolioService.findByCriteria({ user: id });
   }
 
-  async getPortfolioById(id : string,user : any){
+  async getPortfolioById(id: string, user: any): Promise<Portfolio> {
     const portfolio = await this.portfolioService.findById(id);
-if (!portfolio) {
-  throw new NotFoundException('Portfolio not found');
-}
-const receiverId = portfolio.user
+    if (!portfolio) {
+      throw new NotFoundException('Portfolio not found');
+    }
+    const receiverId = portfolio.user;
 
-const viewer = user;
+    const viewer = user;
 
-const populatedPortfolio = await portfolio.populate<{ user: User }>('user');
-const portfolioOwner = populatedPortfolio.user;
+    const populatedPortfolio = await portfolio.populate<{ user: User }>({
+      path: 'user',
+      select: 'id role',
+    });
 
-const message = portfolioOwner.role === UserRole.VIP
-  ? `${viewer.username} viewed your profile`
-  : 'One user viewed your profile';
+    const portfolioOwner = populatedPortfolio.user;
 
-const recentNotif = await this.notificationService.findByCriteria({
-  viewer: viewer.id,
-  receiver: receiverId,
-});
+    const message =
+      portfolioOwner.role === UserRole.VIP
+        ? `${viewer.username} viewed your profile`
+        : 'One user viewed your profile';
 
-const shouldCreateNotification =
-  !recentNotif ||
-  (new Date().getTime() - new Date(recentNotif.createdAt).getTime()) > 60 * 60 * 1000;
+    const recentNotif = await this.notificationService.findByCriteria({
+      viewer: viewer.id,
+      receiver: receiverId,
+    });
 
-if (shouldCreateNotification) {
-  if(recentNotif){await this.notificationService.delete(recentNotif.id)}
-  await this.notificationService.create({
-    message,
-    viewer: viewer.id,
-    portfolio: id,
-    receiver: portfolio.user,
-  });
-  this.consultEvenetService.notifyUser(receiverId as string,message)
-}
+    const shouldCreateNotification =
+      !recentNotif ||
+      new Date().getTime() - new Date(recentNotif.createdAt).getTime() >
+        60 * 60 * 1000;
 
-return portfolio;
+    if (shouldCreateNotification) {
+      if (recentNotif) {
+        await this.notificationService.delete(recentNotif.id);
+      }
+      await this.notificationService.create({
+        message,
+        viewer: viewer.id,
+        portfolio: id,
+        receiver: portfolio.user,
+      });
+      this.consultEvenetService.notifyUser(receiverId as string, message);
+    }
+    portfolio.user = receiverId;
 
-    
-
-
-
-
-
-
-
-  }
- 
-
-  async updateNotfiStatus(id:string){
-    return await this.notificationService.update(id,{seen:true})
+    return portfolio;
   }
 
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  async updateNotfiStatus(id: string) {
+    return await this.notificationService.update(id, { seen: true });
+  }
 }
