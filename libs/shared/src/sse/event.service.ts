@@ -3,7 +3,7 @@ import { ConnectedClient } from "./interface/connected-client.interface";
 import { Observable } from "rxjs";
 
 @Injectable()
-export class ConsultEventService{
+export class EventService{
 
     private clients: ConnectedClient[] = [];
     
