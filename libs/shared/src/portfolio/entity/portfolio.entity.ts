@@ -23,3 +23,9 @@ export class Portfolio {
 }
 
 export const PortfolioSchema = SchemaFactory.createForClass(Portfolio);
+PortfolioSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});
+
+PortfolioSchema.set('toJSON', { virtuals: true });
+PortfolioSchema.set('toObject', { virtuals: true });
