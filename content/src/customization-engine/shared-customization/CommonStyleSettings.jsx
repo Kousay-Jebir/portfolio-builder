@@ -11,6 +11,14 @@ export function CommonStyleSettings({ showBackground = true }) {
         });
     };
 
+    const handleBackgroundImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            handleStyleChange("backgroundImage", `url("${imageUrl}")`);
+        }
+    };
+
     return (
         <div className="space-y-4">
             {/* Background */}
@@ -23,6 +31,18 @@ export function CommonStyleSettings({ showBackground = true }) {
                         onChange={(e) =>
                             handleStyleChange("backgroundColor", e.target.value)
                         }
+                    />
+                </div>
+            )}
+
+            {/* Background Image File Picker */}
+            {showBackground && (
+                <div>
+                    <label>Background Image: </label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleBackgroundImageUpload}
                     />
                 </div>
             )}

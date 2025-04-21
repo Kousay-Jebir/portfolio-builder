@@ -61,7 +61,7 @@ GridColumn.craft = {
         colSettings: {
 
         },
-        style: { ...defaultSectionStyles, padding: 0 }
+        style: { ...defaultSectionStyles, padding: "10px" }
     },
     related: {
         settings: GridColumnSettings,

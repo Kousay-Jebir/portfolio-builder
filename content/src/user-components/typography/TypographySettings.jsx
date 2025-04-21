@@ -85,7 +85,27 @@ export function TypographySettings() {
                     onChange={(e) => handleStyleChange("fontSize", parseInt(e.target.value))}
                 />
             </div>
-
+            <div>
+                <label>Font Weight: </label>
+                <select
+                    value={values.style?.fontWeight || "normal"}
+                    onChange={(e) => handleStyleChange("fontWeight", e.target.value)}
+                >
+                    <option value="normal">Normal</option>
+                    <option value="bold">Bold</option>
+                    <option value="lighter">Lighter</option>
+                    <option value="bolder">Bolder</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="400">400</option>
+                    <option value="500">500</option>
+                    <option value="600">600</option>
+                    <option value="700">700</option>
+                    <option value="800">800</option>
+                    <option value="900">900</option>
+                </select>
+            </div>
             {/* Padding */}
             <fieldset>
                 <legend>Padding (px)</legend>

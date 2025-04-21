@@ -28,9 +28,13 @@ DroppableGridEngine.craft = {
             marginLeft: 0,
             marginRight: 0,
             backgroundColor: '#ffffff',
-            minHeight: '50vh',
+            minHeight: '75vh',
             border: '2px solid lightGray',
-            borderRadius: '10px'
+            borderRadius: '10px',
+
+            backgroundSize: 'cover',         // Makes the image cover the entire area
+            backgroundRepeat: 'no-repeat',   // Prevents the image from repeating
+            backgroundPosition: 'center',    // Centers the image within the element
 
         }
     },
