@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { PRICE_MAP } from './maps/price.map';
 import { EXPIRATION_MAP } from './maps/expiration.map';
@@ -18,7 +18,7 @@ import { BlacklistedTokenService } from '@portfolio-builder/shared';
 import { access } from 'fs';
 
 @Injectable()
-export class SubscriptionService extends BaseService<SubscriptionDocument> {
+export class SubscriptionService extends BaseService<SubscriptionDocument> implements OnModuleInit{
   constructor(
     @InjectModel(Subscription.name)
     private subscriptionModel: Model<SubscriptionDocument>,
@@ -27,6 +27,27 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
     private readonly blacklistedTokenService: BlacklistedTokenService,
   ) {
     super(subscriptionModel);
+  }
+  onModuleInit() {
+      console.log('init')
+      const changeStream = this.subscriptionModel.watch([{$match : {operationType : 'delete'}}],{ fullDocumentBeforeChange: 'required' })
+      changeStream.on('change',async (change)=>{
+        const deletedDoc = change.fullDocumentBeforeChange;
+        if(deletedDoc){
+          const deletedId = change.documentKey._id
+          console.log(`sub ${deletedId} deleted`)
+          const user = await this.userService.findById(deletedDoc.userId);
+          
+          if(!user){
+            throw new NotFoundException('user not found')
+          }
+          const newUser = await this.userService.updateRole(deletedDoc.userId,UserRole.User)
+  
+        }
+
+       
+
+      })
   }
 
   async proceedPaiement(
@@ -83,15 +104,8 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> {
     }).then((res)=> {return res.data.result.status === 'SUCCESS';}).catch((err)=>{return false})
     return res
   }
-  async updateRole(userId: string, token: string) {
-    const user = await this.userService.findById(userId);
-
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    user.role = UserRole.VIP;
-    const newUser = await user.save();
+  async updateToken(userId: string, token: string,role:string) {
+    const newUser = await this.userService.updateRole(userId,role)
     await this.blacklistedTokenService.blacklistToken(token);
     const newLoggedUser = await this.authService.login(newUser);
     return {access_token : newLoggedUser.access_token}
