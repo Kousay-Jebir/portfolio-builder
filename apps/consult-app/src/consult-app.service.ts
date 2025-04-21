@@ -44,7 +44,11 @@ const receiverId = portfolio.user
 
 const viewer = user;
 
-const populatedPortfolio = await portfolio.populate<{ user: User }>('user');
+const populatedPortfolio = await portfolio.populate<{ user: User }>({
+  path: 'user',
+  select: 'id role',
+});
+
 const portfolioOwner = populatedPortfolio.user;
 
 const message = portfolioOwner.role === UserRole.VIP
@@ -70,6 +74,7 @@ if (shouldCreateNotification) {
   });
   this.consultEvenetService.notifyUser(receiverId as string,message)
 }
+portfolio.user=receiverId
 
 return portfolio;
 
