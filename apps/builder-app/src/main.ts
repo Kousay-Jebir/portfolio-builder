@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(BuilderAppModule);
+  app.setGlobalPrefix('builder');
+
   app.useGlobalPipes(new ValidationPipe({transform:true})); 
   
   const swaggerService = app.get(SwaggerDocumentationService);

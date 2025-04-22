@@ -4,10 +4,14 @@ import {
   NotFoundException,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
+    BlacklistGuard,
   ConnectedUser,
+  JwtAuthGuard,
+
 } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { BuildCvService } from './build-cv.service';
@@ -18,8 +22,9 @@ export class BuildCvController {
   constructor(
     private readonly buildCvService: BuildCvService,
   ) {}
-
-  @Post('analyse/:id')
+@UseGuards(JwtAuthGuard, BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Post('portfolio/:id/analyse')
   async analysePortfolio(
     @ConnectedUser() user: any,
     @Param('id') portfolioId: string,
