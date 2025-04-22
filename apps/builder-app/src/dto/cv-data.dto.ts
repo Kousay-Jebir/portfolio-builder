@@ -9,132 +9,167 @@ import {
   import { Type } from 'class-transformer';
   
   class ProjectDto {
+    @IsOptional()
     @IsString()
-    title: string;
+    title?: string;
   
+    @IsOptional()
     @IsString()
-    description: string;
+    description?: string;
   
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
-    tech_stack: string[];
+    tech_stack?: string[];
   
+    @IsOptional()
     @IsUrl()
-    link: string;
+    link?: string;
   }
   
   class ExperienceDto {
+    @IsOptional()
     @IsString()
-    company: string;
+    company?: string;
   
+    @IsOptional()
     @IsString()
-    position: string;
+    position?: string;
   
+    @IsOptional()
     @IsString()
-    location: string;
+    location?: string;
   
+    @IsOptional()
     @IsDateString()
-    start_date: string;
+    start_date?: string;
   
+    @IsOptional()
     @IsDateString()
-    end_date: string;
+    end_date?: string;
   
+    @IsOptional()
     @IsString()
-    description: string;
+    description?: string;
   }
   
   class EducationDto {
+    @IsOptional()
     @IsString()
-    institution: string;
+    institution?: string;
   
+    @IsOptional()
     @IsString()
-    degree: string;
+    degree?: string;
   
+    @IsOptional()
     @IsString()
-    field_of_study: string;
+    field_of_study?: string;
   
+    @IsOptional()
     @IsDateString()
-    start_date: string;
+    start_date?: string;
   
+    @IsOptional()
     @IsDateString()
-    end_date: string;
+    end_date?: string;
   
+    @IsOptional()
     @IsString()
-    grade: string;
+    grade?: string;
   }
   
   class CertificationDto {
+    @IsOptional()
     @IsString()
-    name: string;
+    name?: string;
   
+    @IsOptional()
     @IsString()
-    issuer: string;
+    issuer?: string;
   
+    @IsOptional()
     @IsDateString()
-    date: string;
+    date?: string;
   
+    @IsOptional()
     @IsUrl()
-    link: string;
+    link?: string;
   }
   
   class SocialLinksDto {
+    @IsOptional()
     @IsUrl()
-    github: string;
+    github?: string;
   
+    @IsOptional()
     @IsUrl()
-    linkedin: string;
+    linkedin?: string;
   
+    @IsOptional()
     @IsUrl()
-    website: string;
+    website?: string;
   
+    @IsOptional()
     @IsArray()
     @IsUrl({}, { each: true })
-    other: string[];
+    other?: string[];
   }
   
   class JobTargetDto {
+    @IsOptional()
     @IsString()
-    title: string;
+    title?: string;
   
+    @IsOptional()
     @IsString()
-    description: string;
+    description?: string;
   }
   
   export class CvDataDto {
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
-    skills: string[];
+    skills?: string[];
   
+    @IsOptional()
     @ValidateNested({ each: true })
     @Type(() => ProjectDto)
-    projects: ProjectDto[];
+    projects?: ProjectDto[];
   
+    @IsOptional()
     @ValidateNested({ each: true })
     @Type(() => ExperienceDto)
-    experience: ExperienceDto[];
+    experience?: ExperienceDto[];
   
+    @IsOptional()
     @ValidateNested({ each: true })
     @Type(() => EducationDto)
-    education: EducationDto[];
+    education?: EducationDto[];
   
+    @IsOptional()
     @ValidateNested({ each: true })
     @Type(() => CertificationDto)
-    certifications: CertificationDto[];
+    certifications?: CertificationDto[];
   
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
-    achievements: string[];
+    achievements?: string[];
   
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
-    interests: string[];
+    interests?: string[];
   
+    @IsOptional()
     @ValidateNested()
     @Type(() => SocialLinksDto)
-    social_links: SocialLinksDto;
+    social_links?: SocialLinksDto;
   
+    @IsOptional()
     @ValidateNested()
     @Type(() => JobTargetDto)
-    job_target: JobTargetDto;
+    job_target?: JobTargetDto;
   }
   
