@@ -10,10 +10,10 @@ import { GridRowSettings } from "./GridRowSettings"
 import { useState } from "react"
 
 export const defaultSectionStyles = {
-    padding: '10px',
+    padding: "10px",
+
     minHeight: '100px',
-    border: '1px solid gray',
-    borderRadius: '5px'
+    outline: '2px solid gray'
 }
 
 
@@ -61,7 +61,7 @@ GridColumn.craft = {
         colSettings: {
 
         },
-        style: { ...defaultSectionStyles, padding: "10px" }
+        style: { ...defaultSectionStyles }
     },
     related: {
         settings: GridColumnSettings,
@@ -73,7 +73,7 @@ export { GridColumn }
 function GridRow({ children, style, align, justify, ...props }) {
     console.log(style)
     return (
-        <Draggable element={Container} fluid style={{ minHeight: '100px', borderRadius: '5px', }}>
+        <Draggable element={Container} fluid style={{ minHeight: '100px' }}>
             <Element canvas id={uniqueId()} is={DroppableBox} element={Row} style={style} {...props} align={align} justify={justify}>{children}</Element >
         </Draggable>
     )
@@ -82,7 +82,7 @@ function GridRow({ children, style, align, justify, ...props }) {
 
 GridRow.craft = {
     props: {
-        style: { padding: 0, border: '1px solid gray', borderRadius: '5px', minHeight: '100px' },
+        style: { ...defaultSectionStyles },
         align: "normal",
         justify: "start"
     },

@@ -17,7 +17,7 @@ const DroppableGridEngine = withDroppable(GridEngine);
 DroppableGridEngine.craft = {
     props: {
         style: {
-            padding: 0,
+            padding: "5px",
             paddingLeft: 0,
             paddingRight: 0,
             paddingBottom: 0,
@@ -29,8 +29,8 @@ DroppableGridEngine.craft = {
             marginRight: 0,
             backgroundColor: '#ffffff',
             minHeight: '75vh',
-            border: '2px solid lightGray',
-            borderRadius: '10px',
+            outline: '2px solid lightGray',
+
 
             backgroundSize: 'cover',         // Makes the image cover the entire area
             backgroundRepeat: 'no-repeat',   // Prevents the image from repeating
