@@ -13,5 +13,9 @@ export class CvService extends BaseService<CvDocument> {
     
   ){super(cvModel);}
 
+  async findByOwnerId(id:string){
+    return await this.cvModel.findOne({user:id})
+  }
+
   
 }
