@@ -24,6 +24,8 @@ async function bootstrap() {
   });
 
   app.use('/public', express.static(join(process.cwd(), 'public')));
+  app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
+  
   
 
 

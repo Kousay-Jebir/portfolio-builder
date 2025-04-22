@@ -7,7 +7,7 @@ export type CvDocument = Cv & Document;
 @Schema({timestamps:true})
 export class Cv {
 
-  @Prop({ required: true })
+  @Prop({ required: false})
   title: string;
 
   @Prop({required:true})

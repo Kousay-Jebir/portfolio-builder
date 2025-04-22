@@ -36,7 +36,7 @@ export class BuildCvService {
     
     }
     async createCv(createCvDto : CreateCvDto,userId:string){
-        return await this.cvService.create({...createCvDto,user:userId})
+        return await this.cvService.create({title:createCvDto.title,path:createCvDto.path,user:userId})
 
     }
 
