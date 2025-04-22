@@ -15,6 +15,7 @@ import {
 import axios from 'axios';
 import { BuildCvService } from './build-cv.service';
 import { CreatePortfolioDto } from '../dto/create-portfolio.dto';
+import { CvDataDto } from '../dto/cv-data.dto';
 
 @Controller('cv')
 @ApiTags('cv')
@@ -22,11 +23,21 @@ export class BuildCvController {
   constructor(private readonly buildCvService: BuildCvService) {}
   @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
-  @Post('portfolio')
+  @Post('portfolio/:id')
   async analysePortfolio(
     @ConnectedUser() user: any,
     @Param('id') portfolioId: string,
   ) {
     return await this.buildCvService.getQuestions(portfolioId, user.id);
+  }
+  @UseGuards(JwtAuthGuard, BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Post('generate')
+  async generateCv(@Body() cvDataDto : CvDataDto,@ConnectedUser() user:any){
+
+    return await this.buildCvService.sendResponse(cvDataDto,user.id)
+    
+
+
   }
 }
