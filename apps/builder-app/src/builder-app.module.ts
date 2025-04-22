@@ -6,6 +6,7 @@ import { BuilderAppController } from './builder-app.controller';
 import { mongooseConfig, PortfolioModule, SharedModule, SwaggerModule, TokenModule } from '@portfolio-builder/shared';
 import { BuilderAppService } from './builder-app.service';
 import { MongooseModule } from '@nestjs/mongoose';
+import { BuildCvModule } from './cv/build-cv.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -26,7 +27,8 @@ import { MongooseModule } from '@nestjs/mongoose';
     SharedModule,
     SwaggerModule,
     TokenModule,
-    PortfolioModule
+    PortfolioModule,
+    BuildCvModule
   ],
   controllers: [BuilderAppController],
   providers: [BuilderAppService], // Only provide what you actually use
