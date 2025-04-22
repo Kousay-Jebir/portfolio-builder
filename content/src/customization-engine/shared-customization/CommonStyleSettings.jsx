@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePropSettings } from "./customization-hook";
 
+// Helper functions to extract values and units
 const extractValueAndUnit = (value) => {
     const match = value?.toString().match(/^([\d.]+)(px|%)?$/);
     return match ? [parseFloat(match[1]), match[2] || "px"] : [0, "px"];
@@ -23,6 +24,7 @@ function DimensionControl({ label, prefix, style, onChange }) {
     const [value, defaultUnit] = extractValueAndUnit(style[baseKey] || "0px");
 
     const handleChange = (side, val, unitOverride) => {
+        // Update specific side value
         onChange(`${prefix}${side}`, `${val}${unitOverride}`);
     };
 
@@ -85,9 +87,20 @@ export function CommonStyleSettings({ showBackground = true }) {
 
     const [r, g, b, a] = getRGBA(style.backgroundColor || "rgba(255,255,255,1)");
 
+    // Border Style fix to ensure it updates immediately
+    const handleBorderStyleChange = (e) => {
+        updateStyle("borderStyle", e.target.value);
+    };
+
+    useEffect(() => {
+        // Set the default borderStyle to 'solid' if not set
+        if (!style.borderStyle) {
+            updateStyle("borderStyle", "solid");
+        }
+    }, [style, updateStyle]);
+
     return (
         <div className="space-y-4">
-
             {/* Background color with opacity */}
             {showBackground && (
                 <fieldset>
@@ -160,7 +173,7 @@ export function CommonStyleSettings({ showBackground = true }) {
                 <legend>Border Style</legend>
                 <select
                     value={style.borderStyle || "solid"}
-                    onChange={(e) => updateStyle("borderStyle", e.target.value)}
+                    onChange={handleBorderStyleChange}
                 >
                     <option value="none">none</option>
                     <option value="solid">solid</option>

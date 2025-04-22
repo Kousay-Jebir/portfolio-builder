@@ -1,5 +1,5 @@
 import { useDrawer } from './DrawerContext';
-import { Editor, Element, Frame } from "@craftjs/core";
+import { Editor, Element, Frame, useEditor } from "@craftjs/core";
 import GridEngine from "./layout-engine/grid/GridEngine";
 import Draggable from "./layout-engine/utils/components/Draggable";
 import Grid, { EditableCol, GridBody } from "./user-components/layout/Grid";
@@ -11,9 +11,46 @@ import { Section, GridColumn, GridRow } from "./user-components/layout/Section";
 import { EditableTypography } from "./user-components/typography/Typography";
 import { CustomizationMenu } from "./customization-engine/CustomizationMenu";
 import { EditableButton } from "./user-components/button/Button";
+import { useState } from 'react';
 import { Image } from "./user-components/image/Image";
 import './App.css';
 import { useRef, useEffect } from 'react';
+
+const Topbar = () => {
+  const { actions, query, enabled } = useEditor((state) => ({
+    enabled: state.options.enabled
+  }));
+
+  const handleSerializeClick = () => {
+    console.log(query.serialize());
+  };
+
+  return (
+    <div style={{ padding: "16px", marginTop: "24px", marginBottom: "8px", backgroundColor: "#cbe8e7" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center" }}>
+
+        <div style={{ padding: "8px" }}>
+          <button
+            onClick={handleSerializeClick}
+            style={{
+              padding: "8px 16px",
+              fontSize: "14px",
+              border: "1px solid #d32f2f",
+              backgroundColor: "transparent",
+              color: "#d32f2f",
+              cursor: "pointer",
+            }}
+          >
+            Serialize JSON to console
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
 
 function Drawer({ children }) {
   const { drawerOpen, setDrawerOpen } = useDrawer();
@@ -88,6 +125,7 @@ function App() {
         </Frame>
 
         <ToolBox />
+        <Topbar />
 
         {/* now using our standalone Drawer */}
         <Drawer>
