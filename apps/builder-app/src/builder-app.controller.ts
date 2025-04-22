@@ -10,8 +10,8 @@ import { ConnectedUser } from '@portfolio-builder/shared';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 
-@Controller('builder')
-@ApiTags('builder')
+@Controller()
+@ApiTags()
 export class BuilderAppController {
   constructor(private readonly builderAppService: BuilderAppService) {}
   @UseGuards(JwtAuthGuard, RolesGuard)

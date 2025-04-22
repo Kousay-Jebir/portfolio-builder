@@ -8,27 +8,25 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
-    BlacklistGuard,
+  BlacklistGuard,
   ConnectedUser,
   JwtAuthGuard,
-
 } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { BuildCvService } from './build-cv.service';
+import { CreatePortfolioDto } from '../dto/create-portfolio.dto';
 
 @Controller('cv')
 @ApiTags('cv')
 export class BuildCvController {
-  constructor(
-    private readonly buildCvService: BuildCvService,
-  ) {}
-@UseGuards(JwtAuthGuard, BlacklistGuard)
+  constructor(private readonly buildCvService: BuildCvService) {}
+  @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
-  @Post('portfolio/:id/analyse')
+  @Post('portfolio')
   async analysePortfolio(
     @ConnectedUser() user: any,
     @Param('id') portfolioId: string,
   ) {
-    return await this.buildCvService.getQuestions(portfolioId,user.id)
+    return await this.buildCvService.getQuestions(portfolioId, user.id);
   }
 }
