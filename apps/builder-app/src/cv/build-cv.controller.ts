@@ -30,6 +30,8 @@ export class BuildCvController {
   ) {
     return await this.buildCvService.getQuestions(portfolioId, user.id);
   }
+  @UseGuards(JwtAuthGuard, BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
   @Post('generate')
   async generateCv(@Body() cvDataDto : CvDataDto,@ConnectedUser() user:any){
 
