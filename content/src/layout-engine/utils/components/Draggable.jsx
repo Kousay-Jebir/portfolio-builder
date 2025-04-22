@@ -1,58 +1,77 @@
 import React from "react";
 import { useEditor, useNode } from "@craftjs/core";
 import { useDrawer } from "../../../DrawerContext";
-
+import CustomizableStyle from "../../../customization-engine/shared-customization/shared-style-config";
 function DragHandle({ refCallback, selected, onClick }) {
     return (
         <div
             ref={refCallback}
-            style={{
-                position: "absolute",
-                top: 4,
-                right: 4,
-                width: 20,
-                height: 20,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "grab",
-                zIndex: 10,
-                borderRadius: 4,
-                backgroundColor: selected ? "rgba(0,123,255,0.2)" : "transparent",
-                pointerEvents: "auto",
-                userSelect: "none",
-                fontSize: 12,
-            }}
-            onClick={onClick} // Only apply onClick to the DragHandle
+            style={new CustomizableStyle().setMultiple({
+                position: { value: "absolute" },
+                top: { value: 4 },
+                right: { value: 4 },
+                width: { value: 20 },
+                height: { value: 20 },
+                display: { value: "flex" },
+                alignItems: { value: "center" },
+                justifyContent: { value: "center" },
+                cursor: { value: "grab" },
+                zIndex: { value: 10 },
+                borderRadius: { value: 4 },
+                backgroundColor: {
+                    value: selected
+                        ? "rgba(0,123,255,0.2)"
+                        : "transparent"
+                },
+                pointerEvents: { value: "auto" },
+                userSelect: { value: "none" },
+                fontSize: { value: 12 }
+            }).get()}
+            onClick={onClick}
         >
-            {/* simple “handle” character */}
             <span style={{ lineHeight: 1 }}>☰</span>
         </div>
     );
 }
 
-export default function Draggable({ element: Component = "div", children, style, ...props }) {
+export default function Draggable({
+    element: Component = "div",
+    children,
+    style,
+    ...props
+}) {
     const {
         connectors: { connect, drag },
         selected,
     } = useNode((node) => ({ selected: node.events.selected }));
     const { enabled } = useEditor((state) => ({ enabled: state.options.enabled }));
+    const { setDrawerOpen } = useDrawer();
 
     const refCallback = (ref) => {
         if (ref) connect(drag(ref));
     };
 
-    const { setDrawerOpen } = useDrawer(); // Get setDrawerOpen from the context
-
     const handleClick = (e) => {
-        e.stopPropagation(); // Prevent the click event from propagating to the parent component
-        setDrawerOpen(true); // Open the drawer when the handle is clicked
+        e.stopPropagation();
+        setDrawerOpen(true);
     };
 
     return (
-        <Component {...props} style={{ position: "relative", ...style }}>
+        <Component
+            {...props}
+            style={new CustomizableStyle()
+                .set("position", "relative")
+                .mutate(opts => Object.assign(opts, style))
+                .get()}
+        >
             {children}
-            {enabled && <DragHandle refCallback={refCallback} selected={selected} onClick={handleClick} />}
+            {enabled && (
+                <DragHandle
+                    refCallback={refCallback}
+                    selected={selected}
+                    onClick={handleClick}
+                />
+            )}
         </Component>
     );
 }

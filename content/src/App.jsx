@@ -12,43 +12,87 @@ import { EditableTypography } from "./user-components/typography/Typography";
 import { CustomizationMenu } from "./customization-engine/CustomizationMenu";
 import { EditableButton } from "./user-components/button/Button";
 import { Image } from "./user-components/image/Image";
-
-// Styles
 import './App.css';
+import { useRef, useEffect } from 'react';
+
+function Drawer({ children }) {
+  const { drawerOpen, setDrawerOpen } = useDrawer();
+  const drawerRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      // if click is outside the drawer-content, close it
+      if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+        setDrawerOpen(false);
+      }
+    }
+
+    if (drawerOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [drawerOpen, setDrawerOpen]);
+
+  return (
+    <div className={`drawer ${drawerOpen ? "open" : ""}`}>
+      <div ref={drawerRef} className="drawer-content">
+        {children}
+      </div>
+    </div>
+  );
+}
 
 function App() {
-  const { drawerOpen, setDrawerOpen } = useDrawer(); // Use the drawer context
+  const { drawerOpen, setDrawerOpen } = useDrawer();
 
   return (
     <>
-      {/* Header section with the toggle button */}
       <div className="header">
-        <button className="drawer-toggle" onClick={() => setDrawerOpen(!drawerOpen)}>
+        <button
+          className="drawer-toggle"
+          onClick={() => setDrawerOpen(!drawerOpen)}
+        >
           {drawerOpen ? "Close Drawer" : "Open Drawer"}
         </button>
       </div>
 
-      {/* Editor context */}
-      <Editor resolver={{
-        Draggable, GridEngine, Grid, GridBody, Row, Col, Box, DroppableBox, Container,
-        EditableCol, Section, GridColumn, GridRow, EditableTypography, EditableButton, Image,
-      }}>
-        {/* Main editor content */}
+      <Editor
+        resolver={{
+          Draggable,
+          GridEngine,
+          Grid,
+          GridBody,
+          Row: Box.Row,
+          Col: Box.Col,
+          Box,
+          DroppableBox,
+          Container: Box.Container,
+          EditableCol,
+          Section,
+          GridColumn,
+          GridRow,
+          EditableTypography,
+          EditableButton,
+          Image,
+        }}
+      >
         <Frame>
           <Element is={GridEngine} canvas fluid>
-            {/* This is where your canvas content goes */}
+            {/* canvas content */}
           </Element>
         </Frame>
 
-        {/* ToolBox remains at the bottom */}
         <ToolBox />
 
-        {/* Drawer inside Editor */}
-        <div className={`drawer ${drawerOpen ? 'open' : ''}`}>
-          <div className="drawer-content">
-            <CustomizationMenu />
-          </div>
-        </div>
+        {/* now using our standalone Drawer */}
+        <Drawer>
+          <CustomizationMenu />
+        </Drawer>
       </Editor>
     </>
   );

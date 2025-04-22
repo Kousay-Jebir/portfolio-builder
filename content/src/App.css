@@ -37,6 +37,7 @@
     z-index: 999;
     border-left: 2px solid gray;
     background-color: white;
+    overflow-y: auto;
 
 }
 

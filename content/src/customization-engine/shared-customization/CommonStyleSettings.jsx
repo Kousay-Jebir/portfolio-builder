@@ -1,115 +1,183 @@
-import React from "react";
+import React, { useState } from "react";
 import { usePropSettings } from "./customization-hook";
 
-export function CommonStyleSettings({ showBackground = true }) {
-    const { values, updateProp } = usePropSettings(["style"]);
+const extractValueAndUnit = (value) => {
+    const match = value?.toString().match(/^([\d.]+)(px|%)?$/);
+    return match ? [parseFloat(match[1]), match[2] || "px"] : [0, "px"];
+};
 
-    const handleStyleChange = (field, value) => {
-        updateProp("style", {
-            ...values.style,
-            [field]: value,
-        });
-    };
+const getRGBA = (rgba) => {
+    const match = rgba?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([.\d]+)?\)/);
+    return match ? [match[1], match[2], match[3], match[4] || 1] : [255, 255, 255, 1];
+};
 
-    const handleBackgroundImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            handleStyleChange("backgroundImage", `url("${imageUrl}")`);
-        }
+const rgbaString = (r, g, b, a) => `rgba(${r},${g},${b},${a})`;
+
+const Sides = ["Top", "Right", "Bottom", "Left"];
+
+function DimensionControl({ label, prefix, style, onChange }) {
+    const [isCustom, setIsCustom] = useState(false);
+    const [unit, setUnit] = useState("px");
+
+    const baseKey = `${prefix}`;
+    const [value, defaultUnit] = extractValueAndUnit(style[baseKey] || "0px");
+
+    const handleChange = (side, val, unitOverride) => {
+        onChange(`${prefix}${side}`, `${val}${unitOverride}`);
     };
 
     return (
-        <div className="space-y-4">
-            {/* Background */}
-            {showBackground && (
+        <fieldset>
+            <legend>{label}</legend>
+            {!isCustom ? (
                 <div>
-                    <label>Background Color: </label>
                     <input
-                        type="color"
-                        value={values.style?.backgroundColor || "rgba(250,250,250,0)"}
-                        onChange={(e) =>
-                            handleStyleChange("backgroundColor", e.target.value)
-                        }
+                        type="number"
+                        value={value}
+                        onChange={(e) => handleChange("", e.target.value, unit)}
                     />
+                    <select value={unit} onChange={(e) => setUnit(e.target.value)}>
+                        <option value="px">px</option>
+                        <option value="%">%</option>
+                    </select>
+                    <button type="button" onClick={() => setIsCustom(true)}>
+                        Customize Sides
+                    </button>
                 </div>
+            ) : (
+                <>
+                    {Sides.map((side) => {
+                        const [val, sideUnit] = extractValueAndUnit(style[`${prefix}${side}`] || "0px");
+                        return (
+                            <div key={side}>
+                                <label>{side}:</label>
+                                <input
+                                    type="number"
+                                    value={val}
+                                    onChange={(e) => handleChange(side, e.target.value, sideUnit)}
+                                />
+                                <select
+                                    value={sideUnit}
+                                    onChange={(e) => handleChange(side, val, e.target.value)}
+                                >
+                                    <option value="px">px</option>
+                                    <option value="%">%</option>
+                                </select>
+                            </div>
+                        );
+                    })}
+                    <button type="button" onClick={() => setIsCustom(false)}>
+                        Use All Sides
+                    </button>
+                </>
             )}
+        </fieldset>
+    );
+}
 
-            {/* Background Image File Picker */}
+export function CommonStyleSettings({ showBackground = true }) {
+    const { values, updateProp } = usePropSettings(["style"]);
+    const style = values.style || {};
+
+    const updateStyle = (key, value) => {
+        updateProp("style", { ...style, [key]: value });
+    };
+
+    const [r, g, b, a] = getRGBA(style.backgroundColor || "rgba(255,255,255,1)");
+
+    return (
+        <div className="space-y-4">
+
+            {/* Background color with opacity */}
             {showBackground && (
-                <div>
-                    <label>Background Image: </label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleBackgroundImageUpload}
-                    />
-                </div>
+                <fieldset>
+                    <legend>Background Color</legend>
+                    <div>
+                        <input
+                            type="color"
+                            value={`#${[r, g, b]
+                                .map((x) => parseInt(x).toString(16).padStart(2, "0"))
+                                .join("")}`}
+                            onChange={(e) => {
+                                const hex = e.target.value;
+                                const red = parseInt(hex.slice(1, 3), 16);
+                                const green = parseInt(hex.slice(3, 5), 16);
+                                const blue = parseInt(hex.slice(5, 7), 16);
+                                updateStyle("backgroundColor", rgbaString(red, green, blue, a));
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <label>Opacity</label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={a}
+                            onChange={(e) =>
+                                updateStyle("backgroundColor", rgbaString(r, g, b, e.target.value))
+                            }
+                        />
+                    </div>
+                </fieldset>
             )}
 
             {/* Padding */}
-            <fieldset>
-                <legend>Padding (px)</legend>
-                {["Top", "Right", "Bottom", "Left"].map((side) => (
-                    <div key={side}>
-                        <label>{side}: </label>
-                        <input
-                            type="number"
-                            value={values.style?.[`padding${side}`] || 0}
-                            onChange={(e) =>
-                                handleStyleChange(`padding${side}`, parseInt(e.target.value))
-                            }
-                        />
-                    </div>
-                ))}
-            </fieldset>
+            <DimensionControl
+                label="Padding"
+                prefix="padding"
+                style={style}
+                onChange={updateStyle}
+            />
 
             {/* Margin */}
-            <fieldset>
-                <legend>Margin (px)</legend>
-                {["Top", "Right", "Bottom", "Left"].map((side) => (
-                    <div key={side}>
-                        <label>{side}: </label>
-                        <input
-                            type="number"
-                            value={values.style?.[`margin${side}`] || 0}
-                            onChange={(e) =>
-                                handleStyleChange(`margin${side}`, parseInt(e.target.value))
-                            }
-                        />
-                    </div>
-                ))}
-            </fieldset>
+            <DimensionControl
+                label="Margin"
+                prefix="margin"
+                style={style}
+                onChange={updateStyle}
+            />
 
-            {/* Border */}
-            <fieldset>
-                <legend>Border (CSS syntax)</legend>
-                {["Top", "Right", "Bottom", "Left"].map((side) => (
-                    <div key={side}>
-                        <label>{side}: </label>
-                        <input
-                            type="text"
-                            placeholder="e.g. 1px solid #000"
-                            value={values.style?.[`border${side}`] || "none"}
-                            onChange={(e) =>
-                                handleStyleChange(`border${side}`, e.target.value)
-                            }
-                        />
-                    </div>
-                ))}
-            </fieldset>
+            {/* Border Width */}
+            <DimensionControl
+                label="Border Width"
+                prefix="borderWidth"
+                style={style}
+                onChange={updateStyle}
+            />
 
             {/* Border Radius */}
-            <div>
-                <label>Border Radius (px): </label>
+            <DimensionControl
+                label="Border Radius"
+                prefix="borderRadius"
+                style={style}
+                onChange={updateStyle}
+            />
+
+            {/* Border Style */}
+            <fieldset>
+                <legend>Border Style</legend>
+                <select
+                    value={style.borderStyle || "solid"}
+                    onChange={(e) => updateStyle("borderStyle", e.target.value)}
+                >
+                    <option value="none">none</option>
+                    <option value="solid">solid</option>
+                    <option value="dashed">dashed</option>
+                    <option value="dotted">dotted</option>
+                </select>
+            </fieldset>
+
+            {/* Border Color */}
+            <fieldset>
+                <legend>Border Color</legend>
                 <input
-                    type="number"
-                    value={values.style?.borderRadius || 0}
-                    onChange={(e) =>
-                        handleStyleChange("borderRadius", parseInt(e.target.value))
-                    }
+                    type="color"
+                    value={style.borderColor || "#000000"}
+                    onChange={(e) => updateStyle("borderColor", e.target.value)}
                 />
-            </div>
+            </fieldset>
         </div>
     );
 }
