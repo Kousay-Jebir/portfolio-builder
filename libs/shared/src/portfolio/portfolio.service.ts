@@ -27,7 +27,7 @@ export class PortfolioService extends BaseService<PortfolioDocument> {
   }
 
 
-  async findByCriteria(criteria : Partial<Portfolio>){
+  async findByCriteria(criteria :any){
     return await this.portfolioModel.find(criteria)
   }
 }
