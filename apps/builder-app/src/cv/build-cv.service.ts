@@ -1,13 +1,15 @@
 import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { BlacklistGuard, JwtAuthGuard, PortfolioService } from '@portfolio-builder/shared';
+import { BlacklistGuard, CvService, JwtAuthGuard, PortfolioService } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { CvDataDto } from '../dto/cv-data.dto';
+import { CreateCvDto } from '../dto/create-cv.dto';
 
 @Injectable()
 export class BuildCvService {
    constructor(
       private readonly portfolioService: PortfolioService,
+      private readonly cvService : CvService
     ){}
     async getQuestions(portfolioId:string,userId:string){
         const portfolio = await this.portfolioService.findById(portfolioId);
@@ -30,6 +32,11 @@ export class BuildCvService {
     async sendResponse(cvDataDto:CvDataDto,userId:string){
         axios.post(`${process.env.AI_API}`,{...cvDataDto,userId}).then((res)=>{return res.data}).catch((err)=>{return new Error(err.meesage)})
 
+
+    
+    }
+    async createCv(createCvDto : CreateCvDto,userId:string){
+        return await this.cvService.create({...createCvDto,user:userId})
 
     }
 
