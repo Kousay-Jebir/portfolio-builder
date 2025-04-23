@@ -1,9 +1,9 @@
 import React from "react";
 import { usePropSettings } from "../../customization-engine/shared-customization/customization-hook";
 import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings";
+import { useNode } from "@craftjs/core";
 
-export function GridRowSettings() {
-    const { values, updateProp } = usePropSettings(["justify", "align", "style"]);
+export function GridRowSettings({ getNewOption }) {
 
     return (
         <div className="space-y-4 p-4 border rounded-xl shadow-sm max-w-md">
@@ -16,8 +16,8 @@ export function GridRowSettings() {
             <div>
                 <label>Horizontal Alignment (justify): </label>
                 <select
-                    value={values.justify || "start"}
-                    onChange={(e) => updateProp("justify", e.target.value)}
+                    value={"start"}
+                    onChange={(e) => getNewOption("justify", e.target.value)}
                 >
                     <option value="start">Start</option>
                     <option value="center">Center</option>
@@ -32,8 +32,8 @@ export function GridRowSettings() {
             <div>
                 <label>Vertical Alignment (align): </label>
                 <select
-                    value={values.align || "normal"}
-                    onChange={(e) => updateProp("align", e.target.value)}
+                    value={"normal"}
+                    onChange={(e) => getNewOption("align", e.target.value)}
                 >
                     <option value="normal">Normal</option>
                     <option value="start">Start</option>

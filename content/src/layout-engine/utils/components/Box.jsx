@@ -5,7 +5,6 @@ export default function Box({
     children,
     ...props
 }) {
-    console.log({ ...props })
     return (
         <Component {...props}>
             {children}
@@ -13,4 +12,4 @@ export default function Box({
     );
 }
 
-export const DroppableBox = withDroppable(Box);
+export const DroppableBox = withDroppable(Box, { enableDrag: true });

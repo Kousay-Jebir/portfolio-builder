@@ -7,7 +7,7 @@ import Box from "./layout-engine/utils/components/Box";
 import { Col, Container, Row } from "react-grid-system";
 import { DroppableBox } from "./layout-engine/utils/components/Box";
 import ToolBox from "./user-components/ToolBox";
-import { Section, GridColumn, GridRow } from "./user-components/layout/Section";
+import { Section, GridColumn, GridRow, DroppableGridRow } from "./user-components/layout/Section";
 import { EditableTypography } from "./user-components/typography/Typography";
 import { CustomizationMenu } from "./customization-engine/CustomizationMenu";
 import { EditableButton } from "./user-components/button/Button";
@@ -100,6 +100,7 @@ function App() {
 
       <Editor
         resolver={{
+          DroppableGridRow,
           Draggable,
           GridEngine,
           Grid,
