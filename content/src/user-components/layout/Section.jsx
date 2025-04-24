@@ -10,11 +10,12 @@ import { GridRowSettings } from "./GridRowSettings"
 import { useState } from "react"
 import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings"
 
+
 export const defaultSectionStyles = {
     padding: "10px",
 
     minHeight: '100px',
-    outline: '2px solid gray'
+
 }
 
 
@@ -42,7 +43,7 @@ function GridColumn({ colSettings = {}, children, style, ...props }) {
                 id={uniqueId()}
                 is={DroppableBox}
                 element="div"
-                style={{ minHeight: style?.minHeight }}
+                style={{ minHeight: style?.minHeight, border: '1px solid red' }}
             >
                 {children}
             </Element>
@@ -79,18 +80,11 @@ export function DroppableGridRow({ children }) {
         justify
     } = useNode((node) => ({ style: node.data.custom.style, align: node.data.custom.align, justify: node.data.custom.justify }));
 
-    function getNewOption(option, newValue) {
-        setCustom(props => (props[`${option}`] = newValue))
-        console.log(newValue)
-    }
-
-
     return (
-        <>
-            <GridRowSettings getNewOption={getNewOption} />
-            <Row ref={connect} style={{ ...style, minHeight: "100px" }} align={align} justify={justify}>{children}
-            </Row>
-        </>
+
+        <DroppableBox element={Row} style={{ ...style, minHeight: "100px", border: '1px solid black' }} align={align} justify={justify}>{children}
+        </DroppableBox>
+
     )
 }
 
@@ -99,7 +93,7 @@ export function DroppableGridRow({ children }) {
 function GridRow({ children, ...props }) {
     const id = uniqueId();
     return (
-        <Draggable fluid element={Container} style={{ padding: "10px", minHeight: "100px" }}>
+        <Draggable fluid element={Container} style={{ padding: "10px", minHeight: "100px", backgroundColor: 'red' }}>
             <Element
                 canvas
                 id={id}
@@ -117,16 +111,25 @@ DroppableGridRow.craft = {
         align: "normal",
         justify: "start"
     },
+    related: {
+        settings: GridRowSettings
+    }
 }
 
 export { GridRow }
+
+
+function DroppableSection() {
+
+}
+
 
 
 //Droppable and draggable generic layout component
 export function Section({ component: Component, children, style, ...props }) {
     return (
         <Draggable style={{ ...defaultSectionStyles, ...style }}>
-            <Element canvas id={uniqueId()} is={DroppableBox} element={Component} {...props}>{children}</Element >
+            <Element canvas id={uniqueId()} is={DroppableBox} element={Component} {...props} style={{ border: '1px solid green', minHeight: '100px' }}>{children}</Element >
         </Draggable>
     )
 }

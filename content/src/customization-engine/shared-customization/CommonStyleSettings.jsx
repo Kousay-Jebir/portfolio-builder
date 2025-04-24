@@ -77,8 +77,8 @@ function DimensionControl({ label, prefix, style, onChange }) {
     );
 }
 
-export function CommonStyleSettings({ showBackground = true }) {
-    const { values, updateProp } = usePropSettings(["style"]);
+export function CommonStyleSettings({ showBackground = true, customs = false }) {
+    const { values, updateProp } = usePropSettings(["style"], customs);
     const style = values.style || {};
 
     const updateStyle = (key, value) => {

@@ -1,25 +1,33 @@
 import { useNode } from "@craftjs/core";
 
-export function usePropSettings(fields) {
+export function usePropSettings(fields, useCustom = false) {
     const {
-        actions: { setProp },
+        actions: { setProp, setCustom },
         ...rest
     } = useNode((node) => {
         const result = {};
         fields.forEach((field) => {
-            result[field] = node.data.props[field];
+            // Choose between props and custom based on the `useCustom` flag
+            result[field] = useCustom ? node.data.custom[field] : node.data.props[field];
         });
-        return { props: result };
+        return useCustom ? { custom: result } : { props: result };
     });
 
-    const updateProp = (field, value) => {
-        setProp((props) => {
-            props[field] = value;
-        });
+    // Function to update custom or prop field based on `useCustom`
+    const updateField = (field, value) => {
+        if (useCustom) {
+            setCustom((custom) => {
+                custom[field] = value;
+            });
+        } else {
+            setProp((props) => {
+                props[field] = value;
+            });
+        }
     };
 
     return {
-        values: rest.props,
-        updateProp,
+        values: useCustom ? rest.custom : rest.props,
+        updateProp: updateField,
     };
 }
