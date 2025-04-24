@@ -5,9 +5,10 @@ import { ConfigModule } from '@nestjs/config';
 import { SharedService } from './shared.service';
 import { RolesGuard } from './guards/role.guard';
 import { CvModule } from './cv/cv.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), CvModule],
+  imports: [ConfigModule.forRoot(), CvModule, MailModule],
   providers: [JwtStrategy, JwtAuthGuard,SharedService,RolesGuard],
   exports: [JwtStrategy, JwtAuthGuard,RolesGuard],
 })
