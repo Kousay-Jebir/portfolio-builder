@@ -1,9 +1,8 @@
-import { StyleSettingsPanel } from "./customization-hook";
-export function withCustomizableSettings(Component, defaultProps = {}) {
+export function withCustomizableSettings(Component, CustomizationMenu, defaultProps = {}) {
     Component.craft = {
         props: defaultProps,
         related: {
-            settings: StyleSettingsPanel,
+            settings: CustomizationMenu,
         },
     };
 

@@ -9,6 +9,7 @@ import { Col, Container, Row } from "react-grid-system"
 import { GridRowSettings } from "./GridRowSettings"
 import { useState } from "react"
 import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings"
+import { withCustomizableSettings } from "../../customization-engine/shared-customization/customizable-hoc"
 
 
 export const defaultSectionStyles = {
@@ -19,7 +20,7 @@ export const defaultSectionStyles = {
 }
 
 
-function GridColumn({ colSettings = {}, children, style, ...props }) {
+function BaseGridColumn({ colSettings = {}, children, style, ...props }) {
     const spanProps = {};
     const offsetProps = {};
     const hiddenBreakpoints = [];
@@ -48,24 +49,13 @@ function GridColumn({ colSettings = {}, children, style, ...props }) {
         : column;
 }
 
-
-GridColumn.craft = {
-    props: {
-
-        colSettings: {
-
-        },
-        style: { height: "100px", border: "1px solid red" }
-    },
-    related: {
-        settings: GridColumnSettings,
-    },
-};
+const GridColumn = withCustomizableSettings(BaseGridColumn, GridColumnSettings, {
+    style: { height: "100px", border: "1px solid red" }
+})
 
 export { GridColumn }
 
-function GridRow({ children, style, align, justify, ...props }) {
-    const id = uniqueId();
+function BaseGridRow({ children, style, align, justify, ...props }) {
     return (
         <Draggable element={Row} style={style} align={align} justify={justify} {...props}>
             {children}
@@ -73,37 +63,25 @@ function GridRow({ children, style, align, justify, ...props }) {
     );
 }
 
-GridRow.craft = {
-    props: {
-        style: { height: "100px", border: "1px solid green" },
-        align: "normal",
-        justify: "start"
-    },
-    related: {
-        settings: GridRowSettings
-    }
-}
+const GridRow = withCustomizableSettings(BaseGridRow, GridRowSettings, {
+    style: { height: "100px", border: "1px solid green" },
+    align: "normal",
+    justify: "start"
+})
 
 export { GridRow }
 
 //Droppable and draggable generic layout component
-export function Section({ component: Component, children, style, ...props }) {
+function BaseSection({ component: Component, children, style, ...props }) {
     return (
         <Draggable style={style} element={Component} {...props}>
             {children}
         </Draggable>
     )
 }
+const Section = withCustomizableSettings(BaseSection, CommonStyleSettings, { style: { height: "100px", border: "1px solid blue" } })
+export { Section }
 
-Section.craft = {
-    props: {
-        style: { height: "100px", border: "1px solid blue" },
-    },
-
-    related: {
-        settings: CommonStyleSettings
-    }
-}
 
 /* export const Section = new ComponentBuilder()
     .setComponentResolver((props) => props.component || "div")
