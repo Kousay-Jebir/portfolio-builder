@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   NotFoundException,
   Param,
   Post,
@@ -28,7 +29,7 @@ export class BuildCvController {
   constructor(private readonly buildCvService: BuildCvService) {}
   @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
-  @Post('portfolio/:id')
+  @Get('portfolio/:id/questions')
   async analysePortfolio(
     @ConnectedUser() user: any,
     @Param('id') portfolioId: string,

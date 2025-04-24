@@ -10,6 +10,7 @@ import {
   UserDocument,
   UserRole,
 } from '@portfolio-builder/shared';
+import axios from 'axios';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -74,7 +75,12 @@ export class ConsultAppService {
         receiver: portfolio.user,
       });
       console.log('viewed')
-      this.eventService.notifyUser(receiverId as string, message,'portfolio_view');
+      await axios.post(`http://localhost:5000/main/event/notify-user`, {
+                  userId: receiverId as string,
+                  message: message,
+                  eventType:'portfolio_view'
+                })
+      // this.eventService.notifyUser(receiverId as string, message,'portfolio_view');
     }
     portfolio.user = receiverId;
 

@@ -4,7 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { EventService } from '@portfolio-builder/shared';
 @ApiTags('event')
 @Controller('event')
-export class ConsultEventController {
+export class MainEventController {
   constructor(private readonly eventService: EventService) {}
   @Sse(':id')
   getEvents(

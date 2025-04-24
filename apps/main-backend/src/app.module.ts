@@ -10,6 +10,7 @@ import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { MainEventModule } from './sse/main-event.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { SubscriptionModule } from './subscription/subscription.module';
     UserModule,
     AdminModule,
     SubscriptionModule,
-    TokenModule
+    TokenModule,
+    MainEventModule
   ],
   controllers: [AppController],
   providers: [AppService],
