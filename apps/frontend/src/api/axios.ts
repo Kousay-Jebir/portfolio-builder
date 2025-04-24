@@ -11,7 +11,7 @@ const axiosBuilder = axios.create({
 });
 
 const axiosConsult = axios.create({
-  baseURL: '/api/consult',
+  baseURL: '/api/consulting',
   withCredentials: true,
 });
 
