@@ -1,7 +1,7 @@
 import { Element, useNode } from "@craftjs/core"
 import Draggable from "../../layout-engine/utils/components/Draggable"
 import { DroppableBox } from "../../layout-engine/utils/components/Box"
-import uniqueId from "../../libs/nanoid"
+import uniqueId from "../../../libs/nanoid"
 import { GridColumnSettings } from "./GridColumnSettings"
 import { Hidden, Visible } from "react-grid-system"
 
