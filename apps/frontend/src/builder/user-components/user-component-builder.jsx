@@ -2,7 +2,7 @@ import React from "react";
 import { Element } from "@craftjs/core";
 import Draggable from "../layout-engine/utils/components/Draggable";
 import { withEditableContent } from "../layout-engine/utils/hocs/editable-content-hoc";
-import uniqueId from "../libs/nanoid";
+import uniqueId from "../../libs/nanoid";
 
 export class ComponentBuilder {
     constructor() {

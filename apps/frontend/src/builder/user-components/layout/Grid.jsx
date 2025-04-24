@@ -2,7 +2,7 @@ import { Col, Container, Row } from "react-grid-system";
 import Draggable from "../../layout-engine/utils/components/Draggable";
 import { withDroppable } from "../../layout-engine/utils/hocs/droppable-hoc";
 import { Element } from "@craftjs/core";
-import uniqueId from "../../libs/nanoid";
+import uniqueId from "../../../libs/nanoid";
 import { useRef } from "react";
 import Box from "../../layout-engine/utils/components/Box";
 import { withEditableContent } from "../../layout-engine/utils/hocs/editable-content-hoc";
