@@ -2,7 +2,6 @@ import { useEditor, Element } from "@craftjs/core";
 import { GridColumn, GridRow, Section } from "./layout/Section";
 import { Container } from "react-grid-system";
 import { EditableTypography } from "./typography/Typography";
-import { EditableButton } from "./button/Button";
 import { Image } from "./image/Image";
 
 // Styles (add this to your App.css or inline styles)

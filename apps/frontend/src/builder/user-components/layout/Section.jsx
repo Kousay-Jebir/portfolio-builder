@@ -1,24 +1,11 @@
-import { Element, useNode } from "@craftjs/core"
+import { useNode } from "@craftjs/core"
 import Draggable from "../../layout-engine/utils/components/Draggable"
-import { DroppableBox } from "../../layout-engine/utils/components/Box"
-import uniqueId from "../../../libs/nanoid"
 import { GridColumnSettings } from "./GridColumnSettings"
-import { Hidden, Visible } from "react-grid-system"
-
-import { Col, Container, Row } from "react-grid-system"
+import { Hidden } from "react-grid-system"
+import { Col, Row } from "react-grid-system"
 import { GridRowSettings } from "./GridRowSettings"
-import { useState } from "react"
 import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings"
 import { withCustomizableSettings } from "../../customization-engine/shared-customization/customizable-hoc"
-
-
-export const defaultSectionStyles = {
-    padding: "10px",
-
-    minHeight: '100px',
-
-}
-
 
 function BaseGridColumn({ colSettings = {}, children, style, ...props }) {
     const spanProps = {};
@@ -53,7 +40,7 @@ const GridColumn = withCustomizableSettings(BaseGridColumn, GridColumnSettings, 
     style: { height: "100px", border: "1px solid red" }
 })
 
-export { GridColumn }
+
 
 function BaseGridRow({ children, style, align, justify, ...props }) {
     return (
@@ -69,7 +56,7 @@ const GridRow = withCustomizableSettings(BaseGridRow, GridRowSettings, {
     justify: "start"
 })
 
-export { GridRow }
+
 
 //Droppable and draggable generic layout component
 function BaseSection({ component: Component, children, style, ...props }) {
@@ -80,20 +67,5 @@ function BaseSection({ component: Component, children, style, ...props }) {
     )
 }
 const Section = withCustomizableSettings(BaseSection, CommonStyleSettings, { style: { height: "100px", border: "1px solid blue" } })
-export { Section }
 
-
-/* export const Section = new ComponentBuilder()
-    .setComponentResolver((props) => props.component || "div")
-    .useElement({ canvas: true }) // Make it a Craft canvas
-    .setDraggable(true)
-    .setCraftConfig({
-        props: {
-            style: {
-                padding: "20px",
-                backgroundColor: "#f8f9fa",
-                minHeight: '150px'
-            },
-        }
-    })
-    .build(); */
+export { Section, GridRow, GridColumn }

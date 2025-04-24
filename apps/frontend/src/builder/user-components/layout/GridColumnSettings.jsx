@@ -1,4 +1,3 @@
-import React from "react";
 import { usePropSettings } from "../../customization-engine/shared-customization/customization-hook";
 import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings";
 

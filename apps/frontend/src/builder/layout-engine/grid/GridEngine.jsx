@@ -1,7 +1,6 @@
 import { Container } from "react-grid-system";
 import { withDroppable } from "../utils/hocs/droppable-hoc";
 import GridEngineSettings from "./GridEngineSettings";
-import CustomizableStyle from "../../customization-engine/shared-customization/shared-style-config";
 
 export const DroppableContainer = withDroppable(Container, { enableDrag: true });
 

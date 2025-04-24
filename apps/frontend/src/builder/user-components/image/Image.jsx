@@ -1,4 +1,3 @@
-import React from "react";
 import Draggable from "../../layout-engine/utils/components/Draggable";
 import { ImageSettings } from "./ImageSettings";
 import CustomizableStyle from "../../customization-engine/shared-customization/shared-style-config";

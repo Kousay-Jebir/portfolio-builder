@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { usePropSettings } from "./customization-hook";
 
 // Helper functions to extract values and units
