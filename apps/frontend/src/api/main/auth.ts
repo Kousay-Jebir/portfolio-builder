@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { axiosMain } from './axios';
+import { axiosMain } from '../axios';
 
 export const register = async (userData: {
   username: string;
