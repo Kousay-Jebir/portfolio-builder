@@ -1,4 +1,4 @@
-import { useEditor } from "@craftjs/core";
+import { useEditor, Element } from "@craftjs/core";
 import { GridColumn, GridRow, Section } from "./layout/Section";
 import { Container } from "react-grid-system";
 import { EditableTypography } from "./typography/Typography";
@@ -13,9 +13,9 @@ export default function ToolBox() {
 
     const toolboxItems = [
 
-        { label: "Section", component: <Section component={Container} style={{ background: 'lightGray' }} fluid /> },
-        { label: "Grid Column", component: <GridColumn /> },
-        { label: "Grid Row", component: <GridRow /> },
+        { label: "Section", component: <Element canvas fluid component={Container} is={Section} /> },
+        { label: "Grid Column", component: <Element canvas is={GridColumn} /> },
+        { label: "Grid Row", component: <Element canvas is={GridRow} /> },
         { label: "Paragraph", component: <EditableTypography component="p" /> },
         { label: "Hyperlink", component: <EditableTypography href="#" component="a" /> },
         { label: "Image", component: <Image /> },

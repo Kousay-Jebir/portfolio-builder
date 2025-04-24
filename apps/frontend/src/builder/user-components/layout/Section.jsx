@@ -23,7 +23,7 @@ function GridColumn({ colSettings = {}, children, style, ...props }) {
     const spanProps = {};
     const offsetProps = {};
     const hiddenBreakpoints = [];
-
+    const { connectors: { connect, drag } } = useNode();
     Object.entries(colSettings).forEach(([breakpoint, { span, offset, hidden }]) => {
         if (span != null) spanProps[breakpoint] = span;
         if (offset != null) offsetProps[breakpoint] = offset;
@@ -32,21 +32,13 @@ function GridColumn({ colSettings = {}, children, style, ...props }) {
 
     const column = (
         <Draggable
-            element={Col}
             {...spanProps}
             offset={Object.keys(offsetProps).length ? offsetProps : undefined}
             style={style}
             {...props}
+            element={Col}
         >
-            <Element
-                canvas
-                id={uniqueId()}
-                is={DroppableBox}
-                element="div"
-                style={{ minHeight: style?.minHeight, border: '1px solid red' }}
-            >
-                {children}
-            </Element>
+            {children}
         </Draggable>
     );
 
@@ -63,7 +55,7 @@ GridColumn.craft = {
         colSettings: {
 
         },
-        style: { ...defaultSectionStyles }
+        style: { height: "100px", border: "1px solid red" }
     },
     related: {
         settings: GridColumnSettings,
@@ -72,42 +64,18 @@ GridColumn.craft = {
 
 export { GridColumn }
 
-export function DroppableGridRow({ children }) {
-    const {
-        connectors: { connect }, actions: { setCustom },
-        style,
-        align,
-        justify
-    } = useNode((node) => ({ style: node.data.custom.style, align: node.data.custom.align, justify: node.data.custom.justify }));
-
-    return (
-
-        <DroppableBox element={Row} style={{ ...style, minHeight: "100px", border: '1px solid black' }} align={align} justify={justify}>{children}
-        </DroppableBox>
-
-    )
-}
-
-
-
-function GridRow({ children, ...props }) {
+function GridRow({ children, style, align, justify, ...props }) {
     const id = uniqueId();
     return (
-        <Draggable fluid element={Container} style={{ padding: "10px", minHeight: "100px", backgroundColor: 'red' }}>
-            <Element
-                canvas
-                id={id}
-                is={DroppableGridRow}
-            >
-                {children}
-            </Element>
+        <Draggable element={Row} style={style} align={align} justify={justify} {...props}>
+            {children}
         </Draggable>
     );
 }
 
-DroppableGridRow.craft = {
-    custom: {
-        style: { ...defaultSectionStyles },
+GridRow.craft = {
+    props: {
+        style: { height: "100px", border: "1px solid green" },
         align: "normal",
         justify: "start"
     },
@@ -118,23 +86,20 @@ DroppableGridRow.craft = {
 
 export { GridRow }
 
-
-function DroppableSection() {
-
-}
-
-
-
 //Droppable and draggable generic layout component
 export function Section({ component: Component, children, style, ...props }) {
     return (
-        <Draggable style={{ ...defaultSectionStyles, ...style }}>
-            <Element canvas id={uniqueId()} is={DroppableBox} element={Component} {...props} style={{ border: '1px solid green', minHeight: '100px' }}>{children}</Element >
+        <Draggable style={style} element={Component} {...props}>
+            {children}
         </Draggable>
     )
 }
 
 Section.craft = {
+    props: {
+        style: { height: "100px", border: "1px solid blue" },
+    },
+
     related: {
         settings: CommonStyleSettings
     }

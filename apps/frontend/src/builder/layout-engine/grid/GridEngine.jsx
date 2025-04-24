@@ -17,15 +17,7 @@ const DroppableGridEngine = withDroppable(GridEngine);
 
 DroppableGridEngine.craft = {
     props: {
-        style: new CustomizableStyle()
-            .setMultiple({
-                minHeight: { value: 75, unit: "vh" },
-                outline: { value: "2px solid lightGray" },
-                backgroundSize: { value: "cover" },
-                backgroundRepeat: { value: "no-repeat" },
-                backgroundPosition: { value: "center" }
-            })
-            .get()
+        style: { border: '1px solid gray', minHeight: '75vh' }
     },
     related: {
         settings: GridEngineSettings
