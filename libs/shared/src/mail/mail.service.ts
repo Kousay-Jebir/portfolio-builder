@@ -17,7 +17,7 @@ export class MailService {
 
   async sendMail(to: string, subject: string, text: string) {
     const mailOptions = {
-      from: '"MyApp Support" <chedli.masmoudi97@gmail.com>',
+      from: '"PortfolioBuilder Support" <chedli.masmoudi97@gmail.com>',
       to,
       subject,
       text,

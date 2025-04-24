@@ -8,7 +8,7 @@ import {
   SubscriptionDocument,
 } from './entities/subscription.entity';
 import { Model } from 'mongoose';
-import { BaseService, EventService, NotificationService } from '@portfolio-builder/shared';
+import { BaseService, EventService, MailService, NotificationService } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../user/user.service';
@@ -26,7 +26,8 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> imple
     private readonly userService: UserService,
     private readonly blacklistedTokenService: BlacklistedTokenService,
     private readonly eventService : EventService,
-    private readonly notificationService : NotificationService
+    private readonly notificationService : NotificationService,
+    private readonly mailService : MailService
   ) {
     super(subscriptionModel);
   }
@@ -37,7 +38,7 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> imple
         const deletedDoc = change.fullDocumentBeforeChange;
         if(deletedDoc){
           const deletedId = change.documentKey._id
-          console.log(`sub ${deletedId} deleted`)
+          // console.log(`sub ${deletedId} deleted`)
           const user = await this.userService.findById(deletedDoc.userId);
           
           if(!user){
@@ -50,6 +51,7 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> imple
             message: 'Your subscription has been expired',
             eventType:'sub_expiration'
           })
+          await this.mailService.sendMail(user.email,'Subscription','Your subscription has been expired')
 
   
         }
