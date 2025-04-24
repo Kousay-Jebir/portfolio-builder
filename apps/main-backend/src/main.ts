@@ -13,6 +13,8 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('main');
+
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({transform:true})); 
   const swaggerService = app.get(SwaggerDocumentationService);

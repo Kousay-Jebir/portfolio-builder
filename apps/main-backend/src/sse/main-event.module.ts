@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
 import { EventModule,  SharedModule, TokenModule } from "@portfolio-builder/shared";
-import { ConsultEventController } from "./consult-event.controller";
+import { MainEventController } from "./main-event.controller";
 
 
 @Module({
   imports: [SharedModule,TokenModule,EventModule],
-  controllers: [ConsultEventController],
+  controllers: [MainEventController],
   providers: [],
   exports : []
 })
-export class ConsultEventModule {}
+export class MainEventModule {}
