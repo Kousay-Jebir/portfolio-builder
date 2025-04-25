@@ -78,24 +78,34 @@ export default function Draggable({
  */
 
 
-import { useNode } from '@craftjs/core';
+import React from "react";
+import { useNode } from "@craftjs/core";
 
-const Draggable = ({ element: ElementComponent, children, ...props }) => {
-    const {
-        connectors: { connect, drag },
-    } = useNode();
+const Draggable = React.forwardRef(
+    ({ element: ElementComponent = "div", children, ...props }, forwardedRef) => {
+        const {
+            connectors: { connect, drag },
+        } = useNode();
 
-    return (
-        <div ref={(ref) => ref && connect(drag(ref))}>
-            {ElementComponent ?
-                <ElementComponent {...props}>
-                    {children}
-                </ElementComponent> :
-                <div {...props}>
-                    {children}
-                </div>}
-        </div>
-    );
-};
+        // a single refCallback that wires up both the forwardedRef and Craft connectors
+        const refCallback = (el) => {
+            if (el) {
+                connect(drag(el));
+            }
+            if (typeof forwardedRef === "function") {
+                forwardedRef(el);
+            } else if (forwardedRef) {
+                forwardedRef.current = el;
+            }
+        };
+
+        // Render the element directly, no extra wrapper
+        return (
+            <ElementComponent ref={refCallback} {...props}>
+                {children}
+            </ElementComponent>
+        );
+    }
+);
 
 export default Draggable;

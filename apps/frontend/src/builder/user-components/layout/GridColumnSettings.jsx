@@ -1,4 +1,3 @@
-import React from "react";
 import { usePropSettings } from "../../customization-engine/shared-customization/customization-hook";
 import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings";
 
@@ -9,12 +8,23 @@ export function GridColumnSettings() {
     const colSettings = values.colSettings || {};
 
     const handleChange = (screen, field, raw) => {
-        const value =
-            field === "span" && raw === "content"
-                ? "content"
-                : raw === ""
-                    ? null
-                    : parseInt(raw, 10) || 0;
+        let value;
+
+        if (field === "span") {
+            // Allow "content" as a string and partial strings while typing
+            if (raw === "" || raw === null) {
+                value = null;
+            } else if (/^content$/i.test(raw)) {
+                value = "content";
+            } else if (/^\d+$/.test(raw)) {
+                value = parseInt(raw, 10);
+            } else {
+                value = raw; // Let the user keep typing (e.g., "conte")
+            }
+        } else {
+            // For offset, always parse as number or set null
+            value = raw === "" ? null : parseInt(raw, 10) || 0;
+        }
 
         updateProp("colSettings", {
             ...colSettings,
@@ -24,6 +34,7 @@ export function GridColumnSettings() {
             },
         });
     };
+
 
     const toggleHidden = (screen, isHidden) => {
         updateProp("colSettings", {

@@ -4,17 +4,16 @@ import GridEngine from "./builder/layout-engine/grid/GridEngine";
 import Draggable from "./builder/layout-engine/utils/components/Draggable";
 import Grid, { EditableCol, GridBody } from "./builder/user-components/layout/Grid";
 import Box from "./builder/layout-engine/utils/components/Box";
-import { Col, Container, Row } from "react-grid-system";
 import { DroppableBox } from "./builder/layout-engine/utils/components/Box";
 import ToolBox from "./builder/user-components/ToolBox";
-import { Section, GridColumn, GridRow, DroppableGridRow } from "./builder/user-components/layout/Section";
+import { Section, GridColumn, GridRow } from "./builder/user-components/layout/Section";
 import { EditableTypography } from "./builder/user-components/typography/Typography";
 import { CustomizationMenu } from "./builder/customization-engine/CustomizationMenu";
 import { EditableButton } from "./builder/user-components/button/Button";
-import { useState } from 'react';
 import { Image } from "./builder/user-components/image/Image";
 import './App.css';
 import { useRef, useEffect } from 'react';
+import Layers from './builder/Layers';
 
 const Topbar = () => {
   const { actions, query, enabled } = useEditor((state) => ({
@@ -100,7 +99,6 @@ function App() {
 
       <Editor
         resolver={{
-          DroppableGridRow,
           Draggable,
           GridEngine,
           Grid,
@@ -126,6 +124,7 @@ function App() {
         </Frame>
 
         <ToolBox />
+        <Layers />
         <Topbar />
 
         {/* now using our standalone Drawer */}

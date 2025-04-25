@@ -1,5 +1,5 @@
-import React from "react";
 import { useNode } from "@craftjs/core";
+import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings";
 
 export const ImageSettings = () => {
     const {
@@ -24,6 +24,7 @@ export const ImageSettings = () => {
         <div>
             <label>Upload Image</label>
             <input type="file" accept="image/*" onChange={handleImageUpload} />
+            <CommonStyleSettings />
         </div>
     );
 };
