@@ -1,66 +1,64 @@
 import { useState, useEffect } from "react";
 import { usePropSettings } from "./customization-hook";
 
-// Helper functions to extract values and units
+// Helpers
 const extractValueAndUnit = (value) => {
     const match = value?.toString().match(/^([\d.]+)(px|%)?$/);
     return match ? [parseFloat(match[1]), match[2] || "px"] : [0, "px"];
 };
 
+const rgbaString = (r, g, b, a) => `rgba(${r},${g},${b},${a})`;
 const getRGBA = (rgba) => {
     const match = rgba?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([.\d]+)?\)/);
     return match ? [match[1], match[2], match[3], match[4] || 1] : [255, 255, 255, 1];
 };
 
-const rgbaString = (r, g, b, a) => `rgba(${r},${g},${b},${a})`;
-
 const Sides = ["Top", "Right", "Bottom", "Left"];
 
+// DimensionControl handles padding, margin, border radius, etc.
 function DimensionControl({ label, prefix, style, onChange }) {
-    const [isCustom, setIsCustom] = useState(false);
-    const [unit, setUnit] = useState("px");
+    const [customSides, setCustomSides] = useState(false);
+    const [mainValue, mainUnit] = extractValueAndUnit(style[prefix] || "0px");
 
-    const baseKey = `${prefix}`;
-    const [value, defaultUnit] = extractValueAndUnit(style[baseKey] || "0px");
+    const handleMainChange = (value, unit) => {
+        onChange(prefix, `${value}${unit}`);
+    };
 
-    const handleChange = (side, val, unitOverride) => {
-        // Update specific side value
-        onChange(`${prefix}${side}`, `${val}${unitOverride}`);
+    const handleSideChange = (side, value, unit) => {
+        onChange(`${prefix}${side}`, `${value}${unit}`);
     };
 
     return (
         <fieldset>
             <legend>{label}</legend>
-            {!isCustom ? (
+            {!customSides ? (
                 <div>
                     <input
                         type="number"
-                        value={value}
-                        onChange={(e) => handleChange("", e.target.value, unit)}
+                        value={mainValue}
+                        onChange={(e) => handleMainChange(e.target.value, mainUnit)}
                     />
-                    <select value={unit} onChange={(e) => setUnit(e.target.value)}>
+                    <select value={mainUnit} onChange={(e) => handleMainChange(mainValue, e.target.value)}>
                         <option value="px">px</option>
                         <option value="%">%</option>
                     </select>
-                    <button type="button" onClick={() => setIsCustom(true)}>
-                        Customize Sides
-                    </button>
+                    <button type="button" onClick={() => setCustomSides(true)}>Customize Sides</button>
                 </div>
             ) : (
                 <>
                     {Sides.map((side) => {
-                        const [val, sideUnit] = extractValueAndUnit(style[`${prefix}${side}`] || "0px");
+                        const [val, unit] = extractValueAndUnit(style[`${prefix}${side}`] || "0px");
                         return (
                             <div key={side}>
-                                <label>{side}:</label>
+                                <label>{side}</label>
                                 <input
                                     type="number"
                                     value={val}
-                                    onChange={(e) => handleChange(side, e.target.value, sideUnit)}
+                                    onChange={(e) => handleSideChange(side, e.target.value, unit)}
                                 />
                                 <select
-                                    value={sideUnit}
-                                    onChange={(e) => handleChange(side, val, e.target.value)}
+                                    value={unit}
+                                    onChange={(e) => handleSideChange(side, val, e.target.value)}
                                 >
                                     <option value="px">px</option>
                                     <option value="%">%</option>
@@ -68,11 +66,30 @@ function DimensionControl({ label, prefix, style, onChange }) {
                             </div>
                         );
                     })}
-                    <button type="button" onClick={() => setIsCustom(false)}>
-                        Use All Sides
-                    </button>
+                    <button type="button" onClick={() => setCustomSides(false)}>Use Single Value</button>
                 </>
             )}
+        </fieldset>
+    );
+}
+
+function SizeControl({ label, keyName, style, onChange }) {
+    const [val, unit] = extractValueAndUnit(style[keyName] || "0px");
+    return (
+        <fieldset>
+            <legend>{label}</legend>
+            <input
+                type="number"
+                value={val}
+                onChange={(e) => onChange(keyName, `${e.target.value}${unit}`)}
+            />
+            <select
+                value={unit}
+                onChange={(e) => onChange(keyName, `${val}${e.target.value}`)}
+            >
+                <option value="px">px</option>
+                <option value="%">%</option>
+            </select>
         </fieldset>
     );
 }
@@ -80,100 +97,54 @@ function DimensionControl({ label, prefix, style, onChange }) {
 export function CommonStyleSettings({ showBackground = true, customs = false }) {
     const { values, updateProp } = usePropSettings(["style"], customs);
     const style = values.style || {};
-
-    const updateStyle = (key, value) => {
-        updateProp("style", { ...style, [key]: value });
-    };
+    const updateStyle = (key, value) => updateProp("style", { ...style, [key]: value });
 
     const [r, g, b, a] = getRGBA(style.backgroundColor || "rgba(255,255,255,1)");
 
-    // Border Style fix to ensure it updates immediately
-    const handleBorderStyleChange = (e) => {
-        updateStyle("borderStyle", e.target.value);
-    };
-
     useEffect(() => {
-        // Set the default borderStyle to 'solid' if not set
-        if (!style.borderStyle) {
-            updateStyle("borderStyle", "solid");
-        }
-    }, [style, updateStyle]);
+        if (!style.borderStyle) updateStyle("borderStyle", "solid");
+    }, [style]);
 
     return (
         <div className="space-y-4">
-            {/* Background color with opacity */}
             {showBackground && (
                 <fieldset>
-                    <legend>Background Color</legend>
-                    <div>
-                        <input
-                            type="color"
-                            value={`#${[r, g, b]
-                                .map((x) => parseInt(x).toString(16).padStart(2, "0"))
-                                .join("")}`}
-                            onChange={(e) => {
-                                const hex = e.target.value;
-                                const red = parseInt(hex.slice(1, 3), 16);
-                                const green = parseInt(hex.slice(3, 5), 16);
-                                const blue = parseInt(hex.slice(5, 7), 16);
-                                updateStyle("backgroundColor", rgbaString(red, green, blue, a));
-                            }}
-                        />
-                    </div>
-                    <div>
-                        <label>Opacity</label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            value={a}
-                            onChange={(e) =>
-                                updateStyle("backgroundColor", rgbaString(r, g, b, e.target.value))
-                            }
-                        />
-                    </div>
+                    <legend>Background</legend>
+                    <input
+                        type="color"
+                        value={`#${[r, g, b].map((x) => parseInt(x).toString(16).padStart(2, "0")).join("")}`}
+                        onChange={(e) => {
+                            const hex = e.target.value;
+                            const red = parseInt(hex.slice(1, 3), 16);
+                            const green = parseInt(hex.slice(3, 5), 16);
+                            const blue = parseInt(hex.slice(5, 7), 16);
+                            updateStyle("backgroundColor", rgbaString(red, green, blue, a));
+                        }}
+                    />
+                    <label>Opacity</label>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={a}
+                        onChange={(e) =>
+                            updateStyle("backgroundColor", rgbaString(r, g, b, e.target.value))
+                        }
+                    />
                 </fieldset>
             )}
 
-            {/* Padding */}
-            <DimensionControl
-                label="Padding"
-                prefix="padding"
-                style={style}
-                onChange={updateStyle}
-            />
+            <DimensionControl label="Padding" prefix="padding" style={style} onChange={updateStyle} />
+            <DimensionControl label="Margin" prefix="margin" style={style} onChange={updateStyle} />
+            <DimensionControl label="Border Radius" prefix="borderRadius" style={style} onChange={updateStyle} />
+            <DimensionControl label="Border Width" prefix="borderWidth" style={style} onChange={updateStyle} />
 
-            {/* Margin */}
-            <DimensionControl
-                label="Margin"
-                prefix="margin"
-                style={style}
-                onChange={updateStyle}
-            />
-
-            {/* Border Width */}
-            <DimensionControl
-                label="Border Width"
-                prefix="borderWidth"
-                style={style}
-                onChange={updateStyle}
-            />
-
-            {/* Border Radius */}
-            <DimensionControl
-                label="Border Radius"
-                prefix="borderRadius"
-                style={style}
-                onChange={updateStyle}
-            />
-
-            {/* Border Style */}
             <fieldset>
                 <legend>Border Style</legend>
                 <select
                     value={style.borderStyle || "solid"}
-                    onChange={handleBorderStyleChange}
+                    onChange={(e) => updateStyle("borderStyle", e.target.value)}
                 >
                     <option value="none">none</option>
                     <option value="solid">solid</option>
@@ -182,7 +153,6 @@ export function CommonStyleSettings({ showBackground = true, customs = false }) 
                 </select>
             </fieldset>
 
-            {/* Border Color */}
             <fieldset>
                 <legend>Border Color</legend>
                 <input
@@ -191,6 +161,9 @@ export function CommonStyleSettings({ showBackground = true, customs = false }) 
                     onChange={(e) => updateStyle("borderColor", e.target.value)}
                 />
             </fieldset>
+
+            <SizeControl label="Width" keyName="width" style={style} onChange={updateStyle} />
+            <SizeControl label="Height" keyName="height" style={style} onChange={updateStyle} />
         </div>
     );
 }
