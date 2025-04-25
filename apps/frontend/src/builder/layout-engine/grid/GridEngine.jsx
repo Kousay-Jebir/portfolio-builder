@@ -16,7 +16,7 @@ const DroppableGridEngine = withDroppable(GridEngine);
 
 DroppableGridEngine.craft = {
     props: {
-        style: { border: '1px solid gray', minHeight: '75vh' }
+        style: {}
     },
     related: {
         settings: GridEngineSettings

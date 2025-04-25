@@ -19,6 +19,13 @@ import {
 import { useDrawer } from "./DrawerContext";
 import Layers from "./builder/Layers";
 import "./App.css";
+import { CustomizationMenu } from "./builder/customization-engine/CustomizationMenu";
+import ToolBox from "./builder/user-components/ToolBox";
+import { EditableTypography } from "./builder/user-components/typography/Typography";
+import { Container, Section } from "lucide-react";
+import { BaseSection, GridColumn, GridRow } from "./builder/user-components/layout/Section";
+import { Image } from "./builder/user-components/image/Image";
+import DroppableGridEngine from "./builder/layout-engine/grid/GridEngine";
 
 // -- Constants & Initial State -------------------------------------------------
 const MIN_PANEL_WIDTH = 200;
@@ -152,22 +159,22 @@ export default function App() {
 
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
-      <Editor resolver={{}}>
+      <Editor resolver={{ EditableTypography, Section, GridRow, GridColumn, Image, BaseSection, DroppableGridEngine }}>
         <Topbar onMenuToggle={() => setLeftOpen(true)} dispatch={dispatch} darkMode={state.darkMode} />
         <div className="flex flex-1 overflow-hidden">
 
           {state.showLeft && (
             <Sidebar width={leftWidth} side="left" onResize={resizeLeft}>
               <div className="p-2 text-gray-700 dark:text-gray-300">
-                <h3 className="text-sm font-medium mb-1">Left Panel</h3>
-                <p className="text-xs">ToolBox & Layers</p>
+                <ToolBox />
+                <Layers />
               </div>
             </Sidebar>
           )}
 
           <main className="flex-1 bg-white overflow-auto">
             <Frame>
-              <Element is="div" canvas className="h-full p-4 text-gray-700 dark:text-gray-200">
+              <Element is={DroppableGridEngine} canvas className="h-full p-4 text-gray-700 dark:text-gray-200">
                 Builder Canvas
               </Element>
             </Frame>
@@ -177,7 +184,7 @@ export default function App() {
             <Sidebar width={rightWidth} side="right" onResize={resizeRight}>
               <div className="p-2 text-gray-700 dark:text-gray-300">
                 <h3 className="text-sm font-medium mb-1">Customization</h3>
-                <p className="text-xs">(menu placeholder)</p>
+                <p className="text-xs"><CustomizationMenu /></p>
               </div>
             </Sidebar>
           )}

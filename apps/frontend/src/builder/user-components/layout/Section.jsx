@@ -59,7 +59,7 @@ const GridRow = withCustomizableSettings(BaseGridRow, GridRowSettings, {
 
 
 //Droppable and draggable generic layout component
-function BaseSection({ component: Component, children, style, ...props }) {
+export function BaseSection({ component: Component, children, style, ...props }) {
     return (
         <Draggable style={style} element={Component} {...props}>
             {children}
