@@ -13,6 +13,7 @@ import { EditableButton } from "./builder/user-components/button/Button";
 import { Image } from "./builder/user-components/image/Image";
 import './App.css';
 import { useRef, useEffect } from 'react';
+import Layers from './builder/Layers';
 
 const Topbar = () => {
   const { actions, query, enabled } = useEditor((state) => ({
@@ -123,6 +124,7 @@ function App() {
         </Frame>
 
         <ToolBox />
+        <Layers />
         <Topbar />
 
         {/* now using our standalone Drawer */}
