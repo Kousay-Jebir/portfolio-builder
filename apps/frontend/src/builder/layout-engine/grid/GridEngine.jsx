@@ -6,9 +6,9 @@ export const DroppableContainer = withDroppable(Container, { enableDrag: true })
 
 function GridEngine({ children, style, ...props }) {
     return (
-        <Container {...props} style={style} fluid>
+        <main {...props} style={style} fluid>
             {children}
-        </Container>
+        </main>
     );
 }
 

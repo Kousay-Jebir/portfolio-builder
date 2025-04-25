@@ -37,7 +37,7 @@ function BaseGridColumn({ colSettings = {}, children, style, ...props }) {
 }
 
 const GridColumn = withCustomizableSettings(BaseGridColumn, GridColumnSettings, {
-    style: { height: "100px", border: "1px solid red" }
+    style: { minHeight: "50px", border: "1px solid red" }
 })
 
 
@@ -51,7 +51,7 @@ function BaseGridRow({ children, style, align, justify, ...props }) {
 }
 
 const GridRow = withCustomizableSettings(BaseGridRow, GridRowSettings, {
-    style: { height: "100px", border: "1px solid green" },
+    style: { minHeight: "50px", border: "1px solid green" },
     align: "normal",
     justify: "start"
 })
@@ -66,6 +66,6 @@ function BaseSection({ component: Component, children, style, ...props }) {
         </Draggable>
     )
 }
-const Section = withCustomizableSettings(BaseSection, CommonStyleSettings, { style: { height: "100px", border: "1px solid blue" } })
+const Section = withCustomizableSettings(BaseSection, CommonStyleSettings, { style: { minHeight: "50px", border: "1px solid blue" } })
 
 export { Section, GridRow, GridColumn }
