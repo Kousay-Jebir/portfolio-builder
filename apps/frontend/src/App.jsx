@@ -26,7 +26,7 @@ import { Container, Section } from "lucide-react";
 import { BaseSection, GridColumn, GridRow } from "./builder/user-components/layout/Section";
 import { Image } from "./builder/user-components/image/Image";
 import DroppableGridEngine from "./builder/layout-engine/grid/GridEngine";
-import { BuilderProvider } from "./builder/global-state/state-store";
+import { BuilderProvider, ModeToggle } from "./builder/global-state/state-store";
 
 // -- Constants & Initial State -------------------------------------------------
 const MIN_PANEL_WIDTH = 200;
@@ -87,6 +87,7 @@ function Topbar({ onMenuToggle, dispatch, darkMode }) {
         <Button size="xs" variant="ghost" className="p-1" onClick={() => console.log(query.serialize())}>
           Serialize
         </Button>
+        <ModeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="xs" variant="ghost" className="p-1">
@@ -120,7 +121,7 @@ function Sidebar({ width, children, side, onResize }) {
   const borderClass = side === "left" ? "border-r" : "border-l";
   const resizerPositionClass = side === "left" ? "right-0" : "left-0";
   return (
-    <div className={`relative hidden lg:flex flex-col bg-gray-50 dark:bg-gray-800 ${borderClass}`} style={{ width }}>
+    <div className={`relative hidden lg:flex flex-col bg-gray-50 dark:bg-gray-800 ${borderClass}`} style={{ width, overflow: "auto" }}>
       {children}
       <div
         className={`absolute top-0 ${resizerPositionClass} h-full w-1 hover:w-2 cursor-col-resize bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all`}

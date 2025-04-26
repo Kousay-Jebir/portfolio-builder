@@ -1,5 +1,6 @@
-import { createContext, useContext, useReducer, useEffect } from "react";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { useEditor } from "@craftjs/core";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const BUILDER_MODE = {
     EDIT: "EDIT",
@@ -8,17 +9,13 @@ const BUILDER_MODE = {
 
 const BuilderContext = createContext();
 
+// the border+padding you want in edit-mode
 const editModeStyles = {
     border: "1px solid red",
     padding: "10px",
-    ":hover": {
-        backgroundColor: "lightgray",
-    },
 };
 
-const initialState = {
-    isEnabled: true,
-};
+const initialState = { isEnabled: true };
 
 function reducer(state, action) {
     switch (action.type) {
@@ -31,14 +28,16 @@ function reducer(state, action) {
     }
 }
 
-export const BuilderProvider = ({ children }) => {
-    const { actions: { setOptions } } = useEditor();
-
+export function BuilderProvider({ children }) {
+    const {
+        actions: { setOptions },
+    } = useEditor();
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    // sync Craft.js enabled flag
     useEffect(() => {
-        setOptions((options) => {
-            options.enabled = state.isEnabled;
+        setOptions((opts) => {
+            opts.enabled = state.isEnabled;
         });
     }, [state.isEnabled, setOptions]);
 
@@ -47,24 +46,50 @@ export const BuilderProvider = ({ children }) => {
             {children}
         </BuilderContext.Provider>
     );
-};
+}
 
-export const useBuilder = () => useContext(BuilderContext);
+export function useBuilder() {
+    return useContext(BuilderContext);
+}
 
+/**
+ * HOC: injects edit-mode styles at render-time
+ */
 export function withBuilderEditable(WrappedComponent) {
     return function BuilderEditableComponent(props) {
         const { state } = useBuilder();
-
         const extraStyles = state.isEnabled ? editModeStyles : {};
 
         return (
             <WrappedComponent
                 {...props}
-                style={{
-                    ...props.style,
-                    ...extraStyles,
-                }}
+                style={{ ...props.style, ...extraStyles }}
             />
         );
     };
+}
+
+/**
+ * ModeToggle UI: use this to switch between EDIT / PREVIEW
+ */
+export function ModeToggle() {
+    const { state, dispatch } = useBuilder();
+
+    return (
+        <ToggleGroup
+            type="single"
+            value={state.isEnabled ? "edit" : "preview"}
+            onValueChange={(val) =>
+                dispatch({ type: val === "edit" ? BUILDER_MODE.EDIT : BUILDER_MODE.PREVIEW })
+            }
+            className="bg-transparent"
+        >
+            <ToggleGroupItem value="edit" className="px-2 py-1 text-xs">
+                Edit
+            </ToggleGroupItem>
+            <ToggleGroupItem value="preview" className="px-2 py-1 text-xs">
+                Preview
+            </ToggleGroupItem>
+        </ToggleGroup>
+    );
 }

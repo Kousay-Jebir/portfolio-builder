@@ -5,19 +5,18 @@ import { withEditableContent } from "../../layout-engine/utils/hocs/editable-con
 import { TypographySettings } from "./TypographySettings";
 
 export function Typography({ component: Component, style, children, ...props }) {
-    const defaultStyles = {
-        fontSize: "16px",
-        fontFamily: "sans-serif",
 
-    }
     return (
-        <Draggable style={{ ...defaultStyles, ...style }} element={Component} {...props}>{children}</Draggable>
+        <Draggable style={style} element={Component} {...props}>{children}</Draggable>
     )
 }
 
 const EditableTypography = withEditableContent(withBuilderEditable(Typography))
 EditableTypography.craft = {
     props: {
+        style: {
+            border: "1px solid blue"
+        },
         text: "Change me!"
     },
     related: {
