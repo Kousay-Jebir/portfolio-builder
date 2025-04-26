@@ -1,56 +1,60 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
 
-export const withEditableContent = (WrappedComponent, textProp = 'text') => {
+export function withEditableContent(WrappedComponent, textProp = 'text') {
     return function EditableTextComponent(props) {
         const { enabled } = useEditor((state) => ({
             enabled: state.options.enabled,
         }));
-        const {
-            connectors: { connect },
-            actions: { setProp },
-            selected,
-        } = useNode((node) => ({
+
+        const { connectors: { connect }, actions: { setProp }, selected } = useNode((node) => ({
             selected: node.events.selected,
         }));
 
-        // ref to the actual <span> so we can read its text later
-        const editableRef = useRef(null);
+        const ref = useRef(null);
+        const [localText, setLocalText] = useState(props[textProp]);
+
+        useEffect(() => {
+            setLocalText(props[textProp]);
+        }, [props[textProp]]);
 
         const handleBlur = () => {
-            if (!editableRef.current) return;
-            const newText = editableRef.current.innerText;
-            setProp((p) => {
-                p[textProp] = newText;
-            });
+            if (!ref.current) return;
+            const newText = ref.current.innerText;
+            if (newText !== localText) {
+                setProp((p) => {
+                    p[textProp] = newText;
+                });
+            }
         };
 
-        // shared ref callback for drag/selection
-        const combineRef = (el) => {
+        const combinedRef = (el) => {
             if (el) connect(el);
-            editableRef.current = el;
+            ref.current = el;
         };
+
+        const extraProps = enabled && selected
+            ? {
+                contentEditable: true,
+                suppressContentEditableWarning: true,
+                onBlur: handleBlur,
+                style: {
+                    outline: '1px dashed #999',
+                    minWidth: 20,
+                    display: 'inline-block',
+                    ...props.style, // keep user style
+                },
+            }
+            : {};
 
         return (
-            <WrappedComponent {...props}>
-                {enabled && selected ? (
-                    <span
-                        ref={combineRef}
-                        contentEditable
-                        suppressContentEditableWarning
-                        onBlur={handleBlur}
-                        style={{
-                            outline: '1px dashed #999',
-                            minWidth: 20,
-                            display: 'inline-block',
-                        }}
-                    >
-                        {props[textProp]}
-                    </span>
-                ) : (
-                    <span ref={connect}>{props[textProp]}</span>
-                )}
+            <WrappedComponent
+                {...props}
+                {...extraProps}
+                ref={combinedRef}
+            >
+                {localText}
             </WrappedComponent>
         );
     };
-};
+}
