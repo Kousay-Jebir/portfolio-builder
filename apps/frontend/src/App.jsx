@@ -26,6 +26,7 @@ import { Container, Section } from "lucide-react";
 import { BaseSection, GridColumn, GridRow } from "./builder/user-components/layout/Section";
 import { Image } from "./builder/user-components/image/Image";
 import DroppableGridEngine from "./builder/layout-engine/grid/GridEngine";
+import { BuilderProvider } from "./builder/global-state/state-store";
 
 // -- Constants & Initial State -------------------------------------------------
 const MIN_PANEL_WIDTH = 200;
@@ -160,64 +161,66 @@ export default function App() {
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
       <Editor resolver={{ EditableTypography, Section, GridRow, GridColumn, Image, BaseSection, DroppableGridEngine }}>
-        <Topbar onMenuToggle={() => setLeftOpen(true)} dispatch={dispatch} darkMode={state.darkMode} />
-        <div className="flex flex-1 overflow-hidden">
+        <BuilderProvider>
+          <Topbar onMenuToggle={() => setLeftOpen(true)} dispatch={dispatch} darkMode={state.darkMode} />
+          <div className="flex flex-1 overflow-hidden">
 
-          {state.showLeft && (
-            <Sidebar width={leftWidth} side="left" onResize={resizeLeft}>
-              <div className="p-2 text-gray-700 dark:text-gray-300">
-                <ToolBox />
-                <Layers />
+            {state.showLeft && (
+              <Sidebar width={leftWidth} side="left" onResize={resizeLeft}>
+                <div className="p-2 text-gray-700 dark:text-gray-300">
+                  <ToolBox />
+                  <Layers />
+                </div>
+              </Sidebar>
+            )}
+
+            <main className="flex-1 bg-white overflow-auto">
+              <Frame>
+                <Element is={DroppableGridEngine} canvas className="h-full p-4 text-gray-700 dark:text-gray-200">
+                  Builder Canvas
+                </Element>
+              </Frame>
+            </main>
+
+            {state.showRight && (
+              <Sidebar width={rightWidth} side="right" onResize={resizeRight}>
+                <div className="p-2 text-gray-700 dark:text-gray-300">
+                  <h3 className="text-sm font-medium mb-1">Customization</h3>
+                  <p className="text-xs"><CustomizationMenu /></p>
+                </div>
+              </Sidebar>
+            )}
+          </div>
+
+          {/* Mobile Drawers omitted for brevity */}
+          <Sheet open={leftOpen} onOpenChange={setLeftOpen}>
+            <SheetContent side="left" className="w-60 p-0">
+              <SheetHeader className="p-4 border-b bg-gray-50 dark:bg-gray-800">
+                <SheetTitle>Menu</SheetTitle>
+                <SheetClose asChild>
+                  <Button size="icon" variant="ghost">×</Button>
+                </SheetClose>
+              </SheetHeader>
+              <div className="p-4 bg-gray-50 dark:bg-gray-800">
+                <h3 className="text-sm font-medium mb-2">Left Panel</h3>
+                <div className="text-xs">ToolBox & Layers</div>
               </div>
-            </Sidebar>
-          )}
-
-          <main className="flex-1 bg-white overflow-auto">
-            <Frame>
-              <Element is={DroppableGridEngine} canvas className="h-full p-4 text-gray-700 dark:text-gray-200">
-                Builder Canvas
-              </Element>
-            </Frame>
-          </main>
-
-          {state.showRight && (
-            <Sidebar width={rightWidth} side="right" onResize={resizeRight}>
-              <div className="p-2 text-gray-700 dark:text-gray-300">
-                <h3 className="text-sm font-medium mb-1">Customization</h3>
-                <p className="text-xs"><CustomizationMenu /></p>
+            </SheetContent>
+          </Sheet>
+          <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
+            <SheetContent side="right" className="w-60 p-0">
+              <SheetHeader className="p-4 border-b bg-gray-50 dark:bg-gray-800">
+                <SheetTitle>Customization</SheetTitle>
+                <SheetClose asChild>
+                  <Button size="icon" variant="ghost">×</Button>
+                </SheetClose>
+              </SheetHeader>
+              <div ref={drawerRef} className="p-4 bg-gray-50 dark:bg-gray-800">
+                <div className="text-xs">Customization menu</div>
               </div>
-            </Sidebar>
-          )}
-        </div>
-
-        {/* Mobile Drawers omitted for brevity */}
-        <Sheet open={leftOpen} onOpenChange={setLeftOpen}>
-          <SheetContent side="left" className="w-60 p-0">
-            <SheetHeader className="p-4 border-b bg-gray-50 dark:bg-gray-800">
-              <SheetTitle>Menu</SheetTitle>
-              <SheetClose asChild>
-                <Button size="icon" variant="ghost">×</Button>
-              </SheetClose>
-            </SheetHeader>
-            <div className="p-4 bg-gray-50 dark:bg-gray-800">
-              <h3 className="text-sm font-medium mb-2">Left Panel</h3>
-              <div className="text-xs">ToolBox & Layers</div>
-            </div>
-          </SheetContent>
-        </Sheet>
-        <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-          <SheetContent side="right" className="w-60 p-0">
-            <SheetHeader className="p-4 border-b bg-gray-50 dark:bg-gray-800">
-              <SheetTitle>Customization</SheetTitle>
-              <SheetClose asChild>
-                <Button size="icon" variant="ghost">×</Button>
-              </SheetClose>
-            </SheetHeader>
-            <div ref={drawerRef} className="p-4 bg-gray-50 dark:bg-gray-800">
-              <div className="text-xs">Customization menu</div>
-            </div>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        </BuilderProvider>
       </Editor>
     </div>
   );
