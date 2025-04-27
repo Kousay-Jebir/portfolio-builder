@@ -1,6 +1,7 @@
 import React from "react";
 import { usePropSettings } from "../../customization-engine/shared-customization/customization-hook";
 import { AVAILABLE_FONTS } from "./fonts";
+import { CommonStyleSettings } from "@/builder/customization-engine/shared-customization/CommonStyleSettings";
 
 export function TypographySettings() {
     const { values, updateProp } = usePropSettings(["style"]);
@@ -13,7 +14,7 @@ export function TypographySettings() {
     };
 
     return (
-        <div className="space-y-4 p-4 border rounded-xl shadow-sm max-w-md">
+        <>
             <h2 className="text-lg font-semibold">Typography Settings</h2>
 
             {/* Font Family */}
@@ -106,49 +107,7 @@ export function TypographySettings() {
                     <option value="900">900</option>
                 </select>
             </div>
-            {/* Padding */}
-            <fieldset>
-                <legend>Padding (px)</legend>
-                {["Top", "Right", "Bottom", "Left"].map((side) => (
-                    <div key={side}>
-                        <label>{side}: </label>
-                        <input
-                            type="number"
-                            value={values.style?.[`padding${side}`] || 0}
-                            onChange={(e) =>
-                                handleStyleChange(`padding${side}`, parseInt(e.target.value))
-                            }
-                        />
-                    </div>
-                ))}
-            </fieldset>
-
-            {/* Margin */}
-            <fieldset>
-                <legend>Margin (px)</legend>
-                {["Top", "Right", "Bottom", "Left"].map((side) => (
-                    <div key={side}>
-                        <label>{side}: </label>
-                        <input
-                            type="number"
-                            value={values.style?.[`margin${side}`] || 0}
-                            onChange={(e) =>
-                                handleStyleChange(`margin${side}`, parseInt(e.target.value))
-                            }
-                        />
-                    </div>
-                ))}
-            </fieldset>
-
-            {/* Border Radius */}
-            <div>
-                <label>Border Radius (px): </label>
-                <input
-                    type="number"
-                    value={values.style?.borderRadius || 0}
-                    onChange={(e) => handleStyleChange("borderRadius", parseInt(e.target.value))}
-                />
-            </div>
-        </div>
+            <CommonStyleSettings />
+        </>
     );
 }

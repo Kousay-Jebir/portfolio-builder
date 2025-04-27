@@ -21,10 +21,10 @@ export const ImageSettings = () => {
     };
 
     return (
-        <div>
+        <>
             <label>Upload Image</label>
             <input type="file" accept="image/*" onChange={handleImageUpload} />
             <CommonStyleSettings />
-        </div>
+        </>
     );
 };
