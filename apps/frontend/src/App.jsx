@@ -187,7 +187,7 @@ export default function App() {
               <Sidebar width={rightWidth} side="right" onResize={resizeRight}>
                 <div className="p-2 text-gray-700 dark:text-gray-300">
                   <h3 className="text-sm font-medium mb-1">Customization</h3>
-                  <p className="text-xs"><CustomizationMenu /></p>
+                  <div className="text-xs"><CustomizationMenu /></div>
                 </div>
               </Sidebar>
             )}
