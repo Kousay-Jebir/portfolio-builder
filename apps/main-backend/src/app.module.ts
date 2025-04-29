@@ -13,6 +13,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
 import { MainEventModule } from './sse/main-event.module';
 import { AuthPublicMiddleware } from './auth/middleware/public-auth.middleware';
 import { JwtService } from '@nestjs/jwt';
+import { FileController } from './public.controller';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { JwtService } from '@nestjs/jwt';
     MainEventModule,
     MailModule
   ],
-  controllers: [AppController],
+  controllers: [AppController,FileController],
   providers: [AppService,JwtService],
 })
 export class AppModule implements NestModule {
