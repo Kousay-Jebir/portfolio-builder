@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const createAxiosInstance = (baseURL : string) => {
   const instance = axios.create({
@@ -6,10 +7,13 @@ const createAxiosInstance = (baseURL : string) => {
     withCredentials: true,
   });
 
-  // Add shared interceptors
   instance.interceptors.request.use((config) => {
-    // You can add any global config here, e.g., logging, CSRF, etc.
-    return config;
+    const token = Cookies.get('auth-token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+    
   }, (error) => {
     return Promise.reject(error);
   });
