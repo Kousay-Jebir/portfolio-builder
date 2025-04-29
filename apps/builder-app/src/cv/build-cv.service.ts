@@ -153,5 +153,12 @@ export class BuildCvService {
 
 
     }
+    async getCv(userId:string):Promise<String>{
+      const cv = await this.cvService.findByOwnerId(userId)
+      if(!cv){
+        throw new NotFoundException('cv inexistant')
+      }
+      return cv.path
+    }
 
 }
