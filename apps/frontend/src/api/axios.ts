@@ -1,18 +1,28 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const axiosMain = axios.create({
-  baseURL: '/api/main',
-  withCredentials: true,
-});
+const createAxiosInstance = (baseURL : string) => {
+  const instance = axios.create({
+    baseURL,
+    withCredentials: true,
+  });
 
-const axiosBuilder = axios.create({
-  baseURL: '/api/builder',
-  withCredentials: true,
-});
+  instance.interceptors.request.use((config) => {
+    const token = Cookies.get('auth-token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+    
+  }, (error) => {
+    return Promise.reject(error);
+  });
 
-const axiosConsult = axios.create({
-  baseURL: '/api/consulting',
-  withCredentials: true,
-});
+  return instance;
+};
+
+const axiosMain = createAxiosInstance('/api/main');
+const axiosBuilder = createAxiosInstance('/api/builder');
+const axiosConsult = createAxiosInstance('/api/consulting');
 
 export { axiosMain, axiosBuilder, axiosConsult };

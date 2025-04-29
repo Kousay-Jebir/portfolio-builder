@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "jsx": "react-jsx",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -21,7 +22,8 @@
   "@portfolio-builder/main-backend": ["apps/main-backend/src"],
   "@portfolio-builder/builder-app": ["apps/builder-app/src"],
   "@portfolio-builder/consult-app": ["apps/consult-app/src"],
-  "@portfolio-builder/shared": ["libs/shared/src"]
+  "@portfolio-builder/shared": ["libs/shared/src"],
+  "@/*": ["apps/frontend/src/*"]
 }
   }
 }
