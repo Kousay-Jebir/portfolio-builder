@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MailModule, mongooseConfig } from '@portfolio-builder/shared'; 
@@ -11,6 +11,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { MainEventModule } from './sse/main-event.module';
+import { AuthPublicMiddleware } from './auth/middleware/public-auth.middleware';
 
 @Module({
   imports: [
@@ -32,4 +33,10 @@ import { MainEventModule } from './sse/main-event.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthPublicMiddleware)
+      .forRoutes('/public'); 
+  }
+}
