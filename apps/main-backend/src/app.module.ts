@@ -12,6 +12,7 @@ import { AppService } from './app.service';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { MainEventModule } from './sse/main-event.module';
 import { AuthPublicMiddleware } from './auth/middleware/public-auth.middleware';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { AuthPublicMiddleware } from './auth/middleware/public-auth.middleware';
     MailModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,JwtService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
