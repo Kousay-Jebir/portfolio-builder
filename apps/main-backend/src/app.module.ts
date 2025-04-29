@@ -35,10 +35,4 @@ import { FileController } from './public.controller';
   controllers: [AppController,FileController],
   providers: [AppService,JwtService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthPublicMiddleware)
-      .forRoutes('/public'); 
-  }
-}
+export class AppModule  {}
