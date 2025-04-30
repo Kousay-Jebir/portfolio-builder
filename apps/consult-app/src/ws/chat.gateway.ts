@@ -1,18 +1,34 @@
+import { UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { WebSocketGateway, SubscribeMessage, MessageBody, WsResponse, ConnectedSocket } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway {
   private clients =  new Map<string,Socket>();
+  constructor(private readonly jwtService: JwtService) {}
+
 
   handleConnection(client: Socket) {
-    const userId = client.handshake.query.userId as string
+    const token = client.handshake.auth.token
+    if(!token){
+      throw new UnauthorizedException('unauthorized')
+    }
+    const payload=this.jwtService.verify(token)
+    if(!payload){
+      throw new UnauthorizedException('unauthorized')
+
+    }
+    const userId = payload.user.id as string
     if(userId){
         this.clients.set(userId,client)
         console.log(`client with ID ${userId} connected`)
     }
-    console.log('failed')
+    else{
+      console.log('failed')
     client.disconnect()
+    }
+    
   }
 
   handleDisconnect(client: Socket) {
