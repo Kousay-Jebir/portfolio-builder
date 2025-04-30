@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class ConsultAppController {
   constructor(private readonly consultAppService: ConsultAppService) {}
   @UseGuards(JwtAuthGuard,BlacklistGuard)
-  @ApiBearerAuth('JWT-auth')
+  // @ApiBearerAuth('JWT-auth')
   
   @Get()
   getHello(): string {
