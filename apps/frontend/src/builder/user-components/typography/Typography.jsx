@@ -14,9 +14,6 @@ export function Typography({ component: Component, style, children, ...props }) 
 const EditableTypography = withEditableContent(withBuilderEditable(Typography))
 EditableTypography.craft = {
     props: {
-        style: {
-            border: "1px solid blue"
-        },
         text: "Change me!"
     },
     related: {

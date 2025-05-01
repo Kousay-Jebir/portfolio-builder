@@ -6,6 +6,7 @@ import { Col, Row } from "react-grid-system"
 import { GridRowSettings } from "./GridRowSettings"
 import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings"
 import { withCustomizableSettings } from "../../customization-engine/shared-customization/customizable-hoc"
+import { withBuilderEditable } from "@/builder/global-state/state-store"
 
 function BaseGridColumn({ colSettings = {}, children, style, ...props }) {
     const spanProps = {};
@@ -36,8 +37,10 @@ function BaseGridColumn({ colSettings = {}, children, style, ...props }) {
         : column;
 }
 
-const GridColumn = withCustomizableSettings(BaseGridColumn, GridColumnSettings, {
-    style: { minHeight: "50px", border: "1px solid red" }
+const BuilderEditableGridColumn = withBuilderEditable(BaseGridColumn);
+
+const GridColumn = withCustomizableSettings(BuilderEditableGridColumn, GridColumnSettings, {
+    style: { minHeight: "50px" }
 })
 
 
@@ -50,8 +53,10 @@ function BaseGridRow({ children, style, align, justify, ...props }) {
     );
 }
 
-const GridRow = withCustomizableSettings(BaseGridRow, GridRowSettings, {
-    style: { minHeight: "50px", border: "1px solid green" },
+const BuilderEditableGridRow = withBuilderEditable(BaseGridRow);
+
+const GridRow = withCustomizableSettings(BuilderEditableGridRow, GridRowSettings, {
+    style: { minHeight: "50px" },
     align: "normal",
     justify: "start"
 })
@@ -66,6 +71,7 @@ export function BaseSection({ component: Component, children, style, ...props })
         </Draggable>
     )
 }
-const Section = withCustomizableSettings(BaseSection, CommonStyleSettings, { style: { minHeight: "50px", border: "1px solid blue" } })
+const BuilderEditableSection = withBuilderEditable(BaseSection)
+const Section = withCustomizableSettings(BuilderEditableSection, CommonStyleSettings, { style: { minHeight: "50px" } })
 
-export { Section, GridRow, GridColumn }
+export { Section, GridRow, GridColumn, BuilderEditableSection, BuilderEditableGridColumn, BuilderEditableGridRow }

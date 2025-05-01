@@ -23,7 +23,7 @@ import { CustomizationMenu } from "./builder/customization-engine/CustomizationM
 import ToolBox from "./builder/user-components/ToolBox";
 import { EditableTypography } from "./builder/user-components/typography/Typography";
 import { Container, Section } from "lucide-react";
-import { BaseSection, GridColumn, GridRow } from "./builder/user-components/layout/Section";
+import { BaseSection, BuilderEditableGridColumn, BuilderEditableGridRow, BuilderEditableSection, GridColumn, GridRow } from "./builder/user-components/layout/Section";
 import { Image } from "./builder/user-components/image/Image";
 import DroppableGridEngine from "./builder/layout-engine/grid/GridEngine";
 import { BuilderProvider, ModeToggle } from "./builder/global-state/state-store";
@@ -161,7 +161,7 @@ export default function App() {
 
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
-      <Editor resolver={{ EditableTypography, Section, GridRow, GridColumn, Image, BaseSection, DroppableGridEngine }}>
+      <Editor resolver={{ EditableTypography, Section, GridRow, GridColumn, Image, BaseSection, DroppableGridEngine, BuilderEditableSection, BuilderEditableGridColumn, BuilderEditableGridRow }}>
         <BuilderProvider>
           <Topbar onMenuToggle={() => setLeftOpen(true)} dispatch={dispatch} darkMode={state.darkMode} />
           <div className="flex flex-1 overflow-hidden">

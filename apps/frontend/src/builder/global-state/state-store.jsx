@@ -9,10 +9,11 @@ const BUILDER_MODE = {
 
 const BuilderContext = createContext();
 
-// the border+padding you want in edit-mode
+
 const editModeStyles = {
-    border: "1px solid red",
+    border: "1px solid gray",
     padding: "10px",
+    borderRadius: "5px",
 };
 
 const initialState = { isEnabled: true };
@@ -53,19 +54,21 @@ export function useBuilder() {
 }
 
 /**
- * HOC: injects edit-mode styles at render-time
+ * HOC: injects edit-mode styles at render-time,
+ * while preserving any existing style props.
  */
 export function withBuilderEditable(WrappedComponent) {
     return function BuilderEditableComponent(props) {
         const { state } = useBuilder();
-        const extraStyles = state.isEnabled ? editModeStyles : {};
 
-        return (
-            <WrappedComponent
-                {...props}
-                style={{ ...props.style, ...extraStyles }}
-            />
-        );
+        // Safely merge whatever props.style was,
+        // then layer on our editModeStyles if enabled.
+        const combinedStyle = {
+            ...(state.isEnabled ? editModeStyles : {}),
+            ...(props.style),
+        };
+
+        return <WrappedComponent {...props} style={combinedStyle} />;
     };
 }
 
@@ -80,7 +83,10 @@ export function ModeToggle() {
             type="single"
             value={state.isEnabled ? "edit" : "preview"}
             onValueChange={(val) =>
-                dispatch({ type: val === "edit" ? BUILDER_MODE.EDIT : BUILDER_MODE.PREVIEW })
+                dispatch({
+                    type:
+                        val === "edit" ? BUILDER_MODE.EDIT : BUILDER_MODE.PREVIEW,
+                })
             }
             className="bg-transparent"
         >
