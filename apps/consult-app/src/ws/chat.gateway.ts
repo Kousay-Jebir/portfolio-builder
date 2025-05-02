@@ -4,11 +4,12 @@ import { WebSocketGateway, SubscribeMessage, MessageBody, WsResponse, ConnectedS
 import { JwtAuthGuard } from '@portfolio-builder/shared';
 import { Server, Socket } from 'socket.io';
 import { WsService } from './chat.service';
+import { MessageService } from '../message/message.service';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway {
   private clients =  new Map<string,Socket>();
-  constructor(private readonly jwtService: JwtService,private readonly wsService : WsService) {}
+  constructor(private readonly jwtService: JwtService,private readonly wsService : WsService,private readonly messageService : MessageService) {}
 
   handleConnection(client: Socket) {
     // return this.wsService.verifyClient(client)
@@ -52,6 +53,7 @@ export class ChatGateway {
     
     if(recepientSocket){
         recepientSocket.emit('message',data.message)
+        this.messageService.create({content:data.message,sender:'x',receiver:data.to,})
 
     }
     else{
