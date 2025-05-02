@@ -47,8 +47,9 @@ export class ChatGateway {
   @SubscribeMessage('message')
   handleMessage(@MessageBody() data: { to: string; message: string }){
 
-    const recepientSocket = this.clients.get(data.to)
 
+    const recepientSocket = this.clients.get(data.to)
+    
     if(recepientSocket){
         recepientSocket.emit('message',data.message)
 
