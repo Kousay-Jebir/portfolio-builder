@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConsultUserModule } from './user/consult-user.module';
 import { ChatGateway } from './ws/chat.gateway';
 import { MessageModule } from './message/message.module';
+import { WsService } from './ws/chat.service';
 
 @Module({
   imports: [
@@ -43,6 +44,6 @@ import { MessageModule } from './message/message.module';
     ]),
   ],
   controllers: [ConsultAppController],
-  providers: [ConsultAppService,ChatGateway],
+  providers: [ConsultAppService,ChatGateway,WsService],
 })
 export class ConsultAppModule {}
