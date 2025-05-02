@@ -9,9 +9,9 @@ export class ChatGateway {
   private clients =  new Map<string,Socket>();
   constructor(private readonly jwtService: JwtService) {}
 
-  @UseGuards(JwtAuthGuard)
   handleConnection(client: Socket) {
-    const token = client.handshake.query.token as string
+    try{
+      const token = client.handshake.query.token as string
     if(!token){
       throw new UnauthorizedException('unauthorized')
     }
@@ -29,6 +29,12 @@ export class ChatGateway {
       console.log('failed')
     client.disconnect()
     }
+    }
+    catch(err){
+      console.log(err)
+      client.disconnect()
+    }
+    
     
   }
 
