@@ -2,50 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Resume</title>
+  <title>{{user.full_name}} - Resume</title>
 </head>
-<body style="font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; line-height: 1.6;">
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; background: #fff; color: #333;">
 
-  <h1 style="text-align: center; margin-bottom: 5px;">John Doe</h1>
-  <p style="text-align: center; color: gray; margin-top: 0;">Email: john.doe@example.com | Phone: (123) 456-7890 | Location: City, Country</p>
+  <div style="max-width: 800px; margin: auto; padding: 30px; border: 1px solid #ddd; box-shadow: 0 0 8px rgba(0,0,0,0.05);">
 
-  <hr style="margin: 20px 0;" />
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h1 style="margin-bottom: 5px; font-size: 32px;">{{user.full_name}}</h1>
+      <p style="margin: 0; font-size: 14px; color: #666;">{{user.email}} | {{user.phone}} | {{user.location}}</p>
+    </div>
 
-  <h2 style="color: #2c3e50; margin-bottom: 10px;">Summary</h2>
-  <p style="margin-top: 0;">Motivated and detail-oriented professional with a background in web development and software engineering. Passionate about building efficient and scalable web applications.</p>
+    <!-- Job Target -->
+    {{#if job_target.title}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 30px;">Job Target</h2>
+      <p><strong>{{job_target.title}}</strong> — {{job_target.description}}</p>
+    {{/if}}
 
-  <h2 style="color: #2c3e50; margin-bottom: 10px;">Skills</h2>
-  <ul style="margin-top: 0; padding-left: 20px;">
-    <li>HTML, CSS, JavaScript</li>
-    <li>React, Node.js, Express</li>
-    <li>MongoDB, SQL</li>
-    <li>Git, Docker, REST APIs</li>
-  </ul>
+    <!-- Summary -->
+    {{#if user.summary}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Summary</h2>
+      <p>{{user.summary}}</p>
+    {{/if}}
 
-  <h2 style="color: #2c3e50; margin-bottom: 10px;">Experience</h2>
-  <p style="margin-bottom: 2px;"><strong>Frontend Developer</strong> — ABC Tech</p>
-  <p style="margin-top: 0; color: gray;">Jan 2022 – Present</p>
-  <ul style="padding-left: 20px;">
-    <li>Built and maintained responsive web interfaces using React and Tailwind CSS.</li>
-    <li>Collaborated with backend developers and designers to improve UX and performance.</li>
-  </ul>
+    <!-- Skills -->
+    {{#if portfolio.skills.length}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Skills</h2>
+      <ul style="padding-left: 0; display: flex; flex-wrap: wrap; gap: 10px; list-style: none;">
+        {{#each portfolio.skills}}
+          <li style="background-color: #eef6fd; padding: 5px 12px; border-radius: 15px; font-size: 13px;">{{this}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
 
-  <p style="margin-bottom: 2px;"><strong>Intern Web Developer</strong> — XYZ Solutions</p>
-  <p style="margin-top: 0; color: gray;">Jun 2021 – Dec 2021</p>
-  <ul style="padding-left: 20px;">
-    <li>Assisted in creating client websites and fixing bugs in existing applications.</li>
-    <li>Gained experience with agile development and Git version control.</li>
-  </ul>
+    <!-- Experience -->
+    {{#if portfolio.experience.length}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Experience</h2>
+      {{#each portfolio.experience}}
+        <div style="margin-bottom: 16px;">
+          <strong>{{position}}</strong>, {{company}} — <em>{{location}}</em><br />
+          <span style="font-size: 13px; color: #555;">{{start_date}} – {{end_date}}</span>
+          <p style="margin: 4px 0;">{{description}}</p>
+        </div>
+      {{/each}}
+    {{/if}}
 
-  <h2 style="color: #2c3e50; margin-bottom: 10px;">Education</h2>
-  <p style="margin-bottom: 2px;"><strong>B.Sc. in Computer Science</strong> — University Name</p>
-  <p style="margin-top: 0; color: gray;">2017 – 2021</p>
+    <!-- Education -->
+    {{#if portfolio.education.length}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Education</h2>
+      {{#each portfolio.education}}
+        <div style="margin-bottom: 10px;">
+          <strong>{{degree}}</strong>, {{field_of_study}}<br />
+          {{institution}} ({{start_date}} – {{end_date}})<br />
+          <span style="font-size: 13px;">Grade: {{grade}}</span>
+        </div>
+      {{/each}}
+    {{/if}}
 
-  <h2 style="color: #2c3e50; margin-bottom: 10px;">Projects</h2>
-  <ul style="padding-left: 20px;">
-    <li><strong>Portfolio Website:</strong> Built a personal portfolio using React and hosted it on GitHub Pages.</li>
-    <li><strong>Task Manager App:</strong> Created a full-stack task manager with login/authentication features.</li>
-  </ul>
+    <!-- Certifications -->
+    {{#if portfolio.certifications.length}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Certifications</h2>
+      {{#each portfolio.certifications}}
+        <p style="margin-bottom: 6px;">
+          <strong>{{name}}</strong> – {{issuer}}, {{date}}<br />
+          {{#if link}}<a href="{{link}}" style="font-size: 13px; color: #0077cc;">View Certificate</a>{{/if}}
+        </p>
+      {{/each}}
+    {{/if}}
+
+    <!-- Projects -->
+    {{#if portfolio.projects.length}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Projects</h2>
+      {{#each portfolio.projects}}
+        <div style="margin-bottom: 10px;">
+          <strong>{{title}}</strong><br />
+          <span>{{description}}</span><br />
+          <span style="font-size: 13px;"><em>Tech:</em> {{#each tech_stack}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</span><br />
+          {{#if link}}<a href="{{link}}" style="font-size: 13px; color: #0077cc;">View Project</a>{{/if}}
+        </div>
+      {{/each}}
+    {{/if}}
+
+    <!-- Achievements -->
+    {{#if portfolio.achievements.length}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Achievements</h2>
+      <ul>
+        {{#each portfolio.achievements}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    <!-- Languages -->
+    {{#if user.languages.length}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Languages</h2>
+      <ul style="display: flex; gap: 12px; list-style: none; padding-left: 0;">
+        {{#each user.languages}}
+          <li style="background: #d4f0d7; padding: 5px 12px; border-radius: 15px;">{{this}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    <!-- Interests -->
+    {{#if portfolio.interests.length}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Interests</h2>
+      <p>{{#each portfolio.interests}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+    {{/if}}
+
+    <!-- Social Links -->
+    {{#if portfolio.social_links}}
+      <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">Social Links</h2>
+      <ul style="list-style: none; padding-left: 0; font-size: 14px;">
+        {{#if portfolio.social_links.github}}<li>GitHub: {{portfolio.social_links.github}}</li>{{/if}}
+        {{#if portfolio.social_links.linkedin}}<li>LinkedIn: {{portfolio.social_links.linkedin}}</li>{{/if}}
+        {{#if portfolio.social_links.website}}<li>Website: {{portfolio.social_links.website}}</li>{{/if}}
+        {{#each portfolio.social_links.other}}<li>{{this}}</li>{{/each}}
+      </ul>
+    {{/if}}
+
+  </div>
 
 </body>
 </html>

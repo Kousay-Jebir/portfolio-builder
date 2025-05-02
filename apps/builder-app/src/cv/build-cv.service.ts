@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { BlacklistGuard, CvService, JwtAuthGuard, PortfolioService } from '@portfolio-builder/shared';
+import { BlacklistGuard, CvService, JwtAuthGuard, PdfService, PortfolioService } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { CvDataDto } from '../dto/cv-data.dto';
 import { CreateCvDto } from '../dto/create-cv.dto';
@@ -9,7 +9,8 @@ import { CreateCvDto } from '../dto/create-cv.dto';
 export class BuildCvService {
    constructor(
       private readonly portfolioService: PortfolioService,
-      private readonly cvService : CvService
+      private readonly cvService : CvService,
+      private readonly pdfService : PdfService
     ){}
     async getQuestions(portfolioId:string,userId:string){
         const portfolio = await this.portfolioService.findById(portfolioId);
@@ -159,6 +160,98 @@ export class BuildCvService {
         throw new NotFoundException('cv inexistant')
       }
       return cv.path
+    }
+
+    async generateCv(ownerId:string){
+      const data = {
+        "user": {
+          "id": "1",
+          "full_name": "Jane Doe",
+          "email": "jane.doe@example.com",
+          "phone": "+1 555 123 4567",
+          "location": "San Francisco, CA",
+          "summary": "A results-driven software engineer with 5+ years of experience in building web applications using modern technologies. Passionate about clean code, agile development, and user-focused design.",
+          "languages": ["English", "Spanish", "French"]
+        },
+        "portfolio": {
+          "skills": ["JavaScript", "TypeScript", "React", "Node.js", "MongoDB", "Docker", "AWS", "GraphQL"],
+          "projects": [
+            {
+              "title": "SmartTask Manager",
+              "description": "A productivity app that helps teams manage tasks, track time, and collaborate efficiently.",
+              "tech_stack": ["React", "Node.js", "Express", "MongoDB"],
+              "link": "https://github.com/janedoe/smart-task-manager"
+            },
+            {
+              "title": "Personal Portfolio",
+              "description": "A mobile-responsive portfolio showcasing my projects and blogs.",
+              "tech_stack": ["HTML", "CSS", "JavaScript"],
+              "link": "https://janedoe.dev"
+            }
+          ],
+          "experience": [
+            {
+              "company": "Tech Solutions Inc.",
+              "position": "Senior Software Engineer",
+              "location": "Remote",
+              "start_date": "Jan 2022",
+              "end_date": "Present",
+              "description": "Led the front-end team to redesign the main platform UI. Improved performance by 30%."
+            },
+            {
+              "company": "CodeBase",
+              "position": "Software Developer",
+              "location": "New York, NY",
+              "start_date": "Jun 2019",
+              "end_date": "Dec 2021",
+              "description": "Developed RESTful APIs and integrated third-party services to support business operations."
+            }
+          ],
+          "education": [
+            {
+              "institution": "Stanford University",
+              "degree": "Bachelor of Science",
+              "field_of_study": "Computer Science",
+              "start_date": "2015",
+              "end_date": "2019",
+              "grade": "3.9 GPA"
+            }
+          ],
+          "certifications": [
+            {
+              "name": "AWS Certified Developer – Associate",
+              "issuer": "Amazon Web Services",
+              "date": "March 2022",
+              "link": "https://aws.amazon.com/certification/certified-developer-associate/"
+            },
+            {
+              "name": "Full-Stack Web Developer",
+              "issuer": "Udacity",
+              "date": "June 2020",
+              "link": "https://confirm.udacity.com/XYZ123"
+            }
+          ],
+          "achievements": [
+            "Built an internal CI/CD tool saving 10+ developer hours/week",
+            "Top 5 finalist in Hack the Valley 2021",
+            "Open source contributor to several npm packages"
+          ],
+          "interests": ["Hiking", "Photography", "Open Source", "Travel"],
+          "social_links": {
+            "github": "https://github.com/janedoe",
+            "linkedin": "https://linkedin.com/in/janedoe",
+            "website": "https://janedoe.dev",
+            "other": ["https://twitter.com/janedoe"]
+          }
+        },
+        "job_target": {
+          "title": "Full-Stack Developer",
+          "description": "Seeking a challenging role in a fast-paced tech company to build scalable web applications."
+        }
+      }
+      
+      const filePath=await this.pdfService.generateResumePdf(data)
+      return this.cvService.create({title:'cv',user:ownerId,path:filePath})
     }
 
 }
