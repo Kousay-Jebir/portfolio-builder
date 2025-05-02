@@ -11,19 +11,16 @@ import { JwtAuthGuard } from '@portfolio-builder/shared';
 import { Server, Socket } from 'socket.io';
 import { WsService } from './chat.service';
 import { MessageService } from '../message/message.service';
-import { Client } from 'socket.io/dist/client';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway {
   private clients = new Map<string, Socket>();
   constructor(
-    private readonly jwtService: JwtService,
     private readonly wsService: WsService,
     private readonly messageService: MessageService,
   ) {}
 
   handleConnection(client: Socket) {
-    // return this.wsService.verifyClient(client)
     try {
       const payload = this.wsService.verifyClient(client);
       if (!payload) {
@@ -86,7 +83,7 @@ export class ChatGateway {
     }
     catch(err){
       console.log(err)
-      
+
     }
   
    

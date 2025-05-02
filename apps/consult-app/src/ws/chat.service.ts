@@ -8,9 +8,6 @@ export class WsService {
 
     verifyClient(client: Socket){
         const token = client.handshake.query.token as string;
-    //     console.log("token",token)
-    //     const payload=this.jwtService.verify(token)
-    //    console.log("payload",payload) 
         if (!token) throw new UnauthorizedException('Missing token');
       
         try {
@@ -22,7 +19,7 @@ export class WsService {
         } catch (e) {
           throw new UnauthorizedException('Invalid token');
         }
-      }
+    }
       
 
 }
