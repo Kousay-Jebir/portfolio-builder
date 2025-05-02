@@ -3,19 +3,17 @@ import { JwtService } from '@nestjs/jwt';
 import { WebSocketGateway, SubscribeMessage, MessageBody, WsResponse, ConnectedSocket } from '@nestjs/websockets';
 import { JwtAuthGuard } from '@portfolio-builder/shared';
 import { Server, Socket } from 'socket.io';
+import { WsService } from './chat.service';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway {
   private clients =  new Map<string,Socket>();
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService,private readonly wsService : WsService) {}
 
   handleConnection(client: Socket) {
+    // return this.wsService.verifyClient(client)
     try{
-      const token = client.handshake.query.token as string
-    if(!token){
-      throw new UnauthorizedException('unauthorized')
-    }
-    const payload=this.jwtService.verify(token)
+    const payload=this.wsService.verifyClient(client)
     if(!payload){
       throw new UnauthorizedException('unauthorized')
 
