@@ -37,7 +37,7 @@ export class ConsultUserService {
    
 
 
-    return field?await data.filter((profile)=>profile.field==field):data;
+    return field? data.filter((profile)=>profile.field==field):data;
   }
 
   async getUserPortfolios(id: string) {
