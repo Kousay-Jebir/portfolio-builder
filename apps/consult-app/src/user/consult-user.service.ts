@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CvService, PortfolioService, User } from '@portfolio-builder/shared';
+import { CvService, FieldTypeEnum, PaginationService, PortfolioService, User } from '@portfolio-builder/shared';
 import { PaginationDto } from 'libs/shared/src/pagination/dto/pagination.dto';
 
 @Injectable()
@@ -7,11 +7,13 @@ export class ConsultUserService {
   constructor(
     private readonly portfolioService: PortfolioService,
     private readonly cvService: CvService,
+    private readonly paginationService : PaginationService
   ) {}
 
   async getUsersWithPortfolio(pagination:PaginationDto) {
     const portfolios = await this.portfolioService.findAllWithUserProfileOnly(pagination);
-    
+    const {field}=pagination
+
 
     const profiles = portfolios
       .map((p) => {
@@ -24,7 +26,7 @@ export class ConsultUserService {
         }
         return null;
       })
-      .filter((profile) => profile !== null);
+      .filter((profile) =>profile !== null );
     const data = await Promise.all(
       profiles.map(async (item) => {
         const cv = await this.cvService.findByOwnerId(item.user);
@@ -32,8 +34,10 @@ export class ConsultUserService {
         return cv ? { ...plainItem, cv: cv.path } : { ...plainItem };
       }),
     );
+   
 
-    return data;
+
+    return field? data.filter((profile)=>profile.field==field):data;
   }
 
   async getUserPortfolios(id: string) {

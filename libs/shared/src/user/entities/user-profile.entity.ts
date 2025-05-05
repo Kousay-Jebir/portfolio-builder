@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from './user.entity'; 
+import { FieldTypeEnum } from '../../enum/field-type.enum';
 
 export type UserProfileDocument = UserProfile & Document;
 
@@ -24,8 +25,9 @@ export class UserProfile {
   @Prop()
   location: string;
 
-  @Prop()
-  field: string;
+  @Prop({ type: String, enum: FieldTypeEnum, required: true })
+  
+  field: FieldTypeEnum;
 
  
 
