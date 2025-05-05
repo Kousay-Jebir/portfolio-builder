@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { ActivityTypeEnum } from '../enum/activity-type.enum';
 
 export type ActivityLogDocument = ActivityLog & Document;
 
@@ -8,8 +9,8 @@ export class ActivityLog {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   user: Types.ObjectId;
 
-  @Prop({ required: true })
-  type: 'VIEW' | 'SEARCH' | 'CLICK' | 'LIKE';
+  @Prop({ required: true,type:String,enum:ActivityTypeEnum })
+  type: ActivityTypeEnum;
 
   @Prop({ type: Object })
   metadata: Record<string, any>;
