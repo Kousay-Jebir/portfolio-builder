@@ -5,6 +5,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { BaseService } from "../services/base.service";
 import { PaginationService } from "../pagination/pagination.service";
 import { PaginationDto } from "../pagination/dto/pagination.dto";
+import { match } from "assert";
+import { FieldTypeEnum } from "../enum/field-type.enum";
 
 
 @Injectable()
@@ -17,7 +19,8 @@ export class PortfolioService extends BaseService<PortfolioDocument> {
   ){super(portfolioModel);}
 
   async findAllWithUserProfileOnly(pagination:PaginationDto) {
-    const {offset,limit}=pagination
+    const {offset,limit,field}=pagination
+    console.log('firld',field)
 
     return await   this.paginationService.paginate(this.portfolioModel
       .find(),offset,limit)  
