@@ -11,6 +11,7 @@ export class ConsultUserService {
 
   async getUsersWithPortfolio(pagination:PaginationDto) {
     const portfolios = await this.portfolioService.findAllWithUserProfileOnly(pagination);
+    
 
     const profiles = portfolios
       .map((p) => {

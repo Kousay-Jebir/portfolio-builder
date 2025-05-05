@@ -9,8 +9,8 @@ export class PaginationService{
 
     paginate<T>(
         query: QueryWithHelpers<T[], T>,
-        limit?: number,
         offset?: number,
+        limit?: number,
       ) {
         if (offset) query.skip(offset);
         if (limit) query.limit(limit);

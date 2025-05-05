@@ -19,7 +19,7 @@ export class PortfolioService extends BaseService<PortfolioDocument> {
   async findAllWithUserProfileOnly(pagination:PaginationDto) {
     const {offset,limit}=pagination
 
-    return  this.paginationService.paginate(this.portfolioModel
+    return await   this.paginationService.paginate(this.portfolioModel
       .find(),offset,limit)  
       .populate({
         path: 'user',
@@ -29,6 +29,16 @@ export class PortfolioService extends BaseService<PortfolioDocument> {
         },
       })
       .exec();
+    // return await this.portfolioModel
+    // .find()
+    // .populate({
+    //   path: 'user',
+    //   populate: {
+    //     path: 'profile',
+    //     model: 'UserProfile',
+    //   },
+    // })
+    // .exec();
   }
 
 
