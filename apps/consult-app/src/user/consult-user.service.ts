@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CvService, PortfolioService, User } from '@portfolio-builder/shared';
+import { PaginationDto } from 'libs/shared/src/pagination/dto/pagination.dto';
 
 @Injectable()
 export class ConsultUserService {
@@ -8,8 +9,9 @@ export class ConsultUserService {
     private readonly cvService: CvService,
   ) {}
 
-  async getUsersWithPortfolio() {
-    const portfolios = await this.portfolioService.findAllWithUserProfileOnly();
+  async getUsersWithPortfolio(pagination:PaginationDto) {
+    const portfolios = await this.portfolioService.findAllWithUserProfileOnly(pagination);
+    
 
     const profiles = portfolios
       .map((p) => {
