@@ -10,6 +10,7 @@ import { ConsultUserModule } from './user/consult-user.module';
 import { ChatGateway } from './ws/chat.gateway';
 import { MessageModule } from './message/message.module';
 import { WsService } from './ws/chat.service';
+import { ActivitylogModule } from './activitylog/activitylog.module';
 
 @Module({
   imports: [
@@ -42,6 +43,8 @@ import { WsService } from './ws/chat.service';
       { name: User.name, schema: UserSchema },
       {name : UserProfile.name,schema:UserProfileSchema}
     ]),
+
+    ActivitylogModule,
   ],
   controllers: [ConsultAppController],
   providers: [ConsultAppService,ChatGateway,WsService,PaginationService],
