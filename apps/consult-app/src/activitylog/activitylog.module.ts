@@ -5,6 +5,7 @@ import { ActivityLog, ActivityLogSchema } from './schema/activity-log.schema';
 
 @Module({
   imports:[MongooseModule.forFeature([{ name: ActivityLog.name, schema: ActivityLogSchema }])],
-  providers: [ActivitylogService]
+  providers: [ActivitylogService],
+  exports : [ActivitylogService]
 })
 export class ActivitylogModule {}

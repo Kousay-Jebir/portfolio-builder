@@ -19,9 +19,9 @@ export class ActivitylogService {
         });
       }
     
-      async getUserActivity(userId: string, filters?: any) {
-        return this.activityLogModel
-          .find({ user: userId, ...(filters || {}) })
+      async getUserActivity(userId: string,) {
+        return await this.activityLogModel
+          .find({ user: userId})
           .sort({ createdAt: -1 })
           .exec();
       }

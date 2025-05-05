@@ -12,6 +12,8 @@ import {
 } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { Model } from 'mongoose';
+import { ActivitylogService } from './activitylog/activitylog.service';
+import { ActivityTypeEnum } from './activitylog/enum/activity-type.enum';
 
 @Injectable()
 export class ConsultAppService {
@@ -21,7 +23,8 @@ export class ConsultAppService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly portfolioService: PortfolioService,
     private readonly notificationService: NotificationService,
-    private readonly eventService : EventService
+    private readonly eventService : EventService,
+    private readonly activityLogService : ActivitylogService
   ) {}
   getHello(): string {
     return 'Hello World From Consult!';
@@ -80,8 +83,13 @@ export class ConsultAppService {
                   message: message,
                   eventType:'portfolio_view'
                 })
+      await this.activityLogService.logActivity(viewer.id,ActivityTypeEnum.VIEW,{
+        portfolio:id,ownerId:receiverId
+      })
       // this.eventService.notifyUser(receiverId as string, message,'portfolio_view');
+
     }
+
     portfolio.user = receiverId;
 
     return portfolio;
