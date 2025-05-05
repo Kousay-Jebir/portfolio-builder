@@ -17,7 +17,7 @@ export class CreateProfileDto {
   location: string;
   @ApiProperty()
   @IsString()
-  status: string;
+  field: string;
   @ApiProperty({ example: { "email": 'x' } })
   @IsObject()
   @Transform(({ value }) => {
