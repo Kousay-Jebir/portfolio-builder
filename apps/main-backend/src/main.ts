@@ -14,7 +14,6 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('main');
-  app.useGlobalGuards(new ThrottlerGuard());
 
 
   app.use(cookieParser());
