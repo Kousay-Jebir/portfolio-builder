@@ -19,8 +19,7 @@ export class PortfolioService extends BaseService<PortfolioDocument> {
   ){super(portfolioModel);}
 
   async findAllWithUserProfileOnly(pagination:PaginationDto) {
-    const {offset,limit,field}=pagination
-    console.log('firld',field)
+    const {offset,limit}=pagination
 
     return await   this.paginationService.paginate(this.portfolioModel
       .find(),offset,limit)  
