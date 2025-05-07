@@ -98,4 +98,16 @@ export class ConsultAppService {
   async updateNotfiStatus(id: string) {
     return await this.notificationService.update(id, { seen: true });
   }
+
+  async likePortfolio(id:string,userId:string){
+    const portfolio = await this.portfolioService.findById(id)
+    if(!portfolio){
+      throw new NotFoundException('portfolio not found')
+    }
+    return await this.activityLogService.logActivity(userId,ActivityTypeEnum.LIKE,{
+      portfolio:id,
+      ownerId:portfolio.user
+    })
+
+  }
 }

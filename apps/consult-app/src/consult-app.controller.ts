@@ -37,4 +37,11 @@ export class ConsultAppController {
     return await this.consultAppService.updateNotfiStatus(id)
     
   }
+  @UseGuards(JwtAuthGuard, BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Post('portfolio/like/:id')
+  async likeProfile(@ConnectedUser() user : any , @Param('id') id : string){
+    return await this.consultAppService.likePortfolio(id,user.id)
+
+  }
 }
