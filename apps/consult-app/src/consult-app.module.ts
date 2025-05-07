@@ -3,7 +3,7 @@ import { ConsultAppController } from './consult-app.controller';
 import { ConsultAppService } from './consult-app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { EventModule, mongooseConfig, NotificationModule, PaginationService, Portfolio, PortfolioModule, PortfolioSchema, SharedModule, SwaggerModule, TokenModule, User, UserProfile, UserProfileSchema, UserSchema } from '@portfolio-builder/shared';
+import { EventModule, mongooseConfig, NotificationModule, PaginationService, Portfolio, PortfolioModule, PortfolioSchema, SharedModule, SwaggerModule, TokenModule, User, UserModule, UserProfile, UserProfileSchema, UserSchema } from '@portfolio-builder/shared';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConsultUserModule } from './user/consult-user.module';
@@ -11,6 +11,7 @@ import { ChatGateway } from './ws/chat.gateway';
 import { MessageModule } from './message/message.module';
 import { WsService } from './ws/chat.service';
 import { ActivitylogModule } from './activitylog/activitylog.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -45,6 +46,8 @@ import { ActivitylogModule } from './activitylog/activitylog.module';
     ]),
 
     ActivitylogModule,
+
+    AnalyticsModule,
   ],
   controllers: [ConsultAppController],
   providers: [ConsultAppService,ChatGateway,WsService,PaginationService],
