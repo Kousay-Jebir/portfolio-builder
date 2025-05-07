@@ -8,7 +8,7 @@ export class AnalyticsController {
 
     @Get('most-viewed-portfolios')
     async getMostViewedPortfolios(){
-        
+        return await this.analyticsService.getPortfoliosOwners()
         
     }
 
