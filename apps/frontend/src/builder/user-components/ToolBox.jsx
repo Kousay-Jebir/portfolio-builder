@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Carousel } from "./showcase/Carousel";
+import { CarouselItem } from "./showcase/CarouselItem";
 
 export default function ToolBox() {
     const { connectors } = useEditor();
@@ -20,6 +22,8 @@ export default function ToolBox() {
         { label: "Section", component: <Element canvas fluid component={Container} is={Section} /> },
         { label: "Grid Row", component: <Element canvas is={GridRow} /> },
         { label: "Grid Column", component: <Element canvas is={GridColumn} /> },
+        { label: "Carousel", component: <Element canvas is={Carousel} loop /> },
+        { label: "Carousel item", component: <Element canvas is={CarouselItem} /> },
         { label: "Paragraph", component: <EditableTypography component="p" /> },
         { label: "Hyperlink", component: <EditableTypography href="#" component="a" /> },
         { label: "Image", component: <Image /> },
