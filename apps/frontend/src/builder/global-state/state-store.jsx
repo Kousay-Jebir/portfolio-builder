@@ -21,8 +21,9 @@ const editModeStyles = {
     paddingTop: '10px',
     paddingLeft: '10px',
     padding: "10px",
-    borderRadius: "5px",
 };
+
+const editModeHoverStyles = "hover-styles"
 
 const initialState = { isEnabled: true };
 
@@ -75,8 +76,8 @@ export function withBuilderEditable(WrappedComponent) {
             state.isEnabled ? editModeStyles : {},
             props.style
         );
-
-        return <WrappedComponent {...props} style={combinedStyle} />;
+        const className = state.isEnabled ? `${editModeHoverStyles} ${props.className || ''}` : props.className;
+        return <WrappedComponent {...props} style={combinedStyle} className={className} />;
     };
 }
 

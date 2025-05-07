@@ -38,7 +38,7 @@ function expandListStyle(value) { return null; }
 const shorthandRegistry = {
     margin: expandBoxSides,
     padding: expandBoxSides,
-    borderRadius: expandBoxSides,
+
     border: expandBorder,
     // you can add: background, font, outline, listStyle, etc.
 };
