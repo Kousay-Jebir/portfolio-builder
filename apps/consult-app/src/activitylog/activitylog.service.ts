@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ActivityLog, ActivityLogDocument } from './schema/activity-log.schema';
 import { Model } from 'mongoose';
 import { ActivityTypeEnum } from './enum/activity-type.enum';
+import { log } from 'console';
 
 @Injectable()
 export class ActivitylogService {
@@ -50,6 +51,16 @@ export class ActivitylogService {
         ]);
       
         return results;
+      }
+
+      async getRecentViews(userId : string){
+        const logs = await this.activityLogModel.find({user:userId})
+        const owners= logs.map((item)=>{
+          if(item.type==ActivityTypeEnum.VIEW)
+          return item.metadata.ownerId
+
+        })
+        return owners
       }
       
 }
