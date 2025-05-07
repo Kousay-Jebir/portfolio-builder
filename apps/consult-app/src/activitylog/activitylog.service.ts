@@ -25,4 +25,31 @@ export class ActivitylogService {
           .sort({ createdAt: -1 })
           .exec();
       }
+
+      async getMostViewedPortfolioOwnerIds(): Promise<{ ownerId: string; viewCount: number }[]> {
+        const results = await this.activityLogModel.aggregate([
+          {
+            $match: { type: ActivityTypeEnum.VIEW }
+          },
+          {
+            $group: {
+              _id: '$metadata.ownerId',
+              viewCount: { $sum: 1 }
+            }
+          },
+          {
+            $sort: { viewCount: -1 }
+          },
+          {
+            $project: {
+              _id: 0,
+              ownerId: '$_id',
+              viewCount: 1
+            }
+          }
+        ]);
+      
+        return results;
+      }
+      
 }
