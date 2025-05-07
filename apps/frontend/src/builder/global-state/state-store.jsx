@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { useEditor } from "@craftjs/core";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { mergeStyles } from "./utils";
 
 const BUILDER_MODE = {
     EDIT: "EDIT",
@@ -11,7 +12,14 @@ const BuilderContext = createContext();
 
 
 const editModeStyles = {
-    border: "1px solid gray",
+
+    borderWidth: "1px",
+    borderColor: 'gray',
+    borderStyle: 'solid',
+    paddingRight: '10px',
+    paddingBottom: '10px',
+    paddingTop: '10px',
+    paddingLeft: '10px',
     padding: "10px",
     borderRadius: "5px",
 };
@@ -63,10 +71,10 @@ export function withBuilderEditable(WrappedComponent) {
 
         // Safely merge whatever props.style was,
         // then layer on our editModeStyles if enabled.
-        const combinedStyle = {
-            ...(state.isEnabled ? editModeStyles : {}),
-            ...(props.style),
-        };
+        const combinedStyle = mergeStyles(
+            state.isEnabled ? editModeStyles : {},
+            props.style
+        );
 
         return <WrappedComponent {...props} style={combinedStyle} />;
     };
