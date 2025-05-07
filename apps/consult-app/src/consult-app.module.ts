@@ -11,6 +11,7 @@ import { ChatGateway } from './ws/chat.gateway';
 import { MessageModule } from './message/message.module';
 import { WsService } from './ws/chat.service';
 import { ActivitylogModule } from './activitylog/activitylog.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -45,6 +46,8 @@ import { ActivitylogModule } from './activitylog/activitylog.module';
     ]),
 
     ActivitylogModule,
+
+    AnalyticsModule,
   ],
   controllers: [ConsultAppController],
   providers: [ConsultAppService,ChatGateway,WsService,PaginationService],
