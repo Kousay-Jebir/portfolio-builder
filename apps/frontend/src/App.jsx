@@ -27,6 +27,7 @@ import { BaseSection, BuilderEditableGridColumn, BuilderEditableGridRow, Builder
 import { Image } from "./builder/user-components/image/Image";
 import DroppableGridEngine from "./builder/layout-engine/grid/GridEngine";
 import { BuilderProvider, ModeToggle } from "./builder/global-state/state-store";
+import { AspectRatio } from "./components/ui/aspect-ratio";
 
 // -- Constants & Initial State -------------------------------------------------
 const MIN_PANEL_WIDTH = 200;
@@ -161,7 +162,7 @@ export default function App() {
 
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
-      <Editor resolver={{ EditableTypography, Section, GridRow, GridColumn, Image, BaseSection, DroppableGridEngine, BuilderEditableSection, BuilderEditableGridColumn, BuilderEditableGridRow }}>
+      <Editor resolver={{ EditableTypography, Section, GridRow, GridColumn, Image, BaseSection, DroppableGridEngine, BuilderEditableSection, BuilderEditableGridColumn, BuilderEditableGridRow, AspectRatio }}>
         <BuilderProvider>
           <Topbar onMenuToggle={() => setLeftOpen(true)} dispatch={dispatch} darkMode={state.darkMode} />
           <div className="flex flex-1 overflow-hidden">
