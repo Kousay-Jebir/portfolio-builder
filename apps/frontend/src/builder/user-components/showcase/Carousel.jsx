@@ -20,11 +20,10 @@ function BaseCarousel({ children, loop, style, className, ...props }) {
     );
 }
 
-
-const Carousel = withCustomizableSettings(BaseCarousel, CarouselSettings, {
+const BuilderEditableCarousel = withBuilderEditable(BaseCarousel)
+const Carousel = withCustomizableSettings(BuilderEditableCarousel, CarouselSettings, {
     style: {
         minHeight: '50px',
-        border: '1px solid red'
     }
 
 
