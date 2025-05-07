@@ -14,7 +14,7 @@ export class AnalyticsService {
         const results = await this.activityLogService.getMostViewedPortfolioOwnerIds()
         const data =await Promise.all(
              results.map(async(item)=>{
-                const profile=await this.userProfileModel.findOne({user:item.ownerId})
+                const profile=await this.userProfileModel.findOne({user:item.ownerId}).lean()
                 return {
                     ...profile,counter:item.viewCount
                 }
