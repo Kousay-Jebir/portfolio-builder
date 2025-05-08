@@ -46,6 +46,13 @@ export class AnalyticsService {
     async getMostSearch(userId : string){
         const category = await this.activityLogService.getMostSearchedCategory(userId)
         
+        const profiles=await this.userProfileModel.find({field:category}).lean()
+        return profiles
+
+               
+     
+        
+        
 
 
 
