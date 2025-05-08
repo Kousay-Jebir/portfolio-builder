@@ -35,7 +35,7 @@ export class AnalyticsController {
   @ApiBearerAuth('JWT-auth')
   @Get('based-on-search')
   async getBasedOnSearch(@ConnectedUser() user : any){
-    return await this.analyticsService.getMostSearch()
+    return await this.analyticsService.getMostSearch(user.id)
 
 
 

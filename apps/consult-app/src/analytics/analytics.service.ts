@@ -43,8 +43,9 @@ export class AnalyticsService {
         
 
     }
-    async getMostSearch(){
-        const cat
+    async getMostSearch(userId : string){
+        const category = await this.activityLogService.getMostSearchedCategory(userId)
+        
 
 
     }
