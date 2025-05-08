@@ -62,5 +62,27 @@ export class ActivitylogService {
         })
         return owners
       }
+
+      async getMostSearchedCategory(userId: string): Promise<string | null> {
+        const result = await this.activityLogModel.aggregate([
+          {
+            $match: {
+              type: ActivityTypeEnum.SEARCH,
+              user: userId
+            }
+          },
+          {
+            $group: {
+              _id: '$metadata.category',
+              count: { $sum: 1 }
+            }
+          },
+          { $sort: { count: -1 } },
+          { $limit: 1 }
+        ]);
+      
+        return result[0]?._id || null;
+      }
+      
       
 }

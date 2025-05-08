@@ -31,4 +31,14 @@ export class AnalyticsController {
   async getRecentlyViewed(@ConnectedUser() user: any) {
     return await this.analyticsService.getRecentlyViewed(user.id);
   }
+  @UseGuards(JwtAuthGuard, BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Get('based-on-search')
+  async getBasedOnSearch(@ConnectedUser() user : any){
+    return await this.analyticsService.getMostSearch()
+
+
+
+  }
+
 }
