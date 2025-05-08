@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ActivityLog, ActivityLogDocument } from './schema/activity-log.schema';
 import { Model } from 'mongoose';
 import { ActivityTypeEnum } from './enum/activity-type.enum';
+import { log } from 'console';
 
 @Injectable()
 export class ActivitylogService {
@@ -51,5 +52,38 @@ export class ActivitylogService {
       
         return results;
       }
+
+      async getRecentViews(userId : string){
+        const logs = await this.activityLogModel.find({user:userId})
+        const owners= logs.map((item)=>{
+          if(item.type==ActivityTypeEnum.VIEW)
+          return item.metadata.ownerId
+
+        })
+        return owners
+      }
+
+      async getMostSearchedCategory(userId: string): Promise<string | null> {
+        const result = await this.activityLogModel.aggregate([
+          {
+            $match: {
+              type: ActivityTypeEnum.SEARCH,
+              user: userId
+            }
+          },
+          {
+            $group: {
+              _id: '$metadata.category',
+              count: { $sum: 1 }
+            }
+          },
+          { $sort: { count: -1 } },
+          { $limit: 1 }
+        ]);
+      
+        return result[0]?._id || null;
+      }
+      
+      
       
 }

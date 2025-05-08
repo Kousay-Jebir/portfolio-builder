@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { UserProfile, UserProfileDocument } from '@portfolio-builder/shared';
 import { Model } from 'mongoose';
 import { ActivityTypeEnum } from '../activitylog/enum/activity-type.enum';
+import { use } from 'react';
 
 @Injectable()
 export class AnalyticsService {
@@ -24,6 +25,36 @@ export class AnalyticsService {
             })
         )
         return data
+
+    }
+
+    async getRecentlyViewed(userId:string){
+        const ownerIds=await this.activityLogService.getRecentViews(userId)
+        console.log(ownerIds)
+        const data =await Promise.all(
+            ownerIds.map(async(item)=>{
+               const profile=await this.userProfileModel.findOne({user:item}).lean()
+               return profile
+
+               
+           })
+       )
+       return data
+        
+
+    }
+    async getMostSearch(userId : string){
+        const category = await this.activityLogService.getMostSearchedCategory(userId)
+        
+        const profiles=await this.userProfileModel.find({field:category}).lean()
+        return profiles
+
+               
+     
+        
+        
+
+
 
     }
 }
