@@ -9,24 +9,75 @@ export class AggregationService{
     return await model.aggregate(pipeline).exec();
   }
   async buildAggregation(
-    model:any,
-    matchCriteria: Record<string, any>,
-    groupField: string,
-    sortOptions: Record<string, 1 | -1> = { count: -1 },
-    limit?: number
-  ) {
-    const pipeline: any[] = [
-      { $match: matchCriteria },
-      { $group: { _id: `$${groupField}`, count: { $sum: 1 } } },
-      { $sort: sortOptions },
-      { $project: { _id: 0, [groupField]: '$_id', count: 1 } }
-    ];
+  options: {
+    matchCriteria?: Record<string, any>;
+    groupField?: string; // Make this optional
+    sortOptions?: Record<string, 1 | -1>;
+    limit?: number;
+    skip?: number;
+    additionalPipelineStages?: any[]; // For custom stages
+  } = {},model:any
+) {
+  const {
+    matchCriteria,
+    groupField,
+    sortOptions = { count: -1 },
+    limit,
+    skip,
+    additionalPipelineStages = []
+  } = options;
 
-    if (limit) {
-      pipeline.push({ $limit: limit });
-    }
+  const pipeline: any[] = [];
 
-    return this.executeAggregation(model,pipeline);
+  // Add $match if criteria provided
+  if (matchCriteria) {
+    pipeline.push({ $match: matchCriteria });
   }
+
+  // Add $group if groupField provided
+  if (groupField) {
+    pipeline.push({ 
+      $group: { 
+        _id: `$${groupField}`, 
+        count: { $sum: 1 },
+        // Preserve the first document for reference if needed
+        document: { $first: '$$ROOT' }
+      } 
+    });
+  }
+
+  // Add additional pipeline stages if any
+  pipeline.push(...additionalPipelineStages);
+
+  // Add sorting if groupField was used (implies we have count field)
+  if (groupField && sortOptions) {
+    pipeline.push({ $sort: sortOptions });
+  }
+
+  // Add skip if provided
+  if (skip) {
+    pipeline.push({ $skip: skip });
+  }
+
+  // Add limit if provided
+  if (limit) {
+    pipeline.push({ $limit: limit });
+  }
+
+  // Project only if we grouped
+  if (groupField) {
+    pipeline.push({ 
+      $project: { 
+        _id: 0, 
+        [groupField.split('.').pop() || 'field']: '$_id', 
+        count: 1,
+        // Include additional fields from the first document if needed
+        ...(groupField ? { document: 1 } : {})
+      } 
+    });
+  }
+
+  return this.executeAggregation(model,pipeline);
+}
 
 }

@@ -39,27 +39,28 @@ export class ActivitylogService {
   async getMostPortfolioOwnerIds(
     type: ActivityTypeEnum,
   ): Promise<{ ownerId: string; count: number }[]> {
-    const results = await this.activityLogModel.aggregate([
-      {
-        $match: { type: type },
-      },
-      {
-        $group: {
-          _id: '$metadata.ownerId',
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $sort: { count: -1 },
-      },
-      {
-        $project: {
-          _id: 0,
-          ownerId: '$_id',
-          count: 1,
-        },
-      },
-    ]);
+    const results=await this.aggregationService.buildAggregation({matchCriteria:{type:type},groupField:'metadata.ownerId',sortOptions:{count:-1}},this.activityLogModel)
+    // const results = await this.activityLogModel.aggregate([
+    //   {
+    //     $match: { type: type },
+    //   },
+    //   {
+    //     $group: {
+    //       _id: '$metadata.ownerId',
+    //       count: { $sum: 1 },
+    //     },
+    //   },
+    //   {
+    //     $sort: { count: -1 },
+    //   },
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       ownerId: '$_id',
+    //       count: 1,
+    //     },
+    //   },
+    // ]);
 
     return results;
   }
