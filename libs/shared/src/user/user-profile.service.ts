@@ -9,5 +9,10 @@ export class UserProfileService extends BaseService<UserProfileDocument>{
     constructor(@InjectModel(UserProfile.name) private userProfileModel: Model<UserProfileDocument>){
         super(userProfileModel)
     }
+
+    async findByCriteria(criteria : Partial<UserProfile>){
+        return await this.userProfileModel.findOne({criteria}).lean()
+        
+    }
     
 }

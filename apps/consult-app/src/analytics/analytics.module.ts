@@ -9,7 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports:[ MongooseModule.forFeature([
         { name: UserProfile.name, schema: UserProfileSchema },
         
-      ]),ActivitylogModule,TokenModule],
+      ]),ActivitylogModule,TokenModule,SharedUserModule],
   providers: [AnalyticsService],
   controllers: [AnalyticsController]
 })
