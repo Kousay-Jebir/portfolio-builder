@@ -86,12 +86,20 @@ export class ActivitylogService {
           _id: '$metadata.category',
           count: { $sum: 1 },
         },
+        
       },
+        {
+        $project: {
+          _id: 0,
+          category: '$_id',
+          count: 1,
+        },
+      },
+      
       { $sort: { count: -1 } },
       { $limit: 1 },
     ]);
 
-    // return result[0]?._id || null;
-    return result
+    return result[0].category
   }
 }

@@ -45,12 +45,11 @@ export class AnalyticsService {
 
     }
     async getMostSearch(userId : string){
-        // const category = await this.activityLogService.getMostSearchedCategory(userId)
+        const category = await this.activityLogService.getMostSearchedCategory(userId)
         
-        // const profiles=await this.userProfileService.findByCriteria({field:FieldTypeEnum.ENGINEERING})
-        // return profiles
+        const profiles=await this.userProfileService.findByCriteria({field:category})
+        return profiles
 
-               
     }
 
     // async dataParsing(array : any[]){
@@ -69,4 +68,5 @@ export class AnalyticsService {
 
 
     // }
+    
 }
