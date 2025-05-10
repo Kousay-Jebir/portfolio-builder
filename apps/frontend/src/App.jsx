@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useReducer, useState } from "react";
+// src/App.js
+import React, { useRef, useEffect, useState } from "react";
 import { Editor, Element, Frame, useEditor } from "@craftjs/core";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,55 +17,41 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { useDrawer } from "./DrawerContext";
+import { useUI } from "./DrawerContext";           // UI helpers
 import Layers from "./builder/Layers";
-import "./App.css";
-import { CustomizationMenu } from "./builder/customization-engine/CustomizationMenu";
 import ToolBox from "./builder/user-components/ToolBox";
+import { CustomizationMenu } from "./builder/customization-engine/CustomizationMenu";
 import { EditableTypography } from "./builder/user-components/typography/Typography";
-import { Container, Section } from "lucide-react";
-import { BaseSection, BuilderEditableGridColumn, BuilderEditableGridRow, BuilderEditableSection, GridColumn, GridRow } from "./builder/user-components/layout/Section";
+import {
+  BaseSection,
+  BuilderEditableGridColumn,
+  BuilderEditableGridRow,
+  BuilderEditableSection,
+  GridColumn,
+  GridRow,
+  Section,
+} from "./builder/user-components/layout/Section";
 import { Image } from "./builder/user-components/image/Image";
 import DroppableGridEngine from "./builder/layout-engine/grid/GridEngine";
 import { BuilderProvider, ModeToggle } from "./builder/global-state/state-store";
 import { AspectRatio } from "./components/ui/aspect-ratio";
 import { Carousel } from "./builder/user-components/showcase/Carousel";
 import { CarouselItem } from "./builder/user-components/showcase/CarouselItem";
+import "./App.css";
 
-// -- Constants & Initial State -------------------------------------------------
 const MIN_PANEL_WIDTH = 200;
 const MAX_PANEL_WIDTH = 400;
 const DEFAULT_PANEL_WIDTH = 240;
-const initialPanelState = {
-  showLeft: true,
-  showRight: true,
-  darkMode: false,
-};
 
-// -- Reducer -------------------------------------------------------------------
-function panelReducer(state, action) {
-  switch (action.type) {
-    case "TOGGLE_LEFT":
-      return { ...state, showLeft: !state.showLeft };
-    case "TOGGLE_RIGHT":
-      return { ...state, showRight: !state.showRight };
-    case "TOGGLE_THEME":
-      return { ...state, darkMode: !state.darkMode };
-    default:
-      return state;
-  }
-}
-
-// -- Custom Hook: Resizable Panel ---------------------------------------------
+// hook for resizing panels
 function useResizablePanel(isLeft) {
   const [width, setWidth] = useState(DEFAULT_PANEL_WIDTH);
+  useEffect(() => setWidth(DEFAULT_PANEL_WIDTH), []);
   const startResize = (e) => {
     e.preventDefault();
     const onMove = (evt) => {
-      const newWidth = isLeft ? evt.clientX : window.innerWidth - evt.clientX;
-      if (newWidth >= MIN_PANEL_WIDTH && newWidth <= MAX_PANEL_WIDTH) {
-        setWidth(newWidth);
-      }
+      const w = isLeft ? evt.clientX : window.innerWidth - evt.clientX;
+      if (w >= MIN_PANEL_WIDTH && w <= MAX_PANEL_WIDTH) setWidth(w);
     };
     const onUp = () => {
       document.removeEventListener("mousemove", onMove);
@@ -76,18 +63,25 @@ function useResizablePanel(isLeft) {
   return [width, startResize];
 }
 
-// -- Component: Topbar ---------------------------------------------------------
-function Topbar({ onMenuToggle, dispatch, darkMode }) {
-  const { query } = useEditor((state) => ({ query: state.query }));
-  const { setDrawerOpen } = useDrawer();
-
+function Topbar({ ui, state }) {
+  const { query } = useEditor((s) => ({ query: s.query }));
   return (
-    <header className="flex items-center justify-between h-10 px-4 border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+    <header className="flex items-center justify-between h-10 px-4 border-b bg-gray-50 dark:bg-gray-800">
       <div className="flex items-center space-x-2">
-        <Button size="xs" variant="ghost" className="lg:hidden p-1" onClick={onMenuToggle}>
+        <Button
+          size="xs"
+          variant="ghost"
+          className="lg:hidden p-1"
+          onClick={() => ui.toggleSheet('LEFT')}
+        >
           ☰
         </Button>
-        <Button size="xs" variant="ghost" className="p-1" onClick={() => console.log(query.serialize())}>
+        <Button
+          size="xs"
+          variant="secondary"
+          className="p-1"
+          onClick={() => console.log(query.serialize())}
+        >
           Serialize
         </Button>
         <ModeToggle />
@@ -99,79 +93,111 @@ function Topbar({ onMenuToggle, dispatch, darkMode }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white dark:bg-gray-800 border">
             <DropdownMenuLabel>Panels</DropdownMenuLabel>
-            <DropdownMenuCheckboxItem onCheckedChange={() => dispatch({ type: "TOGGLE_LEFT" })} checked>
+            <DropdownMenuCheckboxItem
+              onCheckedChange={() => ui.togglePanel('LEFT')}
+              checked={state.showLeftSidebar}
+            >
               Left Panel
             </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem onCheckedChange={() => dispatch({ type: "TOGGLE_RIGHT" })} checked>
+            <DropdownMenuCheckboxItem
+              onCheckedChange={() => ui.togglePanel('RIGHT')}
+              checked={state.showRightSidebar}
+            >
               Right Panel
             </DropdownMenuCheckboxItem>
             <DropdownMenuSeparator />
-            <DropdownMenuCheckboxItem onCheckedChange={() => dispatch({ type: "TOGGLE_THEME" })} checked={darkMode}>
+            <DropdownMenuCheckboxItem
+              onCheckedChange={() => ui.toggleTheme()}
+              checked={state.darkMode}
+            >
               Dark Mode
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Button size="xs" variant="ghost" className="lg:hidden p-1" onClick={() => setDrawerOpen(true)}>
+      <Button
+        size="xs"
+        variant="primary"
+        className="lg:hidden p-1"
+        onClick={() => ui.toggleSheet('RIGHT')}
+      >
         Customize
       </Button>
     </header>
   );
 }
 
-// -- Component: Sidebar --------------------------------------------------------
 function Sidebar({ width, children, side, onResize }) {
   const borderClass = side === "left" ? "border-r" : "border-l";
-  const resizerPositionClass = side === "left" ? "right-0" : "left-0";
+  const resizerClass = side === "left" ? "right-0" : "left-0";
   return (
-    <div className={`relative hidden lg:flex flex-col bg-gray-50 dark:bg-gray-800 ${borderClass}`} style={{ width, overflow: "auto" }}>
+    <div
+      className={`relative hidden lg:flex flex-col bg-gray-50 dark:bg-gray-800 ${borderClass}`}
+      style={{ width }}
+    >
       {children}
       <div
-        className={`absolute top-0 ${resizerPositionClass} h-full w-1 hover:w-2 cursor-col-resize bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all`}
+        className={`absolute top-0 ${resizerClass} h-full w-1 cursor-col-resize`}
         onMouseDown={onResize}
       />
     </div>
   );
 }
 
-
-// -- Main App -----------------------------------------------------------------
 export default function App() {
-  const { drawerOpen, setDrawerOpen } = useDrawer();
-  const [leftOpen, setLeftOpen] = useState(false);
+  const { state, ui } = useUI();
   const drawerRef = useRef(null);
-  const [state, dispatch] = useReducer(panelReducer, initialPanelState);
 
-  // Toggle dark mode class on <html>
+  // theme toggling
   useEffect(() => {
     document.documentElement.classList.toggle("dark", state.darkMode);
   }, [state.darkMode]);
 
-  // Panel resizing
+  // panel widths
   const [leftWidth, resizeLeft] = useResizablePanel(true);
   const [rightWidth, resizeRight] = useResizablePanel(false);
 
-  // Close customization drawer on outside click
+  // close right sheet on outside click
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (drawerRef.current && !drawerRef.current.contains(e.target)) {
-        setDrawerOpen(false);
+    const onClick = (e) => {
+      if (
+        state.showRightSheet &&
+        drawerRef.current &&
+        !drawerRef.current.contains(e.target)
+      ) {
+        ui.setSheet('Right', false);
       }
     };
-    if (drawerOpen) document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [drawerOpen, setDrawerOpen]);
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [state.showRightSheet, ui]);
 
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
-      <Editor resolver={{ EditableTypography, Section, GridRow, GridColumn, Image, BaseSection, DroppableGridEngine, BuilderEditableSection, BuilderEditableGridColumn, BuilderEditableGridRow, AspectRatio, Carousel, CarouselItem }}>
+      <Editor
+        resolver={{
+          EditableTypography,
+          Section,
+          GridRow,
+          GridColumn,
+          Image,
+          BaseSection,
+          DroppableGridEngine,
+          BuilderEditableSection,
+          BuilderEditableGridColumn,
+          BuilderEditableGridRow,
+          AspectRatio,
+          Carousel,
+          CarouselItem,
+        }}
+      >
         <BuilderProvider>
-          <Topbar onMenuToggle={() => setLeftOpen(true)} dispatch={dispatch} darkMode={state.darkMode} />
-          <div className="flex flex-1 overflow-hidden">
+          <Topbar ui={ui} state={state} />
 
-            {state.showLeft && (
+          <div className="flex flex-1 overflow-hidden">
+            {state.showLeftSidebar && (
               <Sidebar width={leftWidth} side="left" onResize={resizeLeft}>
-                <div className="p-2 text-gray-700 dark:text-gray-300">
+                <div className="p-2">
                   <ToolBox />
                   <Layers />
                 </div>
@@ -180,47 +206,59 @@ export default function App() {
 
             <main className="flex-1 bg-white overflow-auto">
               <Frame>
-                <Element is={DroppableGridEngine} canvas className="h-full p-4 text-gray-700 dark:text-gray-200">
+                <Element is={DroppableGridEngine} canvas className="h-full p-4">
                   Builder Canvas
                 </Element>
               </Frame>
             </main>
 
-            {state.showRight && (
+            {state.showRightSidebar && (
               <Sidebar width={rightWidth} side="right" onResize={resizeRight}>
-                <div className="p-2 text-gray-700 dark:text-gray-300">
-                  <h3 className="text-sm font-medium mb-1">Customization</h3>
-                  <div className="text-xs"><CustomizationMenu /></div>
+                <div className="p-2">
+                  <h3>Customization</h3>
+                  <CustomizationMenu />
                 </div>
               </Sidebar>
             )}
           </div>
 
-          {/* Mobile Drawers omitted for brevity */}
-          <Sheet open={leftOpen} onOpenChange={setLeftOpen}>
+          {/* mobile left sheet */}
+          <Sheet
+            open={state.showLeftSheet}
+            onOpenChange={() => ui.toggleSheet('LEFT')}
+          >
             <SheetContent side="left" className="w-60 p-0">
-              <SheetHeader className="p-4 border-b bg-gray-50 dark:bg-gray-800">
-                <SheetTitle>Menu</SheetTitle>
-                <SheetClose asChild>
-                  <Button size="icon" variant="ghost">×</Button>
-                </SheetClose>
+              <SheetHeader>
+                <SheetTitle>
+                  Menu
+                  <SheetClose asChild>
+                    <Button>×</Button>
+                  </SheetClose>
+                </SheetTitle>
               </SheetHeader>
-              <div className="p-4 bg-gray-50 dark:bg-gray-800">
-                <h3 className="text-sm font-medium mb-2">Left Panel</h3>
-                <div className="text-xs">ToolBox & Layers</div>
+              <div className="p-4">
+                <ToolBox />
+                <Layers />
               </div>
             </SheetContent>
           </Sheet>
-          <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
+
+          {/* mobile right sheet */}
+          <Sheet
+            open={state.showRightSheet}
+            onOpenChange={() => ui.toggleSheet('RIGHT')}
+          >
             <SheetContent side="right" className="w-60 p-0">
-              <SheetHeader className="p-4 border-b bg-gray-50 dark:bg-gray-800">
-                <SheetTitle>Customization</SheetTitle>
-                <SheetClose asChild>
-                  <Button size="icon" variant="ghost">×</Button>
-                </SheetClose>
+              <SheetHeader>
+                <SheetTitle>
+                  Customization
+                  <SheetClose asChild>
+                    <Button>×</Button>
+                  </SheetClose>
+                </SheetTitle>
               </SheetHeader>
-              <div ref={drawerRef} className="p-4 bg-gray-50 dark:bg-gray-800">
-                <div className="text-xs">Customization menu</div>
+              <div ref={drawerRef} className="p-4">
+                <CustomizationMenu />
               </div>
             </SheetContent>
           </Sheet>

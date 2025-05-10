@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { useEditor } from "@craftjs/core";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { mergeStyles } from "./utils";
+import { useUI } from "@/DrawerContext";
 
 const BUILDER_MODE = {
     EDIT: "EDIT",
@@ -86,16 +87,20 @@ export function withBuilderEditable(WrappedComponent) {
  */
 export function ModeToggle() {
     const { state, dispatch } = useBuilder();
+    const { ui } = useUI();
 
     return (
         <ToggleGroup
             type="single"
             value={state.isEnabled ? "edit" : "preview"}
-            onValueChange={(val) =>
+            onValueChange={(val) => {
                 dispatch({
                     type:
                         val === "edit" ? BUILDER_MODE.EDIT : BUILDER_MODE.PREVIEW,
                 })
+                ui.setPanel('LEFT', val === "edit")
+                ui.setPanel('RIGHT', val === "edit")
+            }
             }
             className="bg-transparent"
         >
@@ -105,6 +110,6 @@ export function ModeToggle() {
             <ToggleGroupItem value="preview" className="px-2 py-1 text-xs">
                 Preview
             </ToggleGroupItem>
-        </ToggleGroup>
+        </ToggleGroup >
     );
 }
