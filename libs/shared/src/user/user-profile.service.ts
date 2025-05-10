@@ -10,8 +10,8 @@ export class UserProfileService extends BaseService<UserProfileDocument>{
         super(userProfileModel)
     }
 
-    async findByCriteria(criteria : Partial<UserProfile>){
-        return await this.userProfileModel.findOne({criteria}).lean()
+    async findByCriteria(criteria:Partial<UserProfile>){
+        return await this.userProfileModel.findOne(criteria).lean()
         
     }
     

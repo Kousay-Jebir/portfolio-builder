@@ -17,6 +17,7 @@ export class AnalyticsService {
         const data =await Promise.all(
              results.map(async(item)=>{
                 const profile=await this.userProfileService.findByCriteria({user:item.ownerId})
+                console.log('profile',profile)
                 return {
                     ...profile,counter:item.count
                 }
@@ -45,10 +46,10 @@ export class AnalyticsService {
 
     }
     async getMostSearch(userId : string){
-        const category = await this.activityLogService.getMostSearchedCategory(userId)
+        // const category = await this.activityLogService.getMostSearchedCategory(userId)
         
-        const profiles=await this.userProfileService.findByCriteria({field:FieldTypeEnum.ENGINEERING})
-        return profiles
+        // const profiles=await this.userProfileService.findByCriteria({field:FieldTypeEnum.ENGINEERING})
+        // return profiles
 
                
     }
