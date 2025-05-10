@@ -6,10 +6,11 @@ import { SharedService } from './shared.service';
 import { RolesGuard } from './guards/role.guard';
 import { CvModule } from './cv/cv.module';
 import { MailModule } from './mail/mail.module';
+import { AggregationService } from './services/aggregation.service';
 
 @Module({
   imports: [ConfigModule.forRoot(), CvModule, MailModule],
-  providers: [JwtStrategy, JwtAuthGuard,SharedService,RolesGuard],
-  exports: [JwtStrategy, JwtAuthGuard,RolesGuard],
+  providers: [JwtStrategy, JwtAuthGuard,SharedService,RolesGuard,AggregationService],
+  exports: [JwtStrategy, JwtAuthGuard,RolesGuard,AggregationService],
 })
 export class SharedModule {}

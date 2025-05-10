@@ -2,21 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { ActivitylogService } from '../activitylog/activitylog.service';
 import axios from 'axios';
 import { InjectModel } from '@nestjs/mongoose';
-import { UserProfile, UserProfileDocument } from '@portfolio-builder/shared';
+import { FieldTypeEnum, UserProfile, UserProfileDocument, UserProfileService } from '@portfolio-builder/shared';
 import { Model } from 'mongoose';
 import { ActivityTypeEnum } from '../activitylog/enum/activity-type.enum';
 import { use } from 'react';
 
 @Injectable()
 export class AnalyticsService {
-    constructor(private readonly activityLogService : ActivitylogService,@InjectModel(UserProfile.name) private readonly userProfileModel: Model<UserProfileDocument>,
+    constructor(private readonly activityLogService : ActivitylogService,private readonly userProfileService : UserProfileService,
     ){}
 
     async getPortfoliosOwners(type : ActivityTypeEnum){
         const results = await this.activityLogService.getMostPortfolioOwnerIds(type)
         const data =await Promise.all(
              results.map(async(item)=>{
-                const profile=await this.userProfileModel.findOne({user:item.ownerId}).lean()
+                const profile=await this.userProfileService.findByCriteria({user:item.ownerId})
                 return {
                     ...profile,counter:item.count
                 }
@@ -24,6 +24,7 @@ export class AnalyticsService {
                 
             })
         )
+        // const data = await this.dataParsing(results)
         return data
 
     }
@@ -33,7 +34,7 @@ export class AnalyticsService {
         console.log(ownerIds)
         const data =await Promise.all(
             ownerIds.map(async(item)=>{
-               const profile=await this.userProfileModel.findOne({user:item}).lean()
+               const profile=await this.userProfileService.findByCriteria({user:item})
                return profile
 
                
@@ -46,15 +47,26 @@ export class AnalyticsService {
     async getMostSearch(userId : string){
         const category = await this.activityLogService.getMostSearchedCategory(userId)
         
-        const profiles=await this.userProfileModel.find({field:category}).lean()
+        const profiles=await this.userProfileService.findByCriteria({field:category})
         return profiles
 
-               
-     
-        
-        
-
-
-
     }
+
+    // async dataParsing(array : any[]){
+    //     const data =await Promise.all(
+    //         array.map(async(item)=>{
+    //            const profile=await this.userProfileModel.findOne({user:item.ownerId}).lean()
+    //            return {
+    //                ...profile,counter:item.count
+    //            }
+
+               
+    //        })
+    //    )
+    //    return data
+
+
+
+    // }
+    
 }
