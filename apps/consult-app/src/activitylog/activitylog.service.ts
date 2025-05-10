@@ -10,7 +10,7 @@ export class ActivitylogService {
   constructor(
     @InjectModel(ActivityLog.name)
     private readonly activityLogModel: Model<ActivityLogDocument>,
-    private readonly aggregationService : AggregationService<ActivityLogDocument>
+    private readonly aggregationService : AggregationService
   ) {}
 
   async logActivity(
