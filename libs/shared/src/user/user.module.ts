@@ -12,4 +12,4 @@ import { UserProfileService } from './user-profile.service';
   controllers: [],
   exports:[UserProfileService]
 })
-export class UserModule {}
+export class SharedUserModule {}

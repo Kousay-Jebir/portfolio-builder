@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ActivityLog, ActivityLogDocument } from './schema/activity-log.schema';
 import { Model } from 'mongoose';
 import { ActivityTypeEnum } from './enum/activity-type.enum';
-import { log } from 'console';
 
 @Injectable()
 export class ActivitylogService {
