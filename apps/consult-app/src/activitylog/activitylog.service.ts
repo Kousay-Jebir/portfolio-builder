@@ -3,12 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ActivityLog, ActivityLogDocument } from './schema/activity-log.schema';
 import { Model } from 'mongoose';
 import { ActivityTypeEnum } from './enum/activity-type.enum';
+import { AggregationService } from '@portfolio-builder/shared';
 
 @Injectable()
 export class ActivitylogService {
   constructor(
     @InjectModel(ActivityLog.name)
     private readonly activityLogModel: Model<ActivityLogDocument>,
+    private readonly aggregationService : AggregationService
   ) {}
 
   async logActivity(

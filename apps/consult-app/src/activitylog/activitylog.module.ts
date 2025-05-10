@@ -3,10 +3,10 @@ import { ActivitylogService } from './activitylog.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ActivityLog, ActivityLogSchema } from './schema/activity-log.schema';
 import { ActivitylogController } from './activitylog.controller';
-import { TokenModule } from '@portfolio-builder/shared';
+import { SharedModule, TokenModule } from '@portfolio-builder/shared';
 
 @Module({
-  imports:[MongooseModule.forFeature([{ name: ActivityLog.name, schema: ActivityLogSchema }]),TokenModule],
+  imports:[MongooseModule.forFeature([{ name: ActivityLog.name, schema: ActivityLogSchema }]),TokenModule,SharedModule],
   providers: [ActivitylogService],
   exports : [ActivitylogService],
   controllers: [ActivitylogController]
