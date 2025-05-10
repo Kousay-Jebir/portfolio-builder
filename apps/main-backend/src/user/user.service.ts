@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument, UserRole, UserSchema } from '@portfolio-builder/shared';
+import { User, UserDocument, UserProfileService, UserRole, UserSchema } from '@portfolio-builder/shared';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt'
@@ -12,7 +12,7 @@ import { BaseService } from '@portfolio-builder/shared';
 @Injectable()
 export class UserService extends BaseService<UserDocument>{
 
-    constructor(@InjectModel(User.name) private userModel : Model<UserDocument>, @InjectModel(UserProfile.name) private userPortfolioModel: Model<UserProfileDocument>,){
+    constructor(@InjectModel(User.name) private userModel : Model<UserDocument>,private readonly userProfileService : UserProfileService){
         super(userModel)
     }
 
@@ -30,12 +30,14 @@ export class UserService extends BaseService<UserDocument>{
     }
     async createProfileData(createProfileDto : CreateProfileDto,user:string,path:string){
        
-        const profile = await this.userPortfolioModel.create({...createProfileDto,profilePicture:path,user:user})
-        const saved= await profile.save()
-        await this.userModel.findByIdAndUpdate(user, { profile: saved._id });
+        // const profile = await this.userPortfolioModel.create({...createProfileDto,profilePicture:path,user:user})
+        // const saved= await profile.save()
+        // await this.userModel.findByIdAndUpdate(user, { profile: saved._id });
 
-        return saved
-        
+        // return saved
+        const profile = await this.userProfileService.create({...createProfileDto,profilePicture:path,user:user})
+        await this.userModel.findByIdAndUpdate(user,{ profile: profile._id })
+        return profile
      
        
     }

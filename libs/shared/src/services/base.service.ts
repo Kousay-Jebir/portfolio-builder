@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 export class BaseService<T> {
   constructor(private readonly model: Model<T>) {}
 
-  async create(createDto: Partial<T>) {
+  async create(createDto: any) {
     const created = new this.model(createDto);
     return created.save();
   }

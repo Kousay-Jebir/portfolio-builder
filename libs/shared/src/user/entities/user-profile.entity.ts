@@ -9,7 +9,7 @@ export type UserProfileDocument = UserProfile & Document;
 @Schema({ timestamps: true })
 export class UserProfile {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  user: User | Types.ObjectId;
+  user: User | Types.ObjectId | string;
 
   @Prop()
   firstName:string
