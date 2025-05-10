@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ActivityLog, ActivityLogDocument } from './schema/activity-log.schema';
 import { Model } from 'mongoose';
@@ -74,32 +74,35 @@ export class ActivitylogService {
   }
 
   async getMostSearchedCategory(userId: string) {
-    const result = await this.activityLogModel.aggregate([
-      {
-        $match: {
-          type: ActivityTypeEnum.SEARCH,
-          user: userId,
-        },
-      },
-      {
-        $group: {
-          _id: '$metadata.category',
-          count: { $sum: 1 },
-        },
+    const results=await this.aggregationService.buildAggregation({matchCriteria:{type:ActivityTypeEnum.SEARCH,user:userId},groupField:'metadata.category',sortOptions:{count:-1}},this.activityLogModel)
+    // const result = await this.activityLogModel.aggregate([
+    //   {
+    //     $match: {
+    //       type: ActivityTypeEnum.SEARCH,
+    //       user: userId,
+    //     },
+    //   },
+    //   {
+    //     $group: {
+    //       _id: '$metadata.category',
+    //       count: { $sum: 1 },
+    //     },
         
-      },
-        {
-        $project: {
-          _id: 0,
-          category: '$_id',
-          count: 1,
-        },
-      },
+    //   },
+    //     {
+    //     $project: {
+    //       _id: 0,
+    //       category: '$_id',
+    //       count: 1,
+    //     },
+    //   },
       
-      { $sort: { count: -1 } },
-      { $limit: 1 },
-    ]);
-
-    return result[0].category
+    //   { $sort: { count: -1 } },
+    //   { $limit: 1 },
+    // ]);
+    if(results.length==0){
+      throw new NotFoundException('there is no search')
+    }
+    return results[0].category
   }
 }
