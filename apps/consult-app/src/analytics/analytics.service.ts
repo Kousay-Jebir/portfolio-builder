@@ -17,7 +17,6 @@ export class AnalyticsService {
         const data =await Promise.all(
              results.map(async(item)=>{
                 const profile=await this.userProfileService.findByCriteria({user:item.ownerId})
-                // console.log('profile',profile)
                 return {
                     ...profile,counter:item.count
                 }

@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CvService, FieldTypeEnum, PaginationService, PortfolioService, User } from '@portfolio-builder/shared';
 import { PaginationDto } from 'libs/shared/src/pagination/dto/pagination.dto';
+import { ActivitylogService } from '../activitylog/activitylog.service';
+import { ActivityTypeEnum } from '../activitylog/enum/activity-type.enum';
 
 @Injectable()
 export class ConsultUserService {
   constructor(
     private readonly portfolioService: PortfolioService,
     private readonly cvService: CvService,
-    private readonly paginationService : PaginationService
+    private readonly paginationService : PaginationService,
+    private readonly activityLogService : ActivitylogService
   ) {}
 
   async getUsersWithPortfolio(pagination:PaginationDto) {
@@ -42,5 +45,10 @@ export class ConsultUserService {
 
   async getUserPortfolios(id: string) {
     return await this.portfolioService.findByCriteria({ user: id });
+  }
+  async search(userId:string,field:string){
+    return await this.activityLogService.logActivity(userId,ActivityTypeEnum.SEARCH,{
+      category:field
+    })
   }
 }

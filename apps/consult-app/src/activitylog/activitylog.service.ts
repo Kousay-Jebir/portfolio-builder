@@ -73,7 +73,7 @@ export class ActivitylogService {
     return owners;
   }
 
-  async getMostSearchedCategory(userId: string): Promise<string | null> {
+  async getMostSearchedCategory(userId: string) {
     const result = await this.activityLogModel.aggregate([
       {
         $match: {
@@ -91,6 +91,7 @@ export class ActivitylogService {
       { $limit: 1 },
     ]);
 
-    return result[0]?._id || null;
+    // return result[0]?._id || null;
+    return result
   }
 }
