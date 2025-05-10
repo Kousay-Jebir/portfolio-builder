@@ -1,68 +1,60 @@
 import { useEditor } from "@craftjs/core";
+import {
+    Accordion,
+    AccordionItem,
+    AccordionTrigger,
+    AccordionContent,
+} from "@/components/ui/accordion";
 
-function LayerItem({
-    layer,
-    handleClick,
-    toggleVisibility,
-    handleDelete,
-    visible,
-    depth = 0,
-}) {
+function LayerItem({ layer, onSelect, onToggleHidden, onDelete, depth }) {
+    const hasChildren = layer.children.length > 0;
+
     return (
-        <li className="text-xs border-b border-border">
-            <div
-                className="flex items-center justify-between hover:bg-muted/30 cursor-pointer py-1 px-2"
-                style={{ paddingLeft: `${depth * 12}px` }}
-                onClick={() => handleClick(layer.id)}
-            >
-                <span className="truncate">
+        <AccordionItem value={layer.id}>
+            <AccordionTrigger>
+                {/* clicking the name selects; the trigger chevron still works */}
+                <span onClick={() => onSelect(layer.id)} className="flex-1">
                     {layer.displayName || layer.name}
                 </span>
-                <div className="flex items-center space-x-2">
-                    {/* visibility toggle */}
-                    <span
-                        className="text-xs cursor-pointer"
-                        onClick={e => {
-                            e.stopPropagation();
-                            toggleVisibility(layer.id);
-                        }}
-                        title={visible ? "Show Layer" : "Hide Layer"}
-                    >
-                        {visible ? "👁" : "🙈"}
-                    </span>
-                    {/* delete icon */}
-                    <span
-                        className="text-xs cursor-pointer select-none"
-                        onClick={e => {
-                            e.stopPropagation();
-                            handleDelete(layer.id);
-                        }}
-                        title="Delete Layer"
-                    >
-                        🗑️
-                    </span>
-                </div>
-            </div>
+                <button
+                    onClick={e => {
+                        e.stopPropagation();
+                        onToggleHidden(layer.id);
+                    }}
+                    aria-label={layer.hidden ? "Show" : "Hide"}
+                >
+                    {layer.hidden ? "🙈" : "👁"}
+                </button>
+                <button
+                    onClick={e => {
+                        e.stopPropagation();
+                        onDelete(layer.id);
+                    }}
+                    aria-label="Delete"
+                >
+                    🗑️
+                </button>
+            </AccordionTrigger>
 
-            {layer.children?.length > 0 && (
-                <ul>
+            {hasChildren && (
+                <AccordionContent>
                     {layer.children.map(child => (
-                        <LayerItem
-                            key={child.id}
-                            layer={child}
-                            handleClick={handleClick}
-                            toggleVisibility={toggleVisibility}
-                            handleDelete={handleDelete}
-                            visible={child.hidden}
-                            depth={depth + 1}
-                        />
+                        <Accordion type="multiple" collapsible className="w-full" style={{ paddingLeft: `${5 + depth}px` }}>
+                            <LayerItem
+                                key={child.id}
+                                layer={child}
+                                onSelect={onSelect}
+                                onToggleHidden={onToggleHidden}
+                                onDelete={onDelete}
+                                depth={depth + 1}
+                            />
+                        </Accordion>
                     ))}
-                </ul>
+                </AccordionContent>
             )}
-        </li>
+        </AccordionItem>
     );
 }
-
 
 export default function Layers() {
     const {
@@ -70,51 +62,31 @@ export default function Layers() {
         actions: { selectNode, setHidden, delete: deleteNode },
     } = useEditor(editor => ({ nodes: editor.nodes }));
 
-    const mapNodeById = id => {
-        const node = nodes[id];
+
+    const buildTree = id => {
+        const d = nodes[id]?.data;
         return {
             id,
-            name: node?.data.name,
-            displayName: node?.data.displayName,
-            children: node?.data.nodes || [],
-            hidden: node?.data.hidden,
+            name: d?.name || "ROOT",
+            displayName: d?.displayName,
+            hidden: !!d?.hidden,
+            children: d?.nodes.map(buildTree) || [],
         };
     };
-
-    const getTree = node => {
-        if (!node) return;
-        const children = node.children.map(childId =>
-            getTree(mapNodeById(childId))
-        );
-        return { ...node, children };
-    };
-
-    const rootNode = getTree(mapNodeById("ROOT"));
-
-    const handleDelete = id => {
-        deleteNode(id)
-    };
+    const root = buildTree("ROOT");
 
     return (
-        <div className="border border-border rounded-none text-muted-foreground mt-2">
-            <div className="border-b border-border text-xs font-medium px-2 py-1 tracking-wide">
-                Layers
-            </div>
-            <ul className="divide-y divide-border p-1">
-                {rootNode?.children?.map(child => (
-                    <LayerItem
-                        key={child.id}
-                        layer={child}
-                        handleClick={selectNode}
-                        toggleVisibility={id =>
-                            setHidden(id, !nodes[id]?.data.hidden)
-                        }
-                        handleDelete={handleDelete}
-                        visible={child.hidden}
-                    />
-                ))}
-            </ul>
-        </div>
+        <Accordion type="multiple" collapsible className="w-full">
+            {root.children.map(layer => (
+                <LayerItem
+                    key={layer.id}
+                    layer={layer}
+                    onSelect={selectNode}
+                    onToggleHidden={id => setHidden(id, !nodes[id].data.hidden)}
+                    onDelete={deleteNode}
+                    depth={0}
+                />
+            ))}
+        </Accordion>
     );
 }
-

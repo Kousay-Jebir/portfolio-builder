@@ -25,7 +25,7 @@ export default function ToolBox() {
         { label: "Carousel", component: <Element canvas is={Carousel} loop /> },
         { label: "Carousel item", component: <Element canvas is={CarouselItem} /> },
         { label: "Paragraph", component: <EditableTypography component="p" /> },
-        { label: "Hyperlink", component: <EditableTypography href="#" component="a" /> },
+        { label: "Hyperlink", component: <EditableTypography href="http://google.com" component="a" /> },
         { label: "Image", component: <Image /> },
     ];
 

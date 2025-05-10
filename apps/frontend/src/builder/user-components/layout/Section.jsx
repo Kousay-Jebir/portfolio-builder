@@ -55,8 +55,8 @@ function BaseGridRow({ children, style, align, justify, ...props }) {
 
 const BuilderEditableGridRow = withBuilderEditable(BaseGridRow);
 
-const GridRow = withCustomizableSettings(BuilderEditableGridRow, GridRowSettings, {
-    style: { minHeight: "50px" },
+const GridRow = withCustomizableSettings(BaseGridRow, GridRowSettings, {
+    style: { minHeight: "50px", border: '1px solid gray' },
     align: "normal",
     justify: "start"
 })
@@ -72,6 +72,6 @@ export function BaseSection({ component: Component, children, style, ...props })
     )
 }
 const BuilderEditableSection = withBuilderEditable(BaseSection)
-const Section = withCustomizableSettings(BuilderEditableSection, CommonStyleSettings, { style: { minHeight: "50px" } })
+const Section = withCustomizableSettings(BaseSection, CommonStyleSettings, { style: { minHeight: "50px", border: '1px solid gray' } })
 
 export { Section, GridRow, GridColumn, BuilderEditableSection, BuilderEditableGridColumn, BuilderEditableGridRow }
