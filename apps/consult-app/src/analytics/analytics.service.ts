@@ -14,16 +14,17 @@ export class AnalyticsService {
 
     async getPortfoliosOwners(type : ActivityTypeEnum){
         const results = await this.activityLogService.getMostPortfolioOwnerIds(type)
-        const data =await Promise.all(
-             results.map(async(item)=>{
-                const profile=await this.userProfileModel.findOne({user:item.ownerId}).lean()
-                return {
-                    ...profile,counter:item.count
-                }
+        // const data =await Promise.all(
+        //      results.map(async(item)=>{
+        //         const profile=await this.userProfileModel.findOne({user:item.ownerId}).lean()
+        //         return {
+        //             ...profile,counter:item.count
+        //         }
 
                 
-            })
-        )
+        //     })
+        // )
+        const data = await this.dataParsing(results)
         return data
 
     }
@@ -50,9 +51,20 @@ export class AnalyticsService {
         return profiles
 
                
-     
-        
-        
+    }
+
+    async dataParsing(array : any[]){
+        const data =await Promise.all(
+            array.map(async(item)=>{
+               const profile=await this.userProfileModel.findOne({user:item.ownerId}).lean()
+               return {
+                   ...profile,counter:item.count
+               }
+
+               
+           })
+       )
+       return data
 
 
 
