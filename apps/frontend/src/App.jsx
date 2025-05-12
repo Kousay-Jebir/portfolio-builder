@@ -17,7 +17,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { useUI } from "./DrawerContext";           // UI helpers
+import { useUI } from "./DrawerContext";
 import Layers from "./builder/Layers";
 import ToolBox from "./builder/user-components/ToolBox";
 import { CustomizationMenu } from "./builder/customization-engine/CustomizationMenu";
@@ -41,7 +41,7 @@ import "./App.css";
 
 const MIN_PANEL_WIDTH = 200;
 const MAX_PANEL_WIDTH = 400;
-const DEFAULT_PANEL_WIDTH = 240;
+const DEFAULT_PANEL_WIDTH = 250;
 
 // hook for resizing panels
 function useResizablePanel(isLeft) {
@@ -133,7 +133,7 @@ function Sidebar({ width, children, side, onResize }) {
   return (
     <div
       className={`relative hidden lg:flex flex-col bg-gray-50 dark:bg-gray-800 ${borderClass}`}
-      style={{ width }}
+      style={{ width, overflow: 'auto' }}
     >
       {children}
       <div

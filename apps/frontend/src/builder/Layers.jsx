@@ -1,12 +1,14 @@
 import { useEditor } from "@craftjs/core";
+import React from "react";
 import {
     Accordion,
     AccordionItem,
     AccordionTrigger,
     AccordionContent,
 } from "@/components/ui/accordion";
+import uniqueId from "@/libs/nanoid";
 
-function LayerItem({ layer, onSelect, onToggleHidden, onDelete, depth }) {
+function LayerItem({ layer, onSelect, onToggleHidden, onDelete, depth, copyComponent }) {
     const hasChildren = layer.children.length > 0;
 
     return (
@@ -34,8 +36,8 @@ function LayerItem({ layer, onSelect, onToggleHidden, onDelete, depth }) {
                 >
                     🗑️
                 </button>
+                <button onClick={(e) => { e.stopPropagation(); copyComponent(layer.id) }}>Copy</button>
             </AccordionTrigger>
-
             {hasChildren && (
                 <AccordionContent>
                     {layer.children.map(child => (
@@ -47,6 +49,7 @@ function LayerItem({ layer, onSelect, onToggleHidden, onDelete, depth }) {
                                 onToggleHidden={onToggleHidden}
                                 onDelete={onDelete}
                                 depth={depth + 1}
+                                copyComponent={copyComponent}
                             />
                         </Accordion>
                     ))}
@@ -56,11 +59,41 @@ function LayerItem({ layer, onSelect, onToggleHidden, onDelete, depth }) {
     );
 }
 
+
 export default function Layers() {
     const {
         nodes,
-        actions: { selectNode, setHidden, delete: deleteNode },
-    } = useEditor(editor => ({ nodes: editor.nodes }));
+        actions: { selectNode, setHidden, delete: deleteNode, addNodeTree, add },
+        query
+    } = useEditor(editor => ({ nodes: editor.nodes, query: editor.query }));
+
+    const copyComponent = (nodeId, parentId = null) => {
+
+        if (!parentId) {
+            parentId = query.node(nodeId).get().data.parent;
+        }
+
+        const nodeType = query.node(nodeId).get().data.type;
+        const nodeProps = query.node(nodeId).get().data.props;
+
+
+        const newNode = query.createNode(React.createElement(nodeType, nodeProps));
+
+
+        add(newNode, parentId);
+
+
+        const childNodes = query.node(nodeId).get().data.nodes || [];
+
+        childNodes.forEach((childId) => {
+
+            copyComponent(childId, newNode.id);
+        });
+    };
+
+
+
+
 
 
     const buildTree = id => {
@@ -75,6 +108,7 @@ export default function Layers() {
     };
     const root = buildTree("ROOT");
 
+
     return (
         <Accordion type="multiple" collapsible className="w-full">
             {root.children.map(layer => (
@@ -84,6 +118,7 @@ export default function Layers() {
                     onSelect={selectNode}
                     onToggleHidden={id => setHidden(id, !nodes[id].data.hidden)}
                     onDelete={deleteNode}
+                    copyComponent={copyComponent}
                     depth={0}
                 />
             ))}
