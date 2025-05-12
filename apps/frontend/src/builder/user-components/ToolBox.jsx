@@ -10,10 +10,11 @@ import {
     CardTitle,
     CardContent
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { EditableButton } from "./button/Button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Carousel } from "./showcase/Carousel";
 import { CarouselItem } from "./showcase/CarouselItem";
+import { Button } from "@/components/ui/button";
 
 export default function ToolBox() {
     const { connectors } = useEditor();
@@ -26,12 +27,13 @@ export default function ToolBox() {
         { label: "Carousel item", component: <Element canvas is={CarouselItem} /> },
         { label: "Paragraph", component: <EditableTypography component="p" /> },
         { label: "Hyperlink", component: <EditableTypography href="http://google.com" component="a" /> },
+        { label: "Button", component: <EditableButton /> },
         { label: "Image", component: <Image /> },
     ];
 
     return (
-        <Card className="border border-border rounded-none bg-transparent">
-            <CardHeader className="border-b border-border px-0 py-1">
+        <Card className="rounded-xs shadow-none">
+            <CardHeader className="border-b px-0 py-1">
                 <CardTitle className="text-sm font-medium text-muted-foreground tracking-wide px-2">
                     Toolbox
                 </CardTitle>

@@ -67,7 +67,7 @@ function UnitInput({ label, value = "0px", onChange }) {
     );
 }
 
-export function CommonStyleSettings({ showBackground = true, customs = false }) {
+export function CommonStyleSettings({ showBackground = true, customs = false, children }) {
     const { values, updateProp } = usePropSettings(["style"], customs);
     const style = values.style || {};
     const update = (k, v) => updateProp("style", { ...style, [k]: v });
@@ -142,10 +142,12 @@ export function CommonStyleSettings({ showBackground = true, customs = false }) 
     };
 
     return (
-        <ScrollArea className="h-full p-2">
+        <ScrollArea className="h-full">
             <div className="space-y-4">
+                {children}
                 {showBackground && (
-                    <Card className="border-border">
+
+                    <Card className="shadow-none rounded-xs">
                         <CardHeader>
                             <Label className="text-sm">Background</Label>
                         </CardHeader>
@@ -186,7 +188,7 @@ export function CommonStyleSettings({ showBackground = true, customs = false }) 
                     const label = prop.charAt(0).toUpperCase() + prop.slice(1);
                     const mode = modes[prop];
                     return (
-                        <Card key={prop} className="border-border">
+                        <Card className="shadow-none rounded-xs" key={prop}>
                             <CardHeader className="flex items-center justify-between">
                                 <Label className="text-sm">{label}</Label>
                                 <div className="flex items-center space-x-1">
@@ -221,7 +223,7 @@ export function CommonStyleSettings({ showBackground = true, customs = false }) 
                     );
                 })}
 
-                <Card className="border-border">
+                <Card className="shadow-none rounded-xs">
                     <CardHeader>
                         <Label className="text-sm">Border</Label>
                     </CardHeader>
@@ -261,7 +263,7 @@ export function CommonStyleSettings({ showBackground = true, customs = false }) 
                     </CardContent>
                 </Card>
 
-                <Card className="border-border">
+                <Card className="shadow-none rounded-xs">
                     <CardHeader>
                         <Label className="text-sm">Box Shadow</Label>
                     </CardHeader>

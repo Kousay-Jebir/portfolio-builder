@@ -38,6 +38,7 @@ import { AspectRatio } from "./components/ui/aspect-ratio";
 import { Carousel } from "./builder/user-components/showcase/Carousel";
 import { CarouselItem } from "./builder/user-components/showcase/CarouselItem";
 import "./App.css";
+import { EditableButton } from "./builder/user-components/button/Button";
 
 const MIN_PANEL_WIDTH = 200;
 const MAX_PANEL_WIDTH = 400;
@@ -189,6 +190,7 @@ export default function App() {
           AspectRatio,
           Carousel,
           CarouselItem,
+          EditableButton
         }}
       >
         <BuilderProvider>
@@ -197,7 +199,7 @@ export default function App() {
           <div className="flex flex-1 overflow-hidden">
             {state.showLeftSidebar && (
               <Sidebar width={leftWidth} side="left" onResize={resizeLeft}>
-                <div className="p-2">
+                <div className="p-2 space-y-4">
                   <ToolBox />
                   <Layers />
                 </div>

@@ -6,6 +6,7 @@ import {
     AccordionTrigger,
     AccordionContent,
 } from "@/components/ui/accordion";
+import { Card, CardContent } from "@/components/ui/card";
 import uniqueId from "@/libs/nanoid";
 
 function LayerItem({ layer, onSelect, onToggleHidden, onDelete, depth, copyComponent }) {
@@ -110,18 +111,22 @@ export default function Layers() {
 
 
     return (
-        <Accordion type="multiple" collapsible className="w-full">
-            {root.children.map(layer => (
-                <LayerItem
-                    key={layer.id}
-                    layer={layer}
-                    onSelect={selectNode}
-                    onToggleHidden={id => setHidden(id, !nodes[id].data.hidden)}
-                    onDelete={deleteNode}
-                    copyComponent={copyComponent}
-                    depth={0}
-                />
-            ))}
-        </Accordion>
+        <Card className="rounded-xs shadow-none">
+            <CardContent>
+                <Accordion type="multiple" collapsible className="w-full">
+                    {root.children.map(layer => (
+                        <LayerItem
+                            key={layer.id}
+                            layer={layer}
+                            onSelect={selectNode}
+                            onToggleHidden={id => setHidden(id, !nodes[id].data.hidden)}
+                            onDelete={deleteNode}
+                            copyComponent={copyComponent}
+                            depth={0}
+                        />
+                    ))}
+                </Accordion>
+            </CardContent>
+        </Card>
     );
 }

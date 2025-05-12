@@ -1,36 +1,40 @@
 import { withEditableContent } from "../../layout-engine/utils/hocs/editable-content-hoc"
 import { ButtonSettings } from "./ButtonSettings";
 import Draggable from "../../layout-engine/utils/components/Draggable";
+import { Button as ShadcnButton } from "@/components/ui/button";
 
-function Button({ component: Component = 'button', onClick, style, children, ...props }) {
+
+export const handlers = {
+    none: () => { },
+    alert: () => window.alert("Hello from your button!"),
+    download: (file) => {
+        if (!file) return window.alert("Please upload a file first.");
+        const url = URL.createObjectURL(file);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = file.name;
+        a.click();
+        URL.revokeObjectURL(url);
+    },
+};
+
+export function EditableButton({ style, onClick, text, variant, size, actionKey, downloadFile, ...props }) {
     return (
-        <Draggable style={style} element={Component} {...props} onClick={onClick}>{children}</Draggable>
+        <Draggable style={style} element={ShadcnButton} variant={variant} size={size} actionKey={actionKey} downloadFile={downloadFile} {...props} onClick={onClick} text={text}>{text}</Draggable>
     )
 }
 
-export const EditableButton = withEditableContent(Button);
+
 
 EditableButton.craft = {
     props: {
-        style: {
-            backgroundColor: '#ffff',
-            color: '#000000',
-            fontSize: 16,
-            padding: 0,
-            paddingTop: 0,
-            paddingBottom: 0,
-            paddingLeft: 0,
-            paddingRight: 0,
-            margin: 0,
-            marginTop: 0,
-            marginBottom: 0,
-            marginLeft: 0,
-            marginRight: 0,
-            borderRadius: 0,
-            fontFamily: 'sans-serif'
-        },
-        onClick: () => alert("Hello world!"),
-        text: "Click me!"
+        style: {},
+        variant: "default",
+        size: "sm",
+        actionKey: "none",
+        text: "Click me!",
+        downloadFile: null,
+        onClick: () => { }
     },
     related: {
         settings: ButtonSettings
