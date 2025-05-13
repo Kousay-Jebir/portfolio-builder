@@ -43,9 +43,10 @@ import test from "../test.json"
 import test2 from "../test2.json"
 import test3 from "../test3.json"
 import { Container } from "react-grid-system";
+import FakeWindowWidthProvider from "./builder/FakeWindowWidthProvider";
 
 const MIN_PANEL_WIDTH = 200;
-const MAX_PANEL_WIDTH = 400;
+const MAX_PANEL_WIDTH = 1000;
 const DEFAULT_PANEL_WIDTH = 250;
 
 // hook for resizing panels
@@ -55,9 +56,13 @@ function useResizablePanel(isLeft) {
   const startResize = (e) => {
     e.preventDefault();
     const onMove = (evt) => {
-      const w = isLeft ? evt.clientX : window.innerWidth - evt.clientX;
+      const totalWidth = document.documentElement.clientWidth;
+      const w = isLeft
+        ? evt.clientX
+        : totalWidth - evt.clientX;
       if (w >= MIN_PANEL_WIDTH && w <= MAX_PANEL_WIDTH) setWidth(w);
     };
+
     const onUp = () => {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onUp);
@@ -220,11 +225,13 @@ export default function App() {
             )}
 
             <main className="flex-1 bg-white overflow-auto">
-              <Frame>
-                <Element is={DroppableGridEngine} canvas className="h-full p-4">
-                  Builder Canvas
-                </Element>
-              </Frame>
+              <FakeWindowWidthProvider>
+                <Frame>
+                  <Element is={DroppableGridEngine} canvas className="h-full p-4">
+                    Builder Canvas
+                  </Element>
+                </Frame>
+              </FakeWindowWidthProvider>
             </main>
 
             {state.showRightSidebar && (
