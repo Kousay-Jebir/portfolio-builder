@@ -1,7 +1,7 @@
 import { useNode } from "@craftjs/core"
 import Draggable from "../../layout-engine/utils/components/Draggable"
 import { GridColumnSettings } from "./GridColumnSettings"
-import { Hidden } from "react-grid-system"
+import { Container, Hidden } from "react-grid-system"
 import { Col, Row } from "react-grid-system"
 import { GridRowSettings } from "./GridRowSettings"
 import { CommonStyleSettings } from "../../customization-engine/shared-customization/CommonStyleSettings"
@@ -64,14 +64,12 @@ const GridRow = withCustomizableSettings(BaseGridRow, GridRowSettings, {
 
 
 //Droppable and draggable generic layout component
-export function BaseSection({ component: Component, children, style, ...props }) {
+export function BaseGridContainer({ children, style, ...props }) {
     return (
-        <Draggable style={style} element={Component} {...props}>
-            {children}
-        </Draggable>
+        <Draggable element={Container} style={style} {...props}>{children}</Draggable>
     )
 }
-const BuilderEditableSection = withBuilderEditable(BaseSection)
-const Section = withCustomizableSettings(BaseSection, CommonStyleSettings, { style: { minHeight: "50px", border: '1px solid gray' } })
+const BuilderEditableSection = withBuilderEditable(BaseGridContainer)
+const Section = withCustomizableSettings(BaseGridContainer, CommonStyleSettings, { style: { minHeight: "50px", border: '1px solid gray' } })
 
 export { Section, GridRow, GridColumn, BuilderEditableSection, BuilderEditableGridColumn, BuilderEditableGridRow }

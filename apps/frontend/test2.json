@@ -1,0 +1,39 @@
+{
+    "ROOT": {
+        "type": {
+            "resolvedName": "DroppableGridEngine"
+        },
+        "isCanvas": true,
+        "props": {
+            "style": {},
+            "className": "h-full p-4",
+            "children": "Builder Canvas"
+        },
+        "displayName": "DroppableGridEngine",
+        "custom": {},
+        "hidden": false,
+        "nodes": [
+            "R9zMq7TKiJ"
+        ],
+        "linkedNodes": {}
+    },
+    "R9zMq7TKiJ": {
+        "type": {
+            "resolvedName": "BaseGridContainer"
+        },
+        "isCanvas": true,
+        "props": {
+            "style": {
+                "minHeight": "50px",
+                "border": "1px solid gray"
+            },
+            "fluid": true
+        },
+        "displayName": "BaseGridContainer",
+        "custom": {},
+        "parent": "ROOT",
+        "hidden": false,
+        "nodes": [],
+        "linkedNodes": {}
+    }
+}

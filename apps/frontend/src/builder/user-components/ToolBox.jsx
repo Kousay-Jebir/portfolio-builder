@@ -1,6 +1,5 @@
 import { useEditor, Element } from "@craftjs/core";
-import { GridColumn, GridRow, Section } from "./layout/Section";
-import { Container } from "react-grid-system";
+import { GridColumn, GridRow, Section, } from "./layout/Section";
 import { EditableTypography } from "./typography/Typography";
 import { Image } from "./image/Image";
 
@@ -20,7 +19,7 @@ export default function ToolBox() {
     const { connectors } = useEditor();
 
     const toolboxItems = [
-        { label: "Section", component: <Element canvas fluid component={Container} is={Section} /> },
+        { label: "Grid Container", component: <Element canvas fluid is={Section} /> },
         { label: "Grid Row", component: <Element canvas is={GridRow} /> },
         { label: "Grid Column", component: <Element canvas is={GridColumn} /> },
         { label: "Carousel", component: <Element canvas is={Carousel} loop /> },
@@ -32,7 +31,7 @@ export default function ToolBox() {
     ];
 
     return (
-        <Card className="rounded-xs shadow-none">
+        <Card className="rounded-xs shadow-none dark:bg-slate-900">
             <CardHeader className="border-b px-0 py-1">
                 <CardTitle className="text-sm font-medium text-muted-foreground tracking-wide px-2">
                     Toolbox

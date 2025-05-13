@@ -108,25 +108,28 @@ export default function Layers() {
         };
     };
     const root = buildTree("ROOT");
-
+    console.log(root)
 
     return (
-        <Card className="rounded-xs shadow-none">
-            <CardContent>
-                <Accordion type="multiple" collapsible className="w-full">
-                    {root.children.map(layer => (
-                        <LayerItem
-                            key={layer.id}
-                            layer={layer}
-                            onSelect={selectNode}
-                            onToggleHidden={id => setHidden(id, !nodes[id].data.hidden)}
-                            onDelete={deleteNode}
-                            copyComponent={copyComponent}
-                            depth={0}
-                        />
-                    ))}
-                </Accordion>
-            </CardContent>
-        </Card>
+
+        root.children.length > 0 ? (
+            <Card className="rounded-xs shadow-none dark:bg-slate-900">
+                <CardContent>
+                    <Accordion type="multiple" collapsible className="w-full">
+                        {root.children.map(layer => (
+                            <LayerItem
+                                key={layer.id}
+                                layer={layer}
+                                onSelect={selectNode}
+                                onToggleHidden={id => setHidden(id, !nodes[id].data.hidden)}
+                                onDelete={deleteNode}
+                                copyComponent={copyComponent}
+                                depth={0}
+                            />
+                        ))}
+                    </Accordion>
+                </CardContent>
+            </Card>) : null
+
     );
 }

@@ -23,7 +23,7 @@ import ToolBox from "./builder/user-components/ToolBox";
 import { CustomizationMenu } from "./builder/customization-engine/CustomizationMenu";
 import { EditableTypography } from "./builder/user-components/typography/Typography";
 import {
-  BaseSection,
+  BaseGridContainer,
   BuilderEditableGridColumn,
   BuilderEditableGridRow,
   BuilderEditableSection,
@@ -39,6 +39,9 @@ import { Carousel } from "./builder/user-components/showcase/Carousel";
 import { CarouselItem } from "./builder/user-components/showcase/CarouselItem";
 import "./App.css";
 import { EditableButton } from "./builder/user-components/button/Button";
+import test from "../test.json"
+import test2 from "../test2.json"
+import { Container } from "react-grid-system";
 
 const MIN_PANEL_WIDTH = 200;
 const MAX_PANEL_WIDTH = 400;
@@ -82,6 +85,14 @@ function Topbar({ ui, state }) {
           variant="secondary"
           className="p-1"
           onClick={() => console.log(query.serialize())}
+        >
+          Serialize
+        </Button>
+        <Button
+          size="xs"
+          variant="secondary"
+          className="p-1"
+          onClick={() => console.log(query.dese())}
         >
           Serialize
         </Button>
@@ -182,7 +193,7 @@ export default function App() {
           GridRow,
           GridColumn,
           Image,
-          BaseSection,
+          BaseGridContainer,
           DroppableGridEngine,
           BuilderEditableSection,
           BuilderEditableGridColumn,
@@ -190,7 +201,8 @@ export default function App() {
           AspectRatio,
           Carousel,
           CarouselItem,
-          EditableButton
+          EditableButton,
+          Container
         }}
       >
         <BuilderProvider>
@@ -207,7 +219,7 @@ export default function App() {
             )}
 
             <main className="flex-1 bg-white overflow-auto">
-              <Frame>
+              <Frame json={test}>
                 <Element is={DroppableGridEngine} canvas className="h-full p-4">
                   Builder Canvas
                 </Element>
@@ -217,7 +229,6 @@ export default function App() {
             {state.showRightSidebar && (
               <Sidebar width={rightWidth} side="right" onResize={resizeRight}>
                 <div className="p-2">
-                  <h3>Customization</h3>
                   <CustomizationMenu />
                 </div>
               </Sidebar>
