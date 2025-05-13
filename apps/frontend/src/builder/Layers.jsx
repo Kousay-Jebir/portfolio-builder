@@ -108,7 +108,7 @@ export default function Layers() {
         };
     };
     const root = buildTree("ROOT");
-    console.log(root)
+
 
     return (
 

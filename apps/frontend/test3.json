@@ -1,0 +1,61 @@
+{
+    "ROOT": {
+        "type": {
+            "resolvedName": "DroppableGridEngine"
+        },
+        "isCanvas": true,
+        "props": {
+            "style": {
+                "backgroundColor": "rgba(255,61,61,1)",
+                "padding": "00px"
+            },
+            "className": "h-full p-4",
+            "children": "Builder Canvas"
+        },
+        "displayName": "DroppableGridEngine",
+        "custom": {},
+        "hidden": false,
+        "nodes": [
+            "PCStThNWmh"
+        ],
+        "linkedNodes": {}
+    },
+    "PCStThNWmh": {
+        "type": {
+            "resolvedName": "GridRow"
+        },
+        "isCanvas": true,
+        "props": {
+            "style": {
+                "minHeight": "50px",
+                "border": "1px solid gray"
+            },
+            "align": "normal",
+            "justify": "start"
+        },
+        "displayName": "BaseGridRow",
+        "custom": {},
+        "parent": "ROOT",
+        "hidden": false,
+        "nodes": [
+            "I3R7MXvYk_"
+        ],
+        "linkedNodes": {}
+    },
+    "I3R7MXvYk_": {
+        "type": {
+            "resolvedName": "EditableTypography"
+        },
+        "isCanvas": false,
+        "props": {
+            "text": "Change me!",
+            "component": "p"
+        },
+        "displayName": "EditableTypography",
+        "custom": {},
+        "parent": "PCStThNWmh",
+        "hidden": false,
+        "nodes": [],
+        "linkedNodes": {}
+    }
+}

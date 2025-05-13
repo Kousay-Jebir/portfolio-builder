@@ -22,8 +22,8 @@ export function Image({
 Image.craft = {
     props: {
         imageUrl: fallback,
-        ratio: 1,
-        className: "w-full h-full object-cover",
+        ratio: 1 / 1,
+        className: "w-full h-full object-fill",
         alt: "image"
     },
     related: {
