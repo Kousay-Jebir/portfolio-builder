@@ -34,10 +34,7 @@ export function withEditableContent(WrappedComponent, textProp = 'text') {
 
         const handleBlur = () => finishEditing();
         const handleKeyDown = (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                finishEditing();
-            }
+
         };
 
 
@@ -59,7 +56,6 @@ export function withEditableContent(WrappedComponent, textProp = 'text') {
                 suppressContentEditableWarning: true,
                 onBlur: handleBlur,
                 onKeyDown: handleKeyDown,
-                style: { outline: '1px dashed #999', minWidth: 20, display: 'inline-block', ...props.style },
             }
             : { style: { ...props.style } };
 

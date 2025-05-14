@@ -44,6 +44,7 @@ import test2 from "../test2.json"
 import test3 from "../test3.json"
 import { Container } from "react-grid-system";
 import FakeWindowWidthProvider from "./builder/FakeWindowWidthProvider";
+import { GenericContainer } from "./builder/user-components/generic/GenericContainer";
 
 const MIN_PANEL_WIDTH = 200;
 const MAX_PANEL_WIDTH = 1000;
@@ -208,7 +209,8 @@ export default function App() {
           Carousel,
           CarouselItem,
           EditableButton,
-          Container
+          Container,
+          GenericContainer
         }}
       >
         <BuilderProvider>

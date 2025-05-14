@@ -14,11 +14,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Carousel } from "./showcase/Carousel";
 import { CarouselItem } from "./showcase/CarouselItem";
 import { Button } from "@/components/ui/button";
+import { GenericContainer } from "./generic/GenericContainer";
 
 export default function ToolBox() {
     const { connectors } = useEditor();
 
     const toolboxItems = [
+        { label: "Generic Container", component: <Element canvas is={GenericContainer} /> },
         { label: "Grid Container", component: <Element canvas fluid is={Section} /> },
         { label: "Grid Row", component: <Element canvas is={GridRow} /> },
         { label: "Grid Column", component: <Element canvas is={GridColumn} /> },

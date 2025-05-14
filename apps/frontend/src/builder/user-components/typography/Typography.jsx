@@ -14,7 +14,12 @@ export function Typography({ component: Component, style, children, text, ...pro
 const EditableTypography = withEditableContent(withBuilderEditable(Typography))
 EditableTypography.craft = {
     props: {
-        text: "Change me!"
+        text: "Change me!",
+        style: {
+            maxWidth: '100%',
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+        }
     },
     related: {
         settings: TypographySettings
