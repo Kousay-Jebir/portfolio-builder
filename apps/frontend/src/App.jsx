@@ -191,6 +191,8 @@ export default function App() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [state.showRightSheet, ui]);
 
+  const [layersOpenMap, setLayersOpenMap] = useState({});
+
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
       <Editor
@@ -221,7 +223,7 @@ export default function App() {
               <Sidebar width={leftWidth} side="left" onResize={resizeLeft}>
                 <div className="p-2 space-y-4">
                   <ToolBox />
-                  <Layers />
+                  <Layers openMap={layersOpenMap} setOpenMap={setLayersOpenMap} />
                 </div>
               </Sidebar>
             )}
@@ -261,7 +263,7 @@ export default function App() {
               </SheetHeader>
               <div className="p-4">
                 <ToolBox />
-                <Layers />
+                <Layers openMap={layersOpenMap} setOpenMap={setLayersOpenMap} />
               </div>
             </SheetContent>
           </Sheet>

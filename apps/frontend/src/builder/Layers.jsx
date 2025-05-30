@@ -1,5 +1,5 @@
 import { useEditor } from "@craftjs/core";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import {
     Accordion,
     AccordionItem,
@@ -7,123 +7,134 @@ import {
     AccordionContent,
 } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
-import uniqueId from "@/libs/nanoid";
 
-function LayerItem({ layer, onSelect, onToggleHidden, onDelete, depth, copyComponent }) {
-    const hasChildren = layer.children.length > 0;
+function LayerItem({
+    layer,
+    onSelect,
+    onToggleHidden,
+    onDelete,
+    copyComponent,
+    openMap,
+    setOpenMap,
+}) {
+    const { id, name, displayName, hidden, children } = layer;
+    const hasChildren = children.length > 0;
+
+    // Controlled open state for this node’s children:
+    const openForThis = openMap[id] || [];
 
     return (
-        <AccordionItem value={layer.id}>
+        <AccordionItem value={id}>
             <AccordionTrigger>
-                {/* clicking the name selects; the trigger chevron still works */}
-                <span onClick={() => onSelect(layer.id)} className="flex-1">
-                    {layer.displayName || layer.name}
+                <span onClick={() => onSelect(id)} className="flex-1 cursor-pointer">
+                    {displayName || name}
                 </span>
                 <button
-                    onClick={e => {
-                        e.stopPropagation();
-                        onToggleHidden(layer.id);
-                    }}
-                    aria-label={layer.hidden ? "Show" : "Hide"}
+                    onClick={(e) => { e.stopPropagation(); onToggleHidden(id); }}
+                    aria-label={hidden ? "Show" : "Hide"}
                 >
-                    {layer.hidden ? "🙈" : "👁"}
+                    {hidden ? "🙈" : "👁"}
                 </button>
                 <button
-                    onClick={e => {
-                        e.stopPropagation();
-                        onDelete(layer.id);
-                    }}
+                    onClick={(e) => { e.stopPropagation(); onDelete(id); }}
                     aria-label="Delete"
                 >
                     🗑️
                 </button>
-                <button onClick={(e) => { e.stopPropagation(); copyComponent(layer.id) }}>Copy</button>
+                <button
+                    onClick={(e) => { e.stopPropagation(); copyComponent(id); }}
+                >
+                    Copy
+                </button>
             </AccordionTrigger>
+
             {hasChildren && (
-                <AccordionContent>
-                    {layer.children.map(child => (
-                        <Accordion type="multiple" collapsible className="w-full" style={{ paddingLeft: `${5 + depth}px` }}>
+                <AccordionContent style={{ paddingLeft: 16 }}>
+                    {/* Each group of children is its own Accordion */}
+                    <Accordion
+                        type="multiple"
+                        collapsible
+                        value={openForThis}
+                        onValueChange={(newVals) =>
+                            setOpenMap((m) => ({ ...m, [id]: newVals }))
+                        }
+                        className="w-full"
+                    >
+                        {children.map((child) => (
                             <LayerItem
                                 key={child.id}
                                 layer={child}
                                 onSelect={onSelect}
                                 onToggleHidden={onToggleHidden}
                                 onDelete={onDelete}
-                                depth={depth + 1}
                                 copyComponent={copyComponent}
+                                openMap={openMap}
+                                setOpenMap={setOpenMap}
                             />
-                        </Accordion>
-                    ))}
+                        ))}
+                    </Accordion>
                 </AccordionContent>
             )}
         </AccordionItem>
     );
 }
 
-
-export default function Layers() {
+export default function Layers({ openMap, setOpenMap }) {
     const {
         nodes,
-        actions: { selectNode, setHidden, delete: deleteNode, addNodeTree, add },
-        query
-    } = useEditor(editor => ({ nodes: editor.nodes, query: editor.query }));
+        actions: { selectNode, setHidden, delete: deleteNode, add },
+        query,
+    } = useEditor((ed) => ({ nodes: ed.nodes, query: ed.query }));
 
     const copyComponent = (nodeId, parentId = null) => {
-
-        if (!parentId) {
-            parentId = query.node(nodeId).get().data.parent;
-        }
-        const { type: nodeType, props: nodeProps, isCanvas } = query.node(nodeId).get().data
-
-
-
-        const newNode = query.createNode(React.createElement(nodeType, nodeProps));
+        if (!parentId) parentId = query.node(nodeId).get().data.parent;
+        const { type, props, isCanvas } = query.node(nodeId).get().data;
+        const newNode = query.createNode(React.createElement(type, props));
         newNode.data.isCanvas = isCanvas;
         add(newNode, parentId);
 
-
-        const childNodes = query.node(nodeId).get().data.nodes || [];
-
-        childNodes.forEach((childId) => {
-
-            copyComponent(childId, newNode.id);
-        });
-        console.log(query.node('ROOT').toNodeTree())
+        const childIds = query.node(nodeId).get().data.nodes || [];
+        childIds.forEach((cid) => copyComponent(cid, newNode.id));
     };
 
-    const buildTree = id => {
-        const d = nodes[id]?.data;
+    const buildTree = (id) => {
+        const d = nodes[id]?.data || {};
         return {
             id,
-            name: d?.name || "ROOT",
-            displayName: d?.displayName,
-            hidden: !!d?.hidden,
-            children: d?.nodes.map(buildTree) || [],
+            name: d.name || "ROOT",
+            displayName: d.displayName,
+            hidden: !!d.hidden,
+            children: (d.nodes || []).map(buildTree),
         };
     };
     const root = buildTree("ROOT");
-
+    if (!root.children.length) return null;
 
     return (
-
-        root.children.length > 0 ? (
-            <Card className="rounded-xs shadow-none dark:bg-slate-900">
-                <CardContent>
-                    <Accordion type="multiple" collapsible className="w-full">
-                        {root.children.map(layer => (
-                            <LayerItem
-                                key={layer.id}
-                                layer={layer}
-                                onSelect={selectNode}
-                                onToggleHidden={id => setHidden(id, !nodes[id].data.hidden)}
-                                onDelete={deleteNode}
-                                copyComponent={copyComponent}
-                                depth={0}
-                            />
-                        ))}
-                    </Accordion>
-                </CardContent>
-            </Card>) : null
-
+        <Card className="rounded-xs shadow-none dark:bg-slate-900">
+            <CardContent>
+                <Accordion
+                    type="multiple"
+                    value={openMap["ROOT"] || []}
+                    onValueChange={(vals) =>
+                        setOpenMap((m) => ({ ...m, ROOT: vals }))
+                    }
+                    className="w-full"
+                >
+                    {root.children.map((layer) => (
+                        <LayerItem
+                            key={layer.id}
+                            layer={layer}
+                            onSelect={selectNode}
+                            onToggleHidden={(id) => setHidden(id, !nodes[id].data.hidden)}
+                            onDelete={deleteNode}
+                            copyComponent={copyComponent}
+                            openMap={openMap}
+                            setOpenMap={setOpenMap}
+                        />
+                    ))}
+                </Accordion>
+            </CardContent>
+        </Card>
     );
 }
