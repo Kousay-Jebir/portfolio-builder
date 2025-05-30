@@ -1,56 +1,75 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState, forwardRef } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
 
-export const withEditableContent = (WrappedComponent, textProp = 'text') => {
-    return function EditableTextComponent(props) {
-        const { enabled } = useEditor((state) => ({
-            enabled: state.options.enabled,
+/**
+ * HOC that makes a component's text prop editable in Craft.js via double-click.
+ * @param WrappedComponent - The component to wrap.
+ * @param textProp - The name of the prop containing text (default: 'text').
+ */
+export function withEditableContent(WrappedComponent, textProp = 'text') {
+    const EditableComponent = (props) => {
+        const { connectors: { connect }, actions: { setProp } } = useNode((node) => ({
         }));
-        const {
-            connectors: { connect },
-            actions: { setProp },
-            selected,
-        } = useNode((node) => ({
-            selected: node.events.selected,
-        }));
+        const { enabled } = useEditor((state) => ({ enabled: state.options.enabled }));
 
-        // ref to the actual <span> so we can read its text later
-        const editableRef = useRef(null);
+        const [localText, setLocalText] = useState(props[textProp]);
+        const [isEditing, setIsEditing] = useState(false);
+        const ref = useRef(null);
 
-        const handleBlur = () => {
-            if (!editableRef.current) return;
-            const newText = editableRef.current.innerText;
-            setProp((p) => {
-                p[textProp] = newText;
-            });
+
+        useEffect(() => {
+            setLocalText(props[textProp]);
+        }, [props[textProp]]);
+
+
+        const finishEditing = () => {
+            if (!ref.current) return;
+            const newText = ref.current.innerText;
+            if (newText !== localText) {
+                setProp((p) => { p[textProp] = newText; });
+                setLocalText(newText);
+            }
+            setIsEditing(false);
         };
 
-        // shared ref callback for drag/selection
-        const combineRef = (el) => {
+        const handleBlur = () => finishEditing();
+        const handleKeyDown = (e) => {
+
+        };
+
+
+        const handleDoubleClick = () => {
+            if (!enabled) return;
+            setIsEditing(true);
+        };
+
+
+        const combinedRef = (el) => {
             if (el) connect(el);
-            editableRef.current = el;
+            ref.current = el;
         };
+
+
+        const editableProps = isEditing
+            ? {
+                contentEditable: true,
+                suppressContentEditableWarning: true,
+                onBlur: handleBlur,
+                onKeyDown: handleKeyDown,
+            }
+            : { style: { ...props.style } };
 
         return (
-            <WrappedComponent {...props}>
-                {enabled && selected ? (
-                    <span
-                        ref={combineRef}
-                        contentEditable
-                        suppressContentEditableWarning
-                        onBlur={handleBlur}
-                        style={{
-                            outline: '1px dashed #999',
-                            minWidth: 20,
-                            display: 'inline-block',
-                        }}
-                    >
-                        {props[textProp]}
-                    </span>
-                ) : (
-                    <span ref={connect}>{props[textProp]}</span>
-                )}
-            </WrappedComponent>
+            <WrappedComponent
+                {...props}
+                {...editableProps}
+                ref={combinedRef}
+                onDoubleClick={handleDoubleClick}
+            />
+
         );
     };
-};
+
+
+    return forwardRef((props, ref) => <EditableComponent {...props} forwardedRef={ref} />);
+}

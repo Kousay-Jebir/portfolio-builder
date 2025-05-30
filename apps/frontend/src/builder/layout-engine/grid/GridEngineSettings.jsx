@@ -10,22 +10,11 @@ export default function GridEngineSettings() {
     };
 
     return (
-        <div className="space-y-4 p-4 border rounded-xl shadow-sm max-w-md">
-            <h2 className="text-lg font-semibold">Canvas settings</h2>
-
-            {/* Background & Text Color */}
-            <div>
-                <label>Background Color: </label>
-                <input
-                    type="color"
-                    value={values.style?.backgroundColor || ""}
-                    onChange={(e) => handleStyleChange("backgroundColor", e.target.value)}
-                />
-            </div>
 
 
-            <CommonStyleSettings />
-        </div>
+
+        <CommonStyleSettings />
+
     );
 
 }

@@ -1,117 +1,140 @@
 import { useEditor } from "@craftjs/core";
-import { useState } from "react";
+import React, { useState } from "react";
+import {
+    Accordion,
+    AccordionItem,
+    AccordionTrigger,
+    AccordionContent,
+} from "@/components/ui/accordion";
+import { Card, CardContent } from "@/components/ui/card";
 
-function LayerItem({ layer, handleClick, toggleVisibility, visible }) {
+function LayerItem({
+    layer,
+    onSelect,
+    onToggleHidden,
+    onDelete,
+    copyComponent,
+    openMap,
+    setOpenMap,
+}) {
+    const { id, name, displayName, hidden, children } = layer;
+    const hasChildren = children.length > 0;
+
+    // Controlled open state for this node’s children:
+    const openForThis = openMap[id] || [];
+
     return (
-        <li style={styles.item}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} onClick={handleClick}>
-                <span style={styles.name}>{layer.displayName || layer.name}
+        <AccordionItem value={id}>
+            <AccordionTrigger>
+                <span onClick={() => onSelect(id)} className="flex-1 cursor-pointer">
+                    {displayName || name}
                 </span>
-                <span
-                    style={{
-                        ...styles.icon,
-                        color: !visible ? "#4caf50" : "#f44336",
-                    }}
-                    onClick={toggleVisibility}
-                    title={!visible ? "Hide Layer" : "Show Layer"}
+                <button
+                    onClick={(e) => { e.stopPropagation(); onToggleHidden(id); }}
+                    aria-label={hidden ? "Show" : "Hide"}
                 >
-                    {!visible ? "👁" : "🙈"}
-                </span>
-            </div>
+                    {hidden ? "🙈" : "👁"}
+                </button>
+                <button
+                    onClick={(e) => { e.stopPropagation(); onDelete(id); }}
+                    aria-label="Delete"
+                >
+                    🗑️
+                </button>
+                <button
+                    onClick={(e) => { e.stopPropagation(); copyComponent(id); }}
+                >
+                    Copy
+                </button>
+            </AccordionTrigger>
 
-            {
-                layer.children && layer.children.length > 0 && (
-                    <ul style={{ paddingLeft: 16 }}>
-                        {layer.children.map((child) => (
-                            <LayerItem key={child.id} layer={child} />
+            {hasChildren && (
+                <AccordionContent style={{ paddingLeft: 16 }}>
+                    {/* Each group of children is its own Accordion */}
+                    <Accordion
+                        type="multiple"
+                        collapsible
+                        value={openForThis}
+                        onValueChange={(newVals) =>
+                            setOpenMap((m) => ({ ...m, [id]: newVals }))
+                        }
+                        className="w-full"
+                    >
+                        {children.map((child) => (
+                            <LayerItem
+                                key={child.id}
+                                layer={child}
+                                onSelect={onSelect}
+                                onToggleHidden={onToggleHidden}
+                                onDelete={onDelete}
+                                copyComponent={copyComponent}
+                                openMap={openMap}
+                                setOpenMap={setOpenMap}
+                            />
                         ))}
-                    </ul>
-                )
-            }
-        </li >
+                    </Accordion>
+                </AccordionContent>
+            )}
+        </AccordionItem>
     );
 }
 
-export default function Layers() {
-    const { nodes, actions: { selectNode, setHidden } } = useEditor((editor) => ({ nodes: editor.nodes }));
+export default function Layers({ openMap, setOpenMap }) {
+    const {
+        nodes,
+        actions: { selectNode, setHidden, delete: deleteNode, add },
+        query,
+    } = useEditor((ed) => ({ nodes: ed.nodes, query: ed.query }));
 
-    function mapNodeById(id) {
-        const craftNode = nodes[id];
+    const copyComponent = (nodeId, parentId = null) => {
+        if (!parentId) parentId = query.node(nodeId).get().data.parent;
+        const { type, props, isCanvas } = query.node(nodeId).get().data;
+        const newNode = query.createNode(React.createElement(type, props));
+        newNode.data.isCanvas = isCanvas;
+        add(newNode, parentId);
+
+        const childIds = query.node(nodeId).get().data.nodes || [];
+        childIds.forEach((cid) => copyComponent(cid, newNode.id));
+    };
+
+    const buildTree = (id) => {
+        const d = nodes[id]?.data || {};
         return {
             id,
-            name: craftNode.data.name,
-            displayName: craftNode.data.displayName,
-            children: craftNode.data.nodes || [],
-            hidden: craftNode.data.hidden
+            name: d.name || "ROOT",
+            displayName: d.displayName,
+            hidden: !!d.hidden,
+            children: (d.nodes || []).map(buildTree),
         };
-    }
-
-    function getTree(node) {
-        if (!node) return;
-
-        const mappedChildren = node.children.map((childId) => {
-            const childNode = mapNodeById(childId);
-            return getTree(childNode); // Recursively build the tree
-        });
-
-        return {
-            ...node,
-            children: mappedChildren,
-        };
-    }
-
-    const rootEntry = nodes['ROOT'];
-    const rootNode = mapNodeById(rootEntry.id);
-    const tree = getTree(rootNode);
+    };
+    const root = buildTree("ROOT");
+    if (!root.children.length) return null;
 
     return (
-        <div style={styles.container}>
-            <h2 style={styles.title}>Layers</h2>
-            <ul style={styles.list}>
-                {tree.children.map((child) => (
-                    <LayerItem key={child.id} layer={child} handleClick={() => selectNode(child.id)} toggleVisibility={() => setHidden(child.id, !child.hidden)} visible={child.hidden} />
-                ))}
-            </ul>
-        </div>
+        <Card className="rounded-xs shadow-none dark:bg-slate-900">
+            <CardContent>
+                <Accordion
+                    type="multiple"
+                    value={openMap["ROOT"] || []}
+                    onValueChange={(vals) =>
+                        setOpenMap((m) => ({ ...m, ROOT: vals }))
+                    }
+                    className="w-full"
+                >
+                    {root.children.map((layer) => (
+                        <LayerItem
+                            key={layer.id}
+                            layer={layer}
+                            onSelect={selectNode}
+                            onToggleHidden={(id) => setHidden(id, !nodes[id].data.hidden)}
+                            onDelete={deleteNode}
+                            copyComponent={copyComponent}
+                            openMap={openMap}
+                            setOpenMap={setOpenMap}
+                        />
+                    ))}
+                </Accordion>
+            </CardContent>
+        </Card>
     );
 }
-
-
-const styles = {
-    container: {
-        width: "100%",
-        maxWidth: "300px",
-        backgroundColor: "#fff",
-        borderRadius: "12px",
-        padding: "16px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-        fontFamily: "sans-serif",
-    },
-    title: {
-        marginBottom: "12px",
-        fontSize: "20px",
-        fontWeight: "600",
-        borderBottom: "1px solid #eee",
-        paddingBottom: "8px",
-    },
-    list: {
-        listStyle: "none",
-        padding: 0,
-        margin: 0,
-    },
-    item: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "8px 0",
-        borderBottom: "1px solid #f1f1f1",
-    },
-    name: {
-        fontSize: "16px",
-    },
-    icon: {
-        cursor: "pointer",
-        fontSize: "18px",
-        transition: "transform 0.2s",
-    },
-};

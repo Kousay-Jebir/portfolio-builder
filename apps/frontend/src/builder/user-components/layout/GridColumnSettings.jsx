@@ -47,7 +47,7 @@ export function GridColumnSettings() {
     };
 
     return (
-        <div className="space-y-4 p-4 border rounded-xl shadow-sm max-w-md">
+        <>
             <h2 className="text-lg font-semibold">Column Settings</h2>
 
             {screenSizes.map((screen) => {
@@ -102,6 +102,6 @@ export function GridColumnSettings() {
                 );
             })}
             <CommonStyleSettings />
-        </div>
+        </>
     );
 }

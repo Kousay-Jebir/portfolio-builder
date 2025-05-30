@@ -1,37 +1,61 @@
 import { useEditor, Element } from "@craftjs/core";
-import { GridColumn, GridRow, Section } from "./layout/Section";
-import { Container } from "react-grid-system";
+import { GridColumn, GridRow, Section, } from "./layout/Section";
 import { EditableTypography } from "./typography/Typography";
 import { Image } from "./image/Image";
 
-// Styles (add this to your App.css or inline styles)
-import './ToolBox.css';
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardContent
+} from "@/components/ui/card";
+import { EditableButton } from "./button/Button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Carousel } from "./showcase/Carousel";
+import { CarouselItem } from "./showcase/CarouselItem";
+import { Button } from "@/components/ui/button";
+import { GenericContainer } from "./generic/GenericContainer";
 
 export default function ToolBox() {
     const { connectors } = useEditor();
 
     const toolboxItems = [
-
-        { label: "Section", component: <Element canvas fluid component={Container} is={Section} /> },
-        { label: "Grid Column", component: <Element canvas is={GridColumn} /> },
+        { label: "Generic Container", component: <Element canvas is={GenericContainer} /> },
+        { label: "Grid Container", component: <Element canvas fluid is={Section} /> },
         { label: "Grid Row", component: <Element canvas is={GridRow} /> },
+        { label: "Grid Column", component: <Element canvas is={GridColumn} /> },
+        { label: "Carousel", component: <Element canvas is={Carousel} loop /> },
+        { label: "Carousel item", component: <Element canvas is={CarouselItem} /> },
         { label: "Paragraph", component: <EditableTypography component="p" /> },
-        { label: "Hyperlink", component: <EditableTypography href="#" component="a" /> },
+        { label: "Hyperlink", component: <EditableTypography href="http://google.com" component="a" /> },
+        { label: "Button", component: <EditableButton /> },
         { label: "Image", component: <Image /> },
     ];
 
     return (
-        <div className="toolbox-container">
-            {toolboxItems.map((item, index) => (
-                <div key={index} className="toolbox-item">
-                    <button
-                        ref={ref => connectors.create(ref, item.component)}
-                        className="toolbox-button"
-                    >
-                        {item.label}
-                    </button>
-                </div>
-            ))}
-        </div>
+        <Card className="rounded-xs shadow-none dark:bg-slate-900">
+            <CardHeader className="border-b px-0 py-1">
+                <CardTitle className="text-sm font-medium text-muted-foreground tracking-wide px-2">
+                    Toolbox
+                </CardTitle>
+            </CardHeader>
+
+            <CardContent className="px-0 py-0">
+                <ScrollArea className="h-full pr-1">
+                    <div className="grid grid-cols-2 gap-1 px-2 py-2">
+                        {toolboxItems.map((item, index) => (
+                            <Button
+                                key={index}
+                                variant="outline"
+                                className="w-full justify-center text-xs h-7"
+                                ref={(ref) => connectors.create(ref, item.component)}
+                            >
+                                {item.label}
+                            </Button>
+                        ))}
+                    </div>
+                </ScrollArea>
+            </CardContent>
+        </Card>
     );
 }
