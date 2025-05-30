@@ -228,7 +228,7 @@ export default function App() {
 
             <main className="flex-1 bg-white overflow-auto">
               <FakeWindowWidthProvider>
-                <Frame>
+                <Frame data={test}>
                   <Element is={DroppableGridEngine} canvas className="h-full p-4">
                     Builder Canvas
                   </Element>

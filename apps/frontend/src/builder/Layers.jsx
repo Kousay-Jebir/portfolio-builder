@@ -1,5 +1,5 @@
 import { useEditor } from "@craftjs/core";
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Accordion,
     AccordionItem,
@@ -73,14 +73,12 @@ export default function Layers() {
         if (!parentId) {
             parentId = query.node(nodeId).get().data.parent;
         }
+        const { type: nodeType, props: nodeProps, isCanvas } = query.node(nodeId).get().data
 
-        const nodeType = query.node(nodeId).get().data.type;
-        const nodeProps = query.node(nodeId).get().data.props;
 
 
         const newNode = query.createNode(React.createElement(nodeType, nodeProps));
-
-
+        newNode.data.isCanvas = isCanvas;
         add(newNode, parentId);
 
 
@@ -90,12 +88,8 @@ export default function Layers() {
 
             copyComponent(childId, newNode.id);
         });
+        console.log(query.node('ROOT').toNodeTree())
     };
-
-
-
-
-
 
     const buildTree = id => {
         const d = nodes[id]?.data;
