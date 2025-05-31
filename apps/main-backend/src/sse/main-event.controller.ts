@@ -1,16 +1,19 @@
-import { Body, Controller, Param, Post, Sse } from '@nestjs/common';
+import { Body, Controller, Param, Post, Sse, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { ApiTags } from '@nestjs/swagger';
-import { EventService } from '@portfolio-builder/shared';
+import { ConnectedUser, EventService, JwtAuthGuard } from '@portfolio-builder/shared';
+import { use } from 'react';
 @ApiTags('event')
 @Controller('event')
+@UseGuards(JwtAuthGuard)
+
 export class MainEventController {
   constructor(private readonly eventService: EventService) {}
-  @Sse(':id')
+  @Sse()
   getEvents(
-    @Param('id') id: string,
+    @ConnectedUser() user : any,
   ): Observable<{ data: any; event?: string }> {
-    return this.eventService.connect(id);
+    return this.eventService.connect(user.id);
   }
   @Post('notify-user')
   notifyUser(@Body() body ) {
