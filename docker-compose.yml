@@ -53,6 +53,48 @@ services:
     depends_on:
       - mongo
       - mongo-init
+  builder-backend:
+    build:
+      context: .
+      dockerfile: apps/builder-app/Dockerfile
+    ports:
+      - "5001:5001"
+    networks:
+      - app-network
+    env_file:
+      - .env
+    command: sh -c "sleep 10 && npm run start:dev:builder"
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+    depends_on:
+      - mongo
+      - mongo-init
+  consulting-backend:
+    build:
+      context: .
+      dockerfile: apps/consult-app/Dockerfile
+    ports:
+      - "5002:5002"
+    networks:
+      - app-network
+    env_file:
+      - .env
+    command: sh -c "sleep 10 && npm run start:dev:consult"
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+    depends_on:
+      - mongo
+      - mongo-init
 
 networks:
   app-network:
