@@ -1,5 +1,5 @@
 import { useEditor } from "@craftjs/core";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
     Accordion,
     AccordionItem,
@@ -18,47 +18,88 @@ function LayerItem({
     setOpenMap,
 }) {
     const { id, name, displayName, hidden, children } = layer;
-    const hasChildren = children.length > 0;
+    const { query } = useEditor();
 
-    // Controlled open state for this node’s children:
+    const [editing, setEditing] = useState(false);
+    const [title, setTitle] = useState(name);
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (editing) {
+            inputRef.current?.focus();
+            inputRef.current?.select();
+        }
+    }, [editing]);
+
+    const saveTitle = () => {
+        const newTitle = title.trim() || name;
+        query.node(id).get().data.name = newTitle;
+        setTitle(newTitle);
+        setEditing(false);
+    };
+
     const openForThis = openMap[id] || [];
 
     return (
         <AccordionItem value={id}>
-            <AccordionTrigger>
-                <span onClick={() => onSelect(id)} className="flex-1 cursor-pointer">
-                    {displayName || name}
-                </span>
-                <button
-                    onClick={(e) => { e.stopPropagation(); onToggleHidden(id); }}
-                    aria-label={hidden ? "Show" : "Hide"}
+            <AccordionTrigger className="flex items-center gap-2 w-full">
+                <div
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onSelect(id);
+                    }}
+                    className="flex-1 cursor-pointer truncate"
                 >
-                    {hidden ? "🙈" : "👁"}
-                </button>
-                <button
-                    onClick={(e) => { e.stopPropagation(); onDelete(id); }}
-                    aria-label="Delete"
-                >
-                    🗑️
-                </button>
-                <button
-                    onClick={(e) => { e.stopPropagation(); copyComponent(id); }}
-                >
-                    Copy
-                </button>
+                    {editing ? (
+                        <input
+                            ref={inputRef}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            onBlur={saveTitle}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") saveTitle();
+                                if (e.key === "Escape") {
+                                    setTitle(name);
+                                    setEditing(false);
+                                }
+                            }}
+                            className="w-full px-1 border border-gray-300 rounded text-sm"
+                        />
+                    ) : (
+                        <span
+                            onDoubleClick={(e) => {
+                                e.stopPropagation();
+                                setEditing(true);
+                            }}
+                            className="text-sm"
+                        >
+                            {title}
+                        </span>
+                    )}
+                </div>
+
+                <div className="flex items-center gap-1">
+                    <button onClick={(e) => { e.stopPropagation(); onToggleHidden(id); }} title={hidden ? "Show" : "Hide"}>
+                        {hidden ? "🙈" : "👁"}
+                    </button>
+                    <button onClick={(e) => { e.stopPropagation(); copyComponent(id); }} title="Copy">
+                        📋
+                    </button>
+                    <button onClick={(e) => { e.stopPropagation(); onDelete(id); }} title="Delete">
+                        🗑️
+                    </button>
+                </div>
             </AccordionTrigger>
 
-            {hasChildren && (
-                <AccordionContent style={{ paddingLeft: 16 }}>
-                    {/* Each group of children is its own Accordion */}
+            {children.length > 0 && (
+                <AccordionContent className="pl-4">
                     <Accordion
                         type="multiple"
                         collapsible
                         value={openForThis}
-                        onValueChange={(newVals) =>
-                            setOpenMap((m) => ({ ...m, [id]: newVals }))
+                        onValueChange={(vals) =>
+                            setOpenMap((m) => ({ ...m, [id]: vals }))
                         }
-                        className="w-full"
                     >
                         {children.map((child) => (
                             <LayerItem
@@ -88,13 +129,15 @@ export default function Layers({ openMap, setOpenMap }) {
 
     const copyComponent = (nodeId, parentId = null) => {
         if (!parentId) parentId = query.node(nodeId).get().data.parent;
+
         const { type, props, isCanvas } = query.node(nodeId).get().data;
         const newNode = query.createNode(React.createElement(type, props));
         newNode.data.isCanvas = isCanvas;
         add(newNode, parentId);
 
-        const childIds = query.node(nodeId).get().data.nodes || [];
-        childIds.forEach((cid) => copyComponent(cid, newNode.id));
+        (query.node(nodeId).get().data.nodes || []).forEach((cid) =>
+            copyComponent(cid, newNode.id)
+        );
     };
 
     const buildTree = (id) => {
@@ -107,14 +150,16 @@ export default function Layers({ openMap, setOpenMap }) {
             children: (d.nodes || []).map(buildTree),
         };
     };
+
     const root = buildTree("ROOT");
     if (!root.children.length) return null;
 
     return (
-        <Card className="rounded-xs shadow-none dark:bg-slate-900">
+        <Card className="shadow-none rounded-xs dark:bg-slate-900">
             <CardContent>
                 <Accordion
                     type="multiple"
+                    collapsible
                     value={openMap["ROOT"] || []}
                     onValueChange={(vals) =>
                         setOpenMap((m) => ({ ...m, ROOT: vals }))

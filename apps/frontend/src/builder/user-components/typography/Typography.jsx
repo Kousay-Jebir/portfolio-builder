@@ -23,6 +23,7 @@ EditableTypography.craft = {
     },
     related: {
         settings: TypographySettings
-    }
+    },
+    name: 'Typography'
 }
 export { EditableTypography }

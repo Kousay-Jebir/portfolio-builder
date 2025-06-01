@@ -45,6 +45,7 @@ import test3 from "../test3.json"
 import { Container } from "react-grid-system";
 import FakeWindowWidthProvider from "./builder/FakeWindowWidthProvider";
 import { GenericContainer } from "./builder/user-components/generic/GenericContainer";
+import { compressPortfolio } from "./builder/save-load/save-portfolio";
 
 const MIN_PANEL_WIDTH = 200;
 const MAX_PANEL_WIDTH = 1000;
@@ -91,18 +92,11 @@ function Topbar({ ui, state }) {
           size="xs"
           variant="secondary"
           className="p-1"
-          onClick={() => console.log(query.serialize())}
+          onClick={() => console.log(compressPortfolio(query.serialize()))}
         >
-          Serialize
+          Save Portfolio
         </Button>
-        <Button
-          size="xs"
-          variant="secondary"
-          className="p-1"
-          onClick={() => console.log(query.dese())}
-        >
-          Serialize
-        </Button>
+
         <ModeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

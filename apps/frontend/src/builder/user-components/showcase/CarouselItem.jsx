@@ -37,5 +37,5 @@ export const CarouselItem = withCustomizableSettings(
         imageUrl: "",
         style: { minHeight: '100px' },
         className: "basis-1/3"
-    }
+    }, { name: 'Carousel item' }
 );

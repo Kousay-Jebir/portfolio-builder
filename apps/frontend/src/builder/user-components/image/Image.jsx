@@ -26,6 +26,7 @@ Image.craft = {
         className: "w-full h-full object-fill",
         alt: "image"
     },
+    name: "Image",
     related: {
         settings: ImageSettings,
     },
