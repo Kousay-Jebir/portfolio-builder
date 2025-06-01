@@ -78,7 +78,7 @@ export class ConsultAppService {
         receiver: portfolio.user,
       });
       console.log('viewed')
-      await axios.post(`http://localhost:5000/main/event/notify-user`, {
+      axios.post(`http://localhost:5000/main/event/notify-user`, {
                   userId: receiverId as string,
                   message: message,
                   eventType:'portfolio_view'

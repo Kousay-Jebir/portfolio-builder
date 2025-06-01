@@ -5,10 +5,10 @@ import { ConnectedUser, EventService, JwtAuthGuard } from '@portfolio-builder/sh
 import { use } from 'react';
 @ApiTags('event')
 @Controller('event')
-@UseGuards(JwtAuthGuard)
 
 export class MainEventController {
   constructor(private readonly eventService: EventService) {}
+  @UseGuards(JwtAuthGuard)
   @Sse()
   getEvents(
     @ConnectedUser() user : any,
