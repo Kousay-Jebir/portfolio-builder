@@ -36,6 +36,7 @@ EditableButton.craft = {
         downloadFile: null,
         onClick: () => { }
     },
+    name: "Button",
     related: {
         settings: ButtonSettings
     }

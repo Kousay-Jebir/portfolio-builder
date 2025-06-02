@@ -13,6 +13,6 @@ function BaseGenericContainer({ element: Element = "div", style, children }) {
 }
 
 const BuilderEditableGenericContainer = withBuilderEditable(BaseGenericContainer)
-const GenericContainer = withCustomizableSettings(BuilderEditableGenericContainer, GenericContainerSettings, {})
+const GenericContainer = withCustomizableSettings(BuilderEditableGenericContainer, GenericContainerSettings, {}, { name: 'Container' })
 
 export { GenericContainer }

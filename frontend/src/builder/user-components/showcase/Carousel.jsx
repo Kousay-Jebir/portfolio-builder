@@ -27,6 +27,6 @@ const Carousel = withCustomizableSettings(BuilderEditableCarousel, CarouselSetti
     }
 
 
-});
+}, { name: 'Carousel' });
 
 export { Carousel };
