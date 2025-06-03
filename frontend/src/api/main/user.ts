@@ -3,10 +3,10 @@ import { axiosMain } from '../axios';
 export const getConnectedUser = async () => {
   axiosMain
     .get('/user')
-    .then((res) => {
+    .then((res:any) => {
       return res.data;
     })
-    .catch((err) => {
+    .catch((err:any) => {
       console.log(err);
       throw err;
     });
@@ -24,11 +24,22 @@ export const createProfile = async (profileData: {
 }) => {
   axiosMain
     .post('/user/profile', profileData)
-    .then((res) => {
+    .then((res:any) => {
       return res.data;
     })
-    .catch((err) => {
+    .catch((err:any) => {
       console.log(err);
       throw err;
     });
+
 };
+
+export const getSubscriptionStatus = async ()=>{
+  axiosMain.get('/user/subscription').then((res:any)=>{
+    return res.data
+  })
+  .catch((err:any)=>{
+    console.log(err)
+  })
+  
+}
