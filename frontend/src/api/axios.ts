@@ -8,7 +8,7 @@ const createAxiosInstance = (baseURL : string) => {
   });
 
   instance.interceptors.request.use((config) => {
-    const token = Cookies.get('auth-token');
+    const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -20,6 +20,7 @@ const createAxiosInstance = (baseURL : string) => {
 
   return instance;
 };
+
 
 const axiosMain = createAxiosInstance('/api/main');
 const axiosBuilder = createAxiosInstance('/api/builder');
