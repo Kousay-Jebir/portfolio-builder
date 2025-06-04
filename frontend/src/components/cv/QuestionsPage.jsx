@@ -7,11 +7,17 @@ const QuestionsPage = () => {
   const questionsData = location.state?.questions;
 
   const [sectionIndex, setSectionIndex] = useState(0);
-  const [answers, setAnswers] = useState({}); // { section: { question: answer } }
-
+  const [answers, setAnswers] = useState([]); // [{ section: '', answers: [['', ''], ['']] }]
+  
   useEffect(() => {
     if (!questionsData) {
-      navigate('/cv-generation'); // Redirect if accessed directly
+      navigate('/cv-generation');
+    } else {
+      const initialAnswers = questionsData.map((section) => ({
+        section: section.section,
+        answers: section.questions.map(() => ['']) // array of empty answers per question
+      }));
+      setAnswers(initialAnswers);
     }
   }, [questionsData, navigate]);
 
@@ -19,14 +25,16 @@ const QuestionsPage = () => {
 
   const currentSection = questionsData[sectionIndex];
 
-  const handleChange = (questionIndex, value) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [currentSection.section]: {
-        ...(prev[currentSection.section] || {}),
-        [questionIndex]: value,
-      },
-    }));
+  const handleInputChange = (qIdx, aIdx, value) => {
+    const updated = [...answers];
+    updated[sectionIndex].answers[qIdx][aIdx] = value;
+    setAnswers(updated);
+  };
+
+  const addAnswerInput = (qIdx) => {
+    const updated = [...answers];
+    updated[sectionIndex].answers[qIdx].push('');
+    setAnswers(updated);
   };
 
   const handleNext = () => {
@@ -34,33 +42,67 @@ const QuestionsPage = () => {
       setSectionIndex((prev) => prev + 1);
     } else {
       console.log('Final answers:', answers);
-      // Submit answers or navigate to summary
-      navigate('/cv-generation'); // or to a "review" page
+      navigate('/cv-generation');
+    }
+  };
+
+  const handlePrevious = () => {
+    if (sectionIndex > 0) {
+      setSectionIndex((prev) => prev - 1);
     }
   };
 
   return (
-    <div>
-      <h2>{currentSection.section.toUpperCase()} Questions</h2>
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">
+        {currentSection.section.toUpperCase()} Questions
+      </h2>
       <form className="space-y-4">
-        {currentSection.questions.map((q, idx) => (
-          <div key={idx}>
-            <label className="block font-semibold">{q}</label>
-            <input
-              type="text"
-              className="border p-2 w-full"
-              value={answers[currentSection.section]?.[idx] || ''}
-              onChange={(e) => handleChange(idx, e.target.value)}
-            />
+        {currentSection.questions.map((q, qIdx) => (
+          <div key={qIdx} className="mb-4">
+            <label className="block font-semibold mb-1">{q}</label>
+            {answers[sectionIndex]?.answers[qIdx]?.map((answer, aIdx) => (
+              <div key={aIdx} className="flex items-center gap-2 mb-2">
+                <input
+                  type="text"
+                  className="border p-2 flex-1"
+                  value={answer}
+                  onChange={(e) =>
+                    handleInputChange(qIdx, aIdx, e.target.value)
+                  }
+                />
+                {aIdx === answers[sectionIndex].answers[qIdx].length - 1 && (
+                  <button
+                    type="button"
+                    onClick={() => addAnswerInput(qIdx)}
+                    className="bg-gray-300 hover:bg-gray-400 text-sm px-2 py-1 rounded"
+                    title="Add another answer"
+                  >
+                    ➕
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
         ))}
       </form>
-      <button
-        onClick={handleNext}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        {sectionIndex < questionsData.length - 1 ? 'Next Section' : 'Finish'}
-      </button>
+
+      <div className="mt-6 flex justify-between">
+        {sectionIndex > 0 && (
+          <button
+            onClick={handlePrevious}
+            className="bg-gray-500 text-white px-4 py-2 rounded"
+          >
+            Previous
+          </button>
+        )}
+        <button
+          onClick={handleNext}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          {sectionIndex < questionsData.length - 1 ? 'Next Section' : 'Finish'}
+        </button>
+      </div>
     </div>
   );
 };
