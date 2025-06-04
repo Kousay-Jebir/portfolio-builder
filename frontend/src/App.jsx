@@ -19,7 +19,6 @@ export default function App() {
     console.log("helo")
     navigator.sendBeacon('http://localhost:5001/builder/save', { code: 'test-code', content: preparePortfolioSave() });
   }); */
-  useExitPrompt(true)
   return (
     <AuthProvider>
       <Router>
@@ -33,7 +32,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-             <Route
+          <Route
             path="/cv-generation"
             element={
               <PrivateRoute>

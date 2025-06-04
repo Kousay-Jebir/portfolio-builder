@@ -25,14 +25,14 @@ import { GenericContainer } from "../builder/user-components/generic/GenericCont
 import DroppableGridEngine from "../builder/layout-engine/grid/GridEngine";
 import { useAuth } from "@/context/AuthContext";
 import { getPortfoliosOfUser } from "@/api/consulting/user";
-
+import useExitPrompt from "@/hooks/useExitPrompt";
 
 
 export default function BuilderPage() {
     const { state } = useUI();
     const { user } = useAuth();
     const [portfolio, setPortfolio] = useState(null);
-
+    useExitPrompt(true)
     useEffect(() => {
         async function fetchPortfolio() {
             try {
