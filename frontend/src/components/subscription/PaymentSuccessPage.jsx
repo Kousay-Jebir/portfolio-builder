@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { confirmSub } from "@/api/main/subscription";
+import Cookies from 'js-cookie';
+
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
@@ -19,10 +21,10 @@ const PaymentSuccessPage = () => {
       try {
         const data = await confirmSub(paymentId);
         console.log(data);
-        // Optional: redirect or show a message
+        Cookies.set('auth-token', data.access_token);
+        
       } catch (error) {
         console.error("Failed to confirm subscription:", error);
-        // Optional: show error to user
       }
     };
 
