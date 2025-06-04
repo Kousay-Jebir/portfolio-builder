@@ -7,15 +7,15 @@ async function bootstrap() {
   const app = await NestFactory.create(BuilderAppModule);
   app.setGlobalPrefix('builder');
 
-  app.useGlobalPipes(new ValidationPipe({transform:true})); 
-  
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
   const swaggerService = app.get(SwaggerDocumentationService);
   swaggerService.setup(app, 'Builder Backend');
   app.enableCors({
-    origin: '*', 
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, 
+    credentials: true,
   });
-  await app.listen(process.env.PORT_BUILD??3001);
+  await app.listen(process.env.PORT_BUILD ?? 3001);
 }
 bootstrap();
