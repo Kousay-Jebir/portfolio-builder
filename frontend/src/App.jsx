@@ -12,6 +12,8 @@ import useAutoSave from './hooks/useAutoSave';
 import { useEditor } from '@craftjs/core';
 import { preparePortfolioSave } from './components/builder/layout/Topbar';
 import useExitPrompt from './hooks/useExitPrompt';
+import SubscriptionPage from './components/subscription/SubscriptionPage';
+import PaymentSuccessPage from './components/subscription/PaymentSuccessPage';
 
 
 export default function App() {
@@ -44,6 +46,22 @@ export default function App() {
             <Route index element={<CvHomePage />} />
             <Route path="questions" element={<QuestionsPage />} />
           </Route>
+            <Route
+            path="/subscription"
+            element={
+              <PrivateRoute>
+                <SubscriptionPage />
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="/payment_success"
+            element={
+              <PrivateRoute>
+                <PaymentSuccessPage />
+              </PrivateRoute>
+            }
+          />
           <Route path='*' element={<p>404</p>} />
         </Routes>
       </Router>

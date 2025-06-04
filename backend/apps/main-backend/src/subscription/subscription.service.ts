@@ -72,7 +72,7 @@ export class SubscriptionService extends BaseService<SubscriptionDocument> imple
       accept_card: 'true',
 
       session_timeout_secs: 5000,
-      success_link: `${process.env.BACKEND}/main/subscription/success`,
+      success_link: `http://localhost:5173/payment_success`,
       fail_link: 'https://example.website.com/fail',
       developer_tracking_id: '608f16e0-61dd-4ac1-b16b-f485f03afb16',
     };
