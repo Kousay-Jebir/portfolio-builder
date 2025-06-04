@@ -12,6 +12,12 @@ import {
 import { ModeToggle } from "../../../builder/global-state/state-store";
 import { compressPortfolio } from "../../../builder/save-load/save-portfolio";
 import { useUI } from "../../../DrawerContext";
+import { save } from "../../../builder/save-load/save-portfolio";
+
+export function preparePortfolioSave() {
+    return query.serialize()
+}
+
 
 export function Topbar() {
     const { query } = useEditor((s) => ({ query: s.query }));
@@ -27,7 +33,7 @@ export function Topbar() {
                     size="xs"
                     variant="secondary"
                     className="p-1"
-                    onClick={() => console.log(compressPortfolio(query.serialize()))}
+                    onClick={async () => { await save(query.serialize()) }}
                 >
                     Save Portfolio
                 </Button>
