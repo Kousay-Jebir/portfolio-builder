@@ -16,20 +16,20 @@ async function bootstrap() {
   app.setGlobalPrefix('main');
 
   app.use(cookieParser());
-  app.useGlobalPipes(new ValidationPipe({transform:true})); 
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const swaggerService = app.get(SwaggerDocumentationService);
   swaggerService.setup(app);
   app.enableCors({
-    origin: '*', 
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, 
+    credentials: true,
   });
 
   app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
-  
-  
 
 
-  await app.listen(process.env.PORT_MAIN??3000);
+
+
+  await app.listen(process.env.PORT_MAIN ?? 3000);
 }
 bootstrap();
