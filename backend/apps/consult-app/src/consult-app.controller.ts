@@ -25,9 +25,9 @@ export class ConsultAppController {
   @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
   @Get('portfolio/urls')
-  async getPortfolioUrls(@ConnectedUser() user:any) :Promise<String[]> {
+  async getPortfolioUrls(@ConnectedUser() user:any) {
     const portfolios=await this.consultAppService.getUserPortfolios(user.id)
-    const portfoliosUrl = await portfolios.map((item)=>{return item.id})
+    const portfoliosUrl = await portfolios.map((item)=>{return {id:item.id, url: `${item.createdAt.toISOString()}-${item.id}`,}})
     return portfoliosUrl
   }
 
