@@ -30,8 +30,8 @@ export class BuildCvService {
     }
 
     }
-    async sendResponse(cvDataDto:any){
-        axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_RESUME_GENERATION}`,{cvDataDto}).then((res)=>{return res.data}).catch((err)=>{return new Error(err.meesage)})
+    async sendResponse(data:any){
+        axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_RESUME_GENERATION}`,{data}).then((res)=>{return res.data}).catch((err)=>{return new Error(err.meesage)})
 
 
     
@@ -162,7 +162,7 @@ export class BuildCvService {
       return cv.path
     }
 
-    async generateCv(ownerId:string,portfolioId:string,cvDataDto:CvDataDto){
+    async generateCv(ownerId:string,portfolioId:string,cvDataDto:Partial<CvDataDto>){
       const portfolio=await this.portfolioService.findById(portfolioId)
       const portfolioData = JSON.stringify(portfolio?.content)
       const questionResponse = JSON.stringify(cvDataDto)
