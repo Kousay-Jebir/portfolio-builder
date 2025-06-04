@@ -44,18 +44,18 @@ const CvHomePage = () => {
       <h2 className="text-2xl font-bold mb-4">Welcome to CV Generation</h2>
 
       <label className="block font-semibold mb-2">Select Portfolio:</label>
-      <select
-        value={selectedPortfolio}
-        onChange={(e) => setSelectedPortfolio(e.target.value)}
-        className="border p-2 w-full mb-4"
-      >
-        <option value="">-- Select a portfolio --</option>
-        {portfolioUrls.map((url, idx) => (
-          <option key={idx} value={url}>
-            {url}
-          </option>
-        ))}
-      </select>
+     <select
+  value={selectedPortfolio}
+  onChange={(e) => setSelectedPortfolio(e.target.value)}
+  className="border p-2 w-full mb-4"
+>
+  <option value="">-- Select a portfolio --</option>
+  {portfolioUrls.map((p, idx) => (
+    <option key={idx} value={p.id}>
+      {p.url}
+    </option>
+  ))}
+</select>
 
       <button
         onClick={handleStart}
