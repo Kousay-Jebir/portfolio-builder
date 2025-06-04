@@ -18,7 +18,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-          {/* Add more routes here */}
+          <Route path='*' element={<p>404</p>} />
         </Routes>
       </Router>
     </AuthProvider>
