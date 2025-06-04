@@ -1,15 +1,13 @@
 import { axiosMain } from '../axios';
 
 export const getConnectedUser = async () => {
-  axiosMain
-    .get('/user')
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-      throw err;
-    });
+  try {
+    const res = await axiosMain.get('/user');
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
 export const createProfile = async (profileData: {
@@ -22,13 +20,11 @@ export const createProfile = async (profileData: {
   socialLinks: object;
   file: any;
 }) => {
-  axiosMain
-    .post('/user/profile', profileData)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-      throw err;
-    });
+  try {
+    const res = await axiosMain.post('/user/profile', profileData);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };

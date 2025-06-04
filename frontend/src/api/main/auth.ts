@@ -6,34 +6,34 @@ export const register = async (userData: {
   email: string;
   password: string;
 }) => {
-  axiosMain
-    .post('/auth/register', userData)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-      throw err;
-    });
+  try {
+    const res = await axiosMain.post('/auth/register', userData);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
 export const login = async (userCredentials: {
   email: string;
   password: string;
 }) => {
-  axiosMain
-    .post('/auth/login', userCredentials)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-      throw err;
-    });
+  try {
+    const res = await axiosMain.post('/auth/login', userCredentials);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
-export const loginWithGoogle = async ()=>{
-    axiosMain.get('/auth/google').then((res)=>{return res.data} ).catch((err)=>{console.log(err);
-        throw err
-    })
+export const loginWithGoogle = async () => {
+  try {
+    const res = await axiosMain.get('/auth/google');
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 }
