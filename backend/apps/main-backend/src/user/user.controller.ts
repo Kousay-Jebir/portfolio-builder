@@ -50,6 +50,17 @@ export class UserController {
         const filePath=`/uploads/${file.filename}`
         return await this.userService.createProfileData(createProfileDto,user.id,filePath)
     }
+
+    @UseGuards(JwtAuthGuard,BlacklistGuard)
+    @ApiBearerAuth('JWT-auth')
+    @Get('subscription')
+    async getSubscription(@ConnectedUser() user : any){
+      return user.role
+
+    }
+
+
+  
 }
 
 
