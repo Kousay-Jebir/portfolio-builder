@@ -38,10 +38,10 @@ export class BuildCvController {
   }
   @UseGuards(JwtAuthGuard, BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
-  @Post('generate')
-  async generateCv(@ConnectedUser() user:any){
+  @Post('generate/portfolio/:portfolioId')
+  async generateCv(@ConnectedUser() user:any,@Param('portfolioId')portfolioId : string,@Body()cvDataDto : CvDataDto){
 
-    return await this.buildCvService.generateCv(user.id)
+    return await this.buildCvService.generateCv(user.id,portfolioId,cvDataDto)
     
 
 

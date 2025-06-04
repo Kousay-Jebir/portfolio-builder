@@ -18,9 +18,9 @@ export class BuildCvService {
       return new NotFoundException('portfolio not found');
     }
     try {
-      const result = await axios.post(`${process.env.AI_API}`, {
-        portfolio: portfolio.content,
-        userId: userId,
+      const result = await axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_QUESTIONS_ENDPOINT}`, {
+        portfolio: portfolio.content
+        // userId: userId,
       });
       const questions = await this.generateQuestions(result.data)
 
@@ -30,8 +30,8 @@ export class BuildCvService {
     }
 
     }
-    async sendResponse(cvDataDto:CvDataDto,userId:string){
-        axios.post(`${process.env.AI_API}`,{...cvDataDto,userId}).then((res)=>{return res.data}).catch((err)=>{return new Error(err.meesage)})
+    async sendResponse(cvDataDto:CvDataDto){
+        axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_RESUME_GENERATION}`,{cvDataDto}).then((res)=>{return res.data}).catch((err)=>{return new Error(err.meesage)})
 
 
     
@@ -162,7 +162,9 @@ export class BuildCvService {
       return cv.path
     }
 
-    async generateCv(ownerId:string){
+    async generateCv(ownerId:string,portfolioId:string,cvDataDto:CvDataDto){
+      const portfolio=await this.portfolioService.findById(portfolioId)
+      const result = await this.sendResponse(cvDataDto)
       const data = {
         "user": {
           "id": "1",
