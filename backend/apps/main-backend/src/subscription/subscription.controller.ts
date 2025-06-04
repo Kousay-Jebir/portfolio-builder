@@ -26,7 +26,7 @@ import { BlacklistGuard } from '@portfolio-builder/shared';
 @Controller('subscription')
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard,BlacklistGuard)
   @ApiBearerAuth('JWT-auth')
   @Post()
   async subscribe(
