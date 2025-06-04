@@ -11,4 +11,8 @@ export class CreateCvDto{
     @IsString()
     path:string
 
+    @ApiProperty()
+    @IsString()
+    filename:string
+
 }

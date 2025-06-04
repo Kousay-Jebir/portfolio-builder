@@ -74,7 +74,7 @@ export class BuildCvController {
   
   @UseInterceptors(FileInterceptor('file', {
           storage: diskStorage({
-            destination: './uploads',
+            destination: './public',
             filename: (req, file, cb) => {
               cb(null, `${Date.now()}-${file.originalname}`);
             },
@@ -82,8 +82,8 @@ export class BuildCvController {
         }),
       )
   async uploadCv(@UploadedFile() file: Express.Multer.File,@ConnectedUser() user : any){
-    const filePath = `/uploads/${file.filename}`
-    return await this.buildCvService.createCv({path:filePath},user.id)
+    const filePath = `/public/${file.filename}`
+    return await this.buildCvService.createCv({path:filePath,filename:file.filename},user.id)
 
   }
 

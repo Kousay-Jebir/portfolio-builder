@@ -37,7 +37,7 @@ export class BuildCvService {
     
     }
     async createCv(createCvDto : CreateCvDto,userId:string){
-        return await this.cvService.create({title:createCvDto.title,path:createCvDto.path,user:userId})
+        return await this.cvService.create({title:createCvDto.title,path:createCvDto.path,filename:createCvDto.filename,user:userId})
 
     }
 
@@ -250,8 +250,8 @@ export class BuildCvService {
         }
       }
       
-      const filePath=await this.pdfService.generateResumePdf(data)
-      return this.cvService.create({title:'cv',user:ownerId,path:filePath})
+      const {filePath,filename}=await this.pdfService.generateResumePdf(data)
+      return this.cvService.create({title:'cv',user:ownerId,path:filePath,filename})
     }
 
 }

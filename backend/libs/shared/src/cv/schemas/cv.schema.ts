@@ -11,6 +11,10 @@ export class Cv {
   title: string;
 
   @Prop({required:true})
+  filename:string
+
+
+  @Prop({required:true})
   path : string;
 
   

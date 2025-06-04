@@ -9,7 +9,7 @@ import * as dayjs from 'dayjs';
 
 @Injectable()
 export class PdfService {
-  async generateResumePdf(data: any): Promise<string> {
+  async generateResumePdf(data: any){
     const templatePath = path.join(process.cwd(), 'uploads','template.html');
     const templateContent = await fs.readFile(templatePath, 'utf8');
 
@@ -39,6 +39,6 @@ export class PdfService {
     });
 
     await browser.close();
-    return `/public/${fileName}`;
+    return {filePath:filePath,filename:fileName};
   }
 }
