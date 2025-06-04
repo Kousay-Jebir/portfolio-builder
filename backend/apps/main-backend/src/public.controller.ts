@@ -1,4 +1,3 @@
-// file: file.controller.ts
 import {
     Controller,
     Get,
@@ -11,10 +10,13 @@ import {
   import { join } from 'path';
   import { existsSync } from 'fs';
 import { JwtAuthGuard } from '@portfolio-builder/shared';
+import { ApiBearerAuth } from '@nestjs/swagger';
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   
   @Controller('public')
   export class FileController {
-    @UseGuards(JwtAuthGuard)
+    
     @Get(':filename')
     async getFile(@Param('filename') filename: string, @Res() res: Response) {
       const filePath = join(process.cwd(), 'public', filename);
