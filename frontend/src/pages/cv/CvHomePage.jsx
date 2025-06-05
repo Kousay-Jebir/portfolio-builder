@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserPortfoliosUrls } from "@/api/consulting/consult";
-import { getCvQuestions, uploadCv } from "@/api/builder/cv"; // import uploadCv
+
+
 import { motion, AnimatePresence } from "framer-motion";
 import { FileUp, Wand2, X, Upload, FileText, ChevronDown } from "lucide-react";
+
+import { generateCv, getCvQuestions, uploadCv } from "@/api/builder/cv"; // import uploadCv
 
 const CvHomePage = () => {
   const navigate = useNavigate();
@@ -41,7 +44,9 @@ const CvHomePage = () => {
       if (q && q.length > 0) {
         navigate("/cv-generation/questions", { state: { questions: q } });
       } else {
-        alert("No questions found for the selected portfolio.");
+        // alert("No questions found for the selected portfolio.");
+        const result = await generateCv(selectedPortfolio)
+        console.log(result)
       }
     } catch (err) {
       console.error("Error fetching questions", err);

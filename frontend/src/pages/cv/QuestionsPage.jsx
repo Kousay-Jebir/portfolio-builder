@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { generateCv } from '@/api/builder/cv';
 
 const QuestionsPage = () => {
   const location = useLocation();
@@ -37,11 +38,13 @@ const QuestionsPage = () => {
     setAnswers(updated);
   };
 
-  const handleNext = () => {
+  const handleNext = async() => {
     if (sectionIndex < questionsData.length - 1) {
       setSectionIndex((prev) => prev + 1);
     } else {
       console.log('Final answers:', answers);
+      const res=await generateCv('6840e17ea06fc2fbf63b4f0d',answers)
+      console.log(res)
       navigate('/cv-generation');
     }
   };
