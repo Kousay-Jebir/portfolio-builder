@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { orangePalette } from "./orangePalette";
 
 export default function AuthPage() {
   const { handleLogin } = useAuth();
@@ -22,75 +21,25 @@ export default function AuthPage() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: orangePalette.background,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div
-        style={{
-          background: orangePalette.white,
-          borderRadius: 16,
-          boxShadow: "0 8px 32px rgba(255, 111, 0, 0.15)",
-          padding: "2.5rem 2rem",
-          maxWidth: 400,
-          width: "100%",
-          border: `2px solid ${orangePalette.border}`,
-        }}
-      >
-        <h1
-          style={{
-            color: orangePalette.primary,
-            fontWeight: 800,
-            fontSize: "2.2rem",
-            marginBottom: 8,
-            letterSpacing: 1,
-          }}
-        >
+    <div className="min-h-screen bg-brand-bg flex items-center justify-center">
+      <div className="bg-brand-white rounded-2xl shadow-[0_8px_32px_rgba(255,111,0,0.15)] p-10 max-w-sm w-full border-2 border-brand">
+        <h1 className="text-brand-primary font-extrabold text-[2.2rem] mb-2 tracking-wide">
           Login
         </h1>
-        <p
-          style={{
-            color: orangePalette.secondary,
-            marginBottom: 24,
-            fontWeight: 500,
-          }}
-        >
+        <p className="text-brand-secondary mb-6 font-medium">
           Welcome back! Please sign in to continue.
         </p>
+
         {error && (
-          <div
-            style={{
-              color: orangePalette.error,
-              marginBottom: 12,
-              fontWeight: 600,
-            }}
-          >
-            {error}
-          </div>
+          <div className="text-brand-error mb-3 font-semibold">{error}</div>
         )}
-        <form
-          onSubmit={onSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: 18 }}
-        >
+
+        <form onSubmit={onSubmit} className="flex flex-col gap-[18px]">
           <input
             name="email"
             onChange={onChange}
             placeholder="Email"
-            style={{
-              padding: "0.9rem 1rem",
-              borderRadius: 8,
-              border: `1.5px solid ${orangePalette.border}`,
-              fontSize: 16,
-              outline: "none",
-              background: orangePalette.background,
-              color: orangePalette.text,
-              fontWeight: 500,
-            }}
+            className="px-4 py-3.5 rounded-lg border-[1.5px] border-brand text-[16px] outline-none bg-brand-bg text-brand-text font-medium"
             autoComplete="email"
             required
           />
@@ -99,54 +48,22 @@ export default function AuthPage() {
             type="password"
             onChange={onChange}
             placeholder="Password"
-            style={{
-              padding: "0.9rem 1rem",
-              borderRadius: 8,
-              border: `1.5px solid ${orangePalette.border}`,
-              fontSize: 16,
-              outline: "none",
-              background: orangePalette.background,
-              color: orangePalette.text,
-              fontWeight: 500,
-            }}
+            className="px-4 py-3.5 rounded-lg border-[1.5px] border-brand text-[16px] outline-none bg-brand-bg text-brand-text font-medium"
             autoComplete="current-password"
             required
           />
           <button
             type="submit"
-            style={{
-              background: orangePalette.primary,
-              color: orangePalette.white,
-              fontWeight: 700,
-              fontSize: 18,
-              border: "none",
-              borderRadius: 8,
-              padding: "1rem",
-              marginTop: 8,
-              boxShadow: "0 2px 8px rgba(255, 111, 0, 0.10)",
-              cursor: "pointer",
-              transition: "background 0.2s",
-            }}
+            className="bg-brand-primary text-white font-bold text-lg rounded-lg py-4 mt-2 shadow-[0_2px_8px_rgba(255,111,0,0.10)] cursor-pointer transition duration-200"
           >
             Login
           </button>
         </form>
-        <div
-          style={{
-            marginTop: 18,
-            textAlign: "center",
-            color: orangePalette.text,
-            fontSize: 15,
-          }}
-        >
-          Don't have an account?{" "}
+
+        <div className="mt-[18px] text-center text-brand-text text-sm">
+          Don&apos;t have an account?{" "}
           <span
-            style={{
-              color: orangePalette.primary,
-              fontWeight: 600,
-              cursor: "pointer",
-              textDecoration: "underline",
-            }}
+            className="text-brand-primary font-semibold cursor-pointer underline"
             onClick={() => navigate("/register")}
           >
             Register
