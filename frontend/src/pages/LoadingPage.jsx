@@ -28,7 +28,7 @@ export default function LoadingPage() {
           <Lottie animationData={loadingAnimation} loop autoplay />
         </div>
         <h2 className="text-2xl md:text-3xl font-bold text-[#FF6F00] text-center drop-shadow-lg">
-          Launching Your Portfolio
+          Generating Your Resume
         </h2>
         <p className="text-[#212121] mt-3 text-center text-base leading-relaxed">
           Hang tight — we’re preparing your awesome showcase. It won’t be long!
