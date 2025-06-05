@@ -1,10 +1,9 @@
 import Lottie from "lottie-react";
 import loadingAnimation from "../assets/animations/loading.json";
 
-export default function LoadingPage() {
+export default function LoadingPage({ text }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FF6F00] to-[#FFA040] flex flex-col items-center justify-center relative overflow-hidden px-4">
-      {/* Sparkles */}
       <div className="absolute inset-0 overflow-hidden -z-10">
         {[...Array(30)].map((_, i) => (
           <div
@@ -22,13 +21,12 @@ export default function LoadingPage() {
         ))}
       </div>
 
-      {/* Glass Card */}
       <div className="bg-[#FFF3E0] backdrop-blur-xl border border-[#FFB300]/40 shadow-2xl rounded-3xl px-8 py-10 max-w-md w-full flex flex-col items-center">
         <div className="w-52 h-52 mb-6">
           <Lottie animationData={loadingAnimation} loop autoplay />
         </div>
         <h2 className="text-2xl md:text-3xl font-bold text-[#FF6F00] text-center drop-shadow-lg">
-          Generating Your Resume
+          {text || "Generating Your Resume"}
         </h2>
         <p className="text-[#212121] mt-3 text-center text-base leading-relaxed">
           Hang tight — we’re preparing your awesome showcase. It won’t be long!

@@ -72,7 +72,11 @@ export default function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/loading" element={<LoadingPage />} />
+          <Route path="/loading-resume" element={<LoadingPage />} />
+          <Route
+            path="/loading-analyzing"
+            element={<LoadingPage text="Analyzing Your Portfolio" />}
+          />
           <Route path="*" element={<p>404</p>} />
         </Routes>
       </Router>
