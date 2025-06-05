@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserPortfoliosUrls } from "@/api/consulting/consult";
-import { getCvQuestions } from "@/api/builder/cv";
+import { getCvQuestions, uploadCv } from "@/api/builder/cv"; // import uploadCv
 
 const CvHomePage = () => {
   const navigate = useNavigate();
@@ -10,6 +10,8 @@ const CvHomePage = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [showUpload, setShowUpload] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -46,11 +48,29 @@ const CvHomePage = () => {
     }
   };
 
-  const handleFileUpload = (event) => {
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      alert(`Uploaded: ${file.name}`);
-      // You can now read the file or send it to your server.
+    setSelectedFile(file);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      alert("Please choose a file first.");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const response = await uploadCv(selectedFile);
+      console.log("Upload success:", response);
+      alert("CV uploaded successfully!");
+      setShowUpload(false);
+      setSelectedFile(null);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("CV upload failed.");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -97,7 +117,7 @@ const CvHomePage = () => {
             <input
               type="file"
               accept=".pdf,.doc,.docx"
-              onChange={handleFileUpload}
+              onChange={handleFileChange}
               className="block w-full mb-4"
             />
             <div className="flex justify-end gap-4">
@@ -106,6 +126,13 @@ const CvHomePage = () => {
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
               >
                 Cancel
+              </button>
+              <button
+                onClick={handleUpload}
+                disabled={uploading}
+                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+              >
+                {uploading ? "Uploading..." : "Submit"}
               </button>
             </div>
           </div>
