@@ -15,22 +15,70 @@ import { Carousel } from "./showcase/Carousel";
 import { CarouselItem } from "./showcase/CarouselItem";
 import { Button } from "@/components/ui/button";
 import { GenericContainer } from "./generic/GenericContainer";
+import { useAuth } from "@/context/AuthContext";
+
+const USER_COMPONENTS = {
+    GENERIC_CONTAINER: {
+        label: 'Generic container',
+        component: <Element canvas is={GenericContainer} />,
+        isPremium: false
+    },
+    GRID_CONTAINER: {
+        label: 'Grid container',
+        component: <Element canvas fluid is={Section} />,
+        isPremium: false
+    },
+    GRID_ROW: {
+        label: 'Grid row',
+        component: <Element canvas is={GridRow} />,
+        isPremium: false
+    },
+    GRID_COLUMN: {
+        label: 'Grid column',
+        component: <Element canvas is={GridColumn} />,
+        isPremium: false
+    },
+    CAROUSEL: {
+        label: 'Carousel',
+        component: <Element canvas is={Carousel} loop />,
+        isPremium: true
+    },
+    CAROUSEL_ITEM: {
+        label: 'Carousel item',
+        component: <Element canvas is={CarouselItem} />,
+        isPremium: true
+    },
+    PARAGRAPH: {
+        label: 'Paragraph',
+        component: <EditableTypography component="p" />,
+        isPremium: false
+    },
+    HYPERLINK: {
+        label: 'Hyperlink',
+        component: <EditableTypography href="http://google.com" component="a" />,
+        isPremium: false
+    },
+    BUTTON: {
+        label: 'Button',
+        component: <EditableButton />,
+        isPremium: false
+    },
+    IMAGE: {
+        label: 'Image',
+        component: <Image />,
+        isPremium: true
+    }
+}
 
 export default function ToolBox() {
     const { connectors } = useEditor();
-
-    const toolboxItems = [
-        { label: "Generic Container", component: <Element canvas is={GenericContainer} /> },
-        { label: "Grid Container", component: <Element canvas fluid is={Section} /> },
-        { label: "Grid Row", component: <Element canvas is={GridRow} /> },
-        { label: "Grid Column", component: <Element canvas is={GridColumn} /> },
-        { label: "Carousel", component: <Element canvas is={Carousel} loop /> },
-        { label: "Carousel item", component: <Element canvas is={CarouselItem} /> },
-        { label: "Paragraph", component: <EditableTypography component="p" /> },
-        { label: "Hyperlink", component: <EditableTypography href="http://google.com" component="a" /> },
-        { label: "Button", component: <EditableButton /> },
-        { label: "Image", component: <Image /> },
-    ];
+    const { user } = useAuth()
+    function filterUserComponents(component) {
+        if (user.role === 'subscribed') return true;
+        else if (user.role === 'user') {
+            return (!component.isPremium)
+        }
+    }
 
     return (
         <Card className="rounded-xs shadow-none dark:bg-slate-900">
@@ -43,7 +91,7 @@ export default function ToolBox() {
             <CardContent className="px-0 py-0">
                 <ScrollArea className="h-full pr-1">
                     <div className="grid grid-cols-2 gap-1 px-2 py-2">
-                        {toolboxItems.map((item, index) => (
+                        {Object.values(USER_COMPONENTS).filter(filterUserComponents).map((item, index) => (
                             <Button
                                 key={index}
                                 variant="outline"
