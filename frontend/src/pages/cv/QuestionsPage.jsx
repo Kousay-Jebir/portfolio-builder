@@ -1,6 +1,7 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { generateCv } from '@/api/builder/cv';
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { generateCv } from "@/api/builder/cv";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 
 const QuestionsPage = () => {
   const location = useLocation();
@@ -8,15 +9,15 @@ const QuestionsPage = () => {
   const questionsData = location.state?.questions;
 
   const [sectionIndex, setSectionIndex] = useState(0);
-  const [answers, setAnswers] = useState([]); // [{ section: '', answers: [['', ''], ['']] }]
-  
+  const [answers, setAnswers] = useState([]);
+
   useEffect(() => {
     if (!questionsData) {
-      navigate('/cv-generation');
+      navigate("/cv-generation");
     } else {
       const initialAnswers = questionsData.map((section) => ({
         section: section.section,
-        answers: section.questions.map(() => ['']) // array of empty answers per question
+        answers: section.questions.map(() => [""]),
       }));
       setAnswers(initialAnswers);
     }
@@ -34,18 +35,18 @@ const QuestionsPage = () => {
 
   const addAnswerInput = (qIdx) => {
     const updated = [...answers];
-    updated[sectionIndex].answers[qIdx].push('');
+    updated[sectionIndex].answers[qIdx].push("");
     setAnswers(updated);
   };
 
-  const handleNext = async() => {
+  const handleNext = async () => {
     if (sectionIndex < questionsData.length - 1) {
       setSectionIndex((prev) => prev + 1);
     } else {
-      console.log('Final answers:', answers);
-      const res=await generateCv('6840e17ea06fc2fbf63b4f0d',answers)
-      console.log(res)
-      navigate('/cv-generation');
+      console.log("Final answers:", answers);
+      const res = await generateCv("6840e17ea06fc2fbf63b4f0d", answers);
+      console.log(res);
+      navigate("/cv-generation");
     }
   };
 
@@ -56,55 +57,90 @@ const QuestionsPage = () => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">
-        {currentSection.section.toUpperCase()} Questions
-      </h2>
-      <form className="space-y-4">
-        {currentSection.questions.map((q, qIdx) => (
-          <div key={qIdx} className="mb-4">
-            <label className="block font-semibold mb-1">{q}</label>
-            {answers[sectionIndex]?.answers[qIdx]?.map((answer, aIdx) => (
-              <div key={aIdx} className="flex items-center gap-2 mb-2">
-                <input
-                  type="text"
-                  className="border p-2 flex-1"
-                  value={answer}
-                  onChange={(e) =>
-                    handleInputChange(qIdx, aIdx, e.target.value)
-                  }
-                />
-                {aIdx === answers[sectionIndex].answers[qIdx].length - 1 && (
-                  <button
-                    type="button"
-                    onClick={() => addAnswerInput(qIdx)}
-                    className="bg-gray-300 hover:bg-gray-400 text-sm px-2 py-1 rounded"
-                    title="Add another answer"
-                  >
-                    ➕
-                  </button>
-                )}
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 p-6 flex items-center justify-center">
+      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl overflow-hidden border border-orange-200">
+        {/* Section Header */}
+        <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="bg-orange-100/30 text-white px-3 py-1 rounded-full text-sm font-medium">
+                Section {sectionIndex + 1} of {questionsData.length}
+              </span>
+              <h2 className="text-2xl font-bold text-white">
+                {currentSection.section}
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Questions Form */}
+        <div className="p-6 space-y-6">
+          <form className="space-y-6">
+            {currentSection.questions.map((q, qIdx) => (
+              <div
+                key={qIdx}
+                className="bg-orange-50/50 p-5 rounded-xl border border-orange-100"
+              >
+                <label className="block text-lg font-semibold text-orange-800 mb-3">
+                  <span className="text-orange-600 mr-2">{qIdx + 1}.</span>
+                  {q}
+                </label>
+
+                {answers[sectionIndex]?.answers[qIdx]?.map((answer, aIdx) => (
+                  <div key={aIdx} className="flex items-center gap-3 mb-3">
+                    <input
+                      type="text"
+                      className="flex-1 px-4 py-3 border border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-orange-900 placeholder-orange-300"
+                      value={answer}
+                      onChange={(e) =>
+                        handleInputChange(qIdx, aIdx, e.target.value)
+                      }
+                      placeholder={`Response ${aIdx + 1}`}
+                    />
+                    {aIdx ===
+                      answers[sectionIndex].answers[qIdx].length - 1 && (
+                      <button
+                        type="button"
+                        onClick={() => addAnswerInput(qIdx)}
+                        className="flex items-center justify-center w-10 h-10 bg-orange-100 hover:bg-orange-200 text-orange-600 rounded-lg transition-colors"
+                        title="Add another answer"
+                      >
+                        <Plus className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                ))}
               </div>
             ))}
-          </div>
-        ))}
-      </form>
+          </form>
 
-      <div className="mt-6 flex justify-between">
-        {sectionIndex > 0 && (
-          <button
-            onClick={handlePrevious}
-            className="bg-gray-500 text-white px-4 py-2 rounded"
-          >
-            Previous
-          </button>
-        )}
-        <button
-          onClick={handleNext}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          {sectionIndex < questionsData.length - 1 ? 'Next Section' : 'Finish'}
-        </button>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between pt-4 border-t border-orange-100">
+            {sectionIndex > 0 && (
+              <button
+                onClick={handlePrevious}
+                className="flex items-center gap-2 px-5 py-3 bg-orange-100 hover:bg-orange-200 text-orange-700 font-medium rounded-lg transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                Previous
+              </button>
+            )}
+
+            <button
+              onClick={handleNext}
+              className="ml-auto flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium rounded-lg shadow-sm transition-all"
+            >
+              {sectionIndex < questionsData.length - 1 ? (
+                <>
+                  Next Section
+                  <ChevronRight className="w-5 h-5" />
+                </>
+              ) : (
+                "Generate CV"
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
