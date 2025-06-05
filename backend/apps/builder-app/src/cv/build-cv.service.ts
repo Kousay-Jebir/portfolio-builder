@@ -31,17 +31,25 @@ export class BuildCvService {
   async getQuestions(portfolioId: string, userId: string) {
     const portfolio = await this.portfolioService.findById(portfolioId);
     console.log(this.extractPortfolioText(portfolio?.content))
+    const textContent = this.extractPortfolioText(portfolio?.content)
     if (!portfolio) {
       return new NotFoundException('portfolio not found');
     }
     try {
-      // const result = await axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_QUESTIONS_ENDPOINT}`, {
-      //   portfolio: portfolio.content
+      // const questions = await axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_QUESTIONS_ENDPOINT}`, {
+      //   portfolio: textContent
       //   // userId: userId,
       // });
       const questions = await this.generateQuestions(['skills', 'projects', 'experience'])
+      if(questions.length>0){      return questions
+}
+      else{
+        const result = await this.sendResponse(textContent)
+        const { filePath, filename } = await this.pdfService.generateResumePdf(result)
+        return this.cvService.create({ title: 'cv', user: userId, path: filePath, filename })
 
-      return questions
+      }
+
     } catch (err) {
       throw new Error(err);
     }
