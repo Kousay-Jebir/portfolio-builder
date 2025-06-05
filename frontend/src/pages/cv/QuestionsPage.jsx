@@ -2,15 +2,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { generateCv } from "@/api/builder/cv";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
-
+import LoadingPage from "../LoadingPage";
 const QuestionsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const questionsData = location.state?.questions;
+  const portfolioId= location.state?.portfolioId
 
   const [sectionIndex, setSectionIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
-
+  const [loading,setLoading]=useState(false)
   useEffect(() => {
     if (!questionsData) {
       navigate("/cv-generation");
@@ -43,8 +44,11 @@ const QuestionsPage = () => {
     if (sectionIndex < questionsData.length - 1) {
       setSectionIndex((prev) => prev + 1);
     } else {
+      setLoading(true)
       console.log("Final answers:", answers);
-      const res = await generateCv("6840e17ea06fc2fbf63b4f0d", answers);
+      //  await new Promise(resolve => setTimeout(resolve, 30000));
+
+      const res = await generateCv(portfolioId, answers);
       console.log(res);
       navigate("/cv-generation");
     }
@@ -55,7 +59,9 @@ const QuestionsPage = () => {
       setSectionIndex((prev) => prev - 1);
     }
   };
-
+    if (loading) {
+      return <LoadingPage/>;
+    }
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 p-6 flex items-center justify-center">
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl overflow-hidden border border-orange-200">
