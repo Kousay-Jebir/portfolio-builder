@@ -59,7 +59,6 @@ const QuestionsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 p-6 flex items-center justify-center">
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl overflow-hidden border border-orange-200">
-        {/* Section Header */}
         <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -72,8 +71,6 @@ const QuestionsPage = () => {
             </div>
           </div>
         </div>
-
-        {/* Questions Form */}
         <div className="p-6 space-y-6">
           <form className="space-y-6">
             {currentSection.questions.map((q, qIdx) => (
@@ -113,8 +110,6 @@ const QuestionsPage = () => {
               </div>
             ))}
           </form>
-
-          {/* Navigation Buttons */}
           <div className="flex justify-between pt-4 border-t border-orange-100">
             {sectionIndex > 0 && (
               <button

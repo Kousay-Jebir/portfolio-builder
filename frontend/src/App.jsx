@@ -20,6 +20,7 @@ import WelcomePage from "./pages/auth-pages/WelcomePage";
 
 import GoogleRedirect from "./pages/GoogleRedirect";
 import NotLoggedInRoutes from "./context/notLoggedInRoutes";
+import LoadingPage from "./pages/LoadingPage";
 
 export default function App() {
   /* useAutoSave(() => {
@@ -71,6 +72,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/loading" element={<LoadingPage />} />
           <Route path="*" element={<p>404</p>} />
         </Routes>
       </Router>
