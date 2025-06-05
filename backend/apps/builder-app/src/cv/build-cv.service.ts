@@ -41,16 +41,11 @@ export class BuildCvService {
       //   // userId: userId,
       // });
       const questions = await this.generateQuestions(['skills', 'projects', 'experience'])
-      if(questions.length>0){      return questions
+         return questions
 }
-      else{
-        const result = await this.sendResponse(textContent)
-        const { filePath, filename } = await this.pdfService.generateResumePdf(result)
-        return this.cvService.create({ title: 'cv', user: userId, path: filePath, filename })
+     
 
-      }
-
-    } catch (err) {
+     catch (err) {
       throw new Error(err);
     }
 
