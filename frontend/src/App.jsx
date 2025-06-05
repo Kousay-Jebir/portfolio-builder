@@ -1,20 +1,20 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from '@/context/AuthContext';
-import AuthPage from './pages/AuthPage';
-import BuilderPage from '@/pages/BuilderPage';
-import PrivateRoute from './components/PrivateRoute';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/context/AuthContext";
+import AuthPage from "./pages/auth-pages/AuthPage";
+import BuilderPage from "@/pages/BuilderPage";
+import PrivateRoute from "./components/PrivateRoute";
 
-import CvHomePage from './components/cv/CvHomePage';
-import QuestionsPage from './components/cv/QuestionsPage';
-import CvGenerationLayout from './components/cv/CvGenerationLayout';
+import CvHomePage from "./components/cv/CvHomePage";
+import QuestionsPage from "./components/cv/QuestionsPage";
+import CvGenerationLayout from "./components/cv/CvGenerationLayout";
 
-import useAutoSave from './hooks/useAutoSave';
-import { useEditor } from '@craftjs/core';
-import { preparePortfolioSave } from './components/builder/layout/Topbar';
-import useExitPrompt from './hooks/useExitPrompt';
-import SubscriptionPage from './components/subscription/SubscriptionPage';
-import PaymentSuccessPage from './components/subscription/PaymentSuccessPage';
-
+import useAutoSave from "./hooks/useAutoSave";
+import { useEditor } from "@craftjs/core";
+import { preparePortfolioSave } from "./components/builder/layout/Topbar";
+import useExitPrompt from "./hooks/useExitPrompt";
+import SubscriptionPage from "./components/subscription/SubscriptionPage";
+import PaymentSuccessPage from "./components/subscription/PaymentSuccessPage";
+import RegisterPage from "./pages/auth-pages/RegisterPage";
 
 export default function App() {
   /* useAutoSave(() => {
@@ -26,6 +26,7 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<AuthPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route
             path="/builder"
             element={
@@ -45,7 +46,7 @@ export default function App() {
             <Route index element={<CvHomePage />} />
             <Route path="questions" element={<QuestionsPage />} />
           </Route>
-            <Route
+          <Route
             path="/subscription"
             element={
               <PrivateRoute>
@@ -53,7 +54,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-            <Route
+          <Route
             path="/payment_success"
             element={
               <PrivateRoute>
@@ -61,7 +62,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-          <Route path='*' element={<p>404</p>} />
+          <Route path="*" element={<p>404</p>} />
         </Routes>
       </Router>
     </AuthProvider>
