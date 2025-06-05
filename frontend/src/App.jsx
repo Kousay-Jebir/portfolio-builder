@@ -15,6 +15,7 @@ import useExitPrompt from "./hooks/useExitPrompt";
 import SubscriptionPage from "./pages/subscription/SubscriptionPage";
 import PaymentSuccessPage from "./pages/subscription/PaymentSuccessPage";
 import RegisterPage from "./pages/auth-pages/RegisterPage";
+import GoogleRedirect from "./pages/GoogleRedirect";
 
 export default function App() {
   /* useAutoSave(() => {
@@ -26,6 +27,8 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<AuthPage />} />
+          <Route path="/google-redirect" element={<GoogleRedirect />} />
+
           <Route path="/register" element={<RegisterPage />} />
           <Route
             path="/builder"
