@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { orangePalette } from "./orangePalette";
+import { loginWithGoogle } from "@/api/main/auth";
 
 export default function AuthPage() {
   const { handleLogin } = useAuth();
@@ -20,6 +21,12 @@ export default function AuthPage() {
       setError("Invalid credentials");
     }
   };
+
+  const connectWithGoogle=async()=>{
+    // await loginWithGoogle()
+    // console.log('google')
+    window.location.href='http://localhost:5000/main/auth/google'
+  }
 
   return (
     <div
@@ -153,7 +160,7 @@ export default function AuthPage() {
           </button>
           <button
             type="button"
-            onClick={() => (window.location.href = "/api/auth/google")}
+            onClick={connectWithGoogle}
             style={{
               display: "flex",
               alignItems: "center",
