@@ -182,11 +182,10 @@ export class BuildCvService {
     return cv.path
   }
 
-  async generateCv(ownerId: string, portfolioId: string, cvDataDto: Partial<CvDataDto>) {
+  async generateCv(ownerId: string, portfolioId: string, cvDataDto?: Partial<CvDataDto>) {
     const portfolio = await this.portfolioService.findById(portfolioId)
-    const portfolioData = JSON.stringify(portfolio?.content)
-    const questionResponse = JSON.stringify(cvDataDto)
-    const finalData = portfolioData + questionResponse
+    const portfolioTextContent= this.extractPortfolioText(portfolio?.content)
+    const finalData=cvDataDto? portfolioTextContent+JSON.stringify(cvDataDto):portfolioTextContent
     const result = await this.sendResponse(finalData)
     const data = {
       "user": {
