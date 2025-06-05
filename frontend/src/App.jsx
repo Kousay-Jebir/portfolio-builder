@@ -16,10 +16,10 @@ import SubscriptionPage from "./pages/subscription/SubscriptionPage";
 import PaymentSuccessPage from "./pages/subscription/PaymentSuccessPage";
 import RegisterPage from "./pages/auth-pages/RegisterPage";
 
-import WelcomePage from './pages/auth-pages/WelcomePage';
+import WelcomePage from "./pages/auth-pages/WelcomePage";
 
 import GoogleRedirect from "./pages/GoogleRedirect";
-
+import NotLoggedInRoutes from "./context/notLoggedInRoutes";
 
 export default function App() {
   /* useAutoSave(() => {
@@ -30,10 +30,12 @@ export default function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/login" element={<AuthPage />} />
-          <Route path="/google-redirect" element={<GoogleRedirect />} />
-
-          <Route path="/register" element={<RegisterPage />} />
+          <Route element={<NotLoggedInRoutes />}>
+            <Route path="/login" element={<AuthPage />} />
+            <Route path="/google-redirect" element={<GoogleRedirect />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/welcome" element={<WelcomePage />} />
+          </Route>
           <Route
             path="/builder"
             element={
@@ -69,7 +71,6 @@ export default function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/welcome" element={<WelcomePage />} />
           <Route path="*" element={<p>404</p>} />
         </Routes>
       </Router>
