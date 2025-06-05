@@ -40,6 +40,7 @@ const CvHomePage = () => {
 
     setLoading(true);
     try {
+      await new Promise(resolve => setTimeout(resolve, 30000));
       const q = await getCvQuestions(selectedPortfolio);
       setQuestions(q);
       if (q && q.length > 0) {
@@ -69,6 +70,7 @@ const CvHomePage = () => {
 
     setUploading(true);
     try {
+
       const response = await uploadCv(selectedFile);
       console.log("Upload success:", response);
       alert("CV uploaded successfully!");

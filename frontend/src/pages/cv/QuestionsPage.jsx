@@ -46,6 +46,8 @@ const QuestionsPage = () => {
     } else {
       setLoading(true)
       console.log("Final answers:", answers);
+      //  await new Promise(resolve => setTimeout(resolve, 30000));
+
       const res = await generateCv(portfolioId, answers);
       console.log(res);
       navigate("/cv-generation");
