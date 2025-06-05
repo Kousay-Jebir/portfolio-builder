@@ -17,7 +17,7 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
     try {
-      await register(form);
+      await register({username:form.username,email:form.email,password:form.password}) ;
       setSuccess(true);
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
