@@ -10,7 +10,7 @@ import * as dayjs from 'dayjs';
 @Injectable()
 export class PdfService {
   async generateResumePdf(data: any){
-    const templatePath = path.join(process.cwd(), 'uploads','template.html');
+    const templatePath = path.join(process.cwd(), 'assets','template2.html');
     const templateContent = await fs.readFile(templatePath, 'utf8');
 
     const template = Handlebars.compile(templateContent);
