@@ -17,7 +17,11 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
     try {
-      await register({username:form.username,email:form.email,password:form.password}) ;
+      await register({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+      });
       setSuccess(true);
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
@@ -31,7 +35,7 @@ export default function RegisterPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: orangePalette.primary,
+        background: orangePalette.secondary,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

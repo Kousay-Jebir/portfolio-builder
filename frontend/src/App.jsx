@@ -15,7 +15,11 @@ import useExitPrompt from "./hooks/useExitPrompt";
 import SubscriptionPage from "./pages/subscription/SubscriptionPage";
 import PaymentSuccessPage from "./pages/subscription/PaymentSuccessPage";
 import RegisterPage from "./pages/auth-pages/RegisterPage";
+
+import WelcomePage from './pages/auth-pages/WelcomePage';
+
 import GoogleRedirect from "./pages/GoogleRedirect";
+
 
 export default function App() {
   /* useAutoSave(() => {
@@ -65,6 +69,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/welcome" element={<WelcomePage />} />
           <Route path="*" element={<p>404</p>} />
         </Routes>
       </Router>
