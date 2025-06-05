@@ -40,8 +40,8 @@ export class BuildCvService {
       //   portfolio: textContent
       //   // userId: userId,
       // });
-      // const questions = await this.generateQuestions(['skills','projects'])
-      const questions=[]
+      const questions = await this.generateQuestions(['skills','projects'])
+      // const questions=[]
          return questions
 }
      
