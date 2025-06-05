@@ -40,8 +40,8 @@ export class BuildCvService {
       //   portfolio: textContent
       //   // userId: userId,
       // });
-      // const questions = await this.generateQuestions(['skills','projects'])
-      const questions=[]
+      const questions = await this.generateQuestions(['skills','projects'])
+      // const questions=[]
          return questions
 }
      
@@ -186,7 +186,7 @@ export class BuildCvService {
   async generateCv(ownerId: string, portfolioId: string, cvDataDto?: Partial<CvDataDto>) {
     const portfolio = await this.portfolioService.findById(portfolioId)
     const portfolioTextContent= this.extractPortfolioText(portfolio?.content)
-    const finalData=cvDataDto? portfolioTextContent+this.extractAndConcatAnswers(cvDataDto):portfolioTextContent
+    const finalData=cvDataDto? portfolioTextContent+this.extractAnswersWithSections(cvDataDto):portfolioTextContent
     return finalData
     // const result = await this.sendResponse(finalData)
     // const data = {
@@ -279,12 +279,15 @@ export class BuildCvService {
     // const { filePath, filename } = await this.pdfService.generateResumePdf(data)
     // return this.cvService.create({ title: 'cv', user: ownerId, path: filePath, filename })
   }
-  private extractAndConcatAnswers(data: any): string {
+  private extractAnswersWithSections(data: any): string {
   return data
-    .flatMap(item => item.answers)     // Flatten all answers arrays (arrays of arrays)
-    .flatMap(answer => answer)         // Flatten inner arrays to get strings
-    .join(' ');                         // Concatenate all strings
+    .map(item => {
+      const answers = item.answers.flat().join(' ');
+      return `${item.section}: ${answers}`;
+    })
+    .join(' ');
 }
+
 
 
 }

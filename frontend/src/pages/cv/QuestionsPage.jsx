@@ -7,6 +7,7 @@ const QuestionsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const questionsData = location.state?.questions;
+  const portfolioId= location.state?.portfolioId
 
   const [sectionIndex, setSectionIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
@@ -44,7 +45,7 @@ const QuestionsPage = () => {
       setSectionIndex((prev) => prev + 1);
     } else {
       console.log("Final answers:", answers);
-      const res = await generateCv("6840e17ea06fc2fbf63b4f0d", answers);
+      const res = await generateCv(portfolioId, answers);
       console.log(res);
       navigate("/cv-generation");
     }

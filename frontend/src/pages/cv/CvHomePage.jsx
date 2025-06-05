@@ -42,7 +42,7 @@ const CvHomePage = () => {
       const q = await getCvQuestions(selectedPortfolio);
       setQuestions(q);
       if (q && q.length > 0) {
-        navigate("/cv-generation/questions", { state: { questions: q } });
+        navigate("/cv-generation/questions", { state: { questions: q,portfolioId:selectedPortfolio } });
       } else {
         // alert("No questions found for the selected portfolio.");
         const result = await generateCv(selectedPortfolio)
