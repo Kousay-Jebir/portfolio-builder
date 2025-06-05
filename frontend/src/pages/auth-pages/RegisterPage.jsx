@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "@/api/main/auth";
+import { orangePalette } from "./orangePalette";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -27,32 +28,109 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg flex items-center justify-center">
-      <div className="bg-brand-white rounded-2xl shadow-xl border-2 border-brand p-10 max-w-sm w-full">
-        <h1 className="text-brand-primary font-extrabold text-3xl mb-2 tracking-wide">
+    <div
+      style={{
+        minHeight: "100vh",
+        background: orangePalette.primary,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "background 0.4s",
+      }}
+    >
+      <div
+        style={{
+          background: `linear-gradient(135deg, ${orangePalette.secondary} 0%, ${orangePalette.primary} 100%)`,
+          borderRadius: 24,
+          boxShadow: "0 8px 32px rgba(255, 111, 0, 0.18)",
+          padding: "2.5rem 2rem",
+          maxWidth: 420,
+          width: "100%",
+          border: `2.5px solid ${orangePalette.accent}`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          transition: "box-shadow 0.3s, border 0.3s",
+        }}
+      >
+        <h1
+          style={{
+            color: orangePalette.white,
+            fontWeight: 900,
+            fontSize: "2.3rem",
+            marginBottom: 8,
+            letterSpacing: 1,
+            textShadow: "0 2px 8px rgba(255, 111, 0, 0.15)",
+          }}
+        >
           Create Account
         </h1>
-        <p className="text-brand-secondary mb-6 font-medium">
+        <p
+          style={{
+            color: orangePalette.accent,
+            marginBottom: 24,
+            fontWeight: 500,
+            textAlign: "center",
+          }}
+        >
           Join us and build your portfolio!
         </p>
-
         {error && (
-          <div className="text-brand-error mb-3 font-semibold">{error}</div>
+          <div
+            style={{
+              color: orangePalette.error,
+              marginBottom: 12,
+              fontWeight: 600,
+              background: orangePalette.white,
+              borderRadius: 8,
+              padding: "0.5rem 1rem",
+              boxShadow: "0 1px 4px rgba(216, 67, 21, 0.08)",
+            }}
+          >
+            {error}
+          </div>
         )}
-
         {success && (
-          <div className="text-brand-primary mb-3 font-semibold">
+          <div
+            style={{
+              color: orangePalette.white,
+              marginBottom: 12,
+              fontWeight: 600,
+              background: orangePalette.secondary,
+              borderRadius: 8,
+              padding: "0.5rem 1rem",
+              boxShadow: "0 1px 4px rgba(255, 167, 38, 0.08)",
+            }}
+          >
             Registration successful! Redirecting...
           </div>
         )}
-
-        <form onSubmit={onSubmit} className="flex flex-col gap-5">
+        <form
+          onSubmit={onSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 18,
+            width: "100%",
+          }}
+        >
           <input
             name="username"
             placeholder="Username"
             value={form.username}
             onChange={onChange}
-            className="px-4 py-3 rounded-lg border-[1.5px] border-brand bg-brand-bg text-brand-text font-medium text-base outline-none"
+            style={{
+              padding: "0.9rem 1rem",
+              borderRadius: 10,
+              border: `1.5px solid ${orangePalette.accent}`,
+              fontSize: 16,
+              outline: "none",
+              background: orangePalette.white,
+              color: orangePalette.text,
+              fontWeight: 500,
+              boxShadow: "0 1px 4px rgba(255, 167, 38, 0.08)",
+              transition: "border 0.2s, box-shadow 0.2s",
+            }}
             autoComplete="username"
             required
           />
@@ -62,7 +140,18 @@ export default function RegisterPage() {
             placeholder="Email"
             value={form.email}
             onChange={onChange}
-            className="px-4 py-3 rounded-lg border-[1.5px] border-brand bg-brand-bg text-brand-text font-medium text-base outline-none"
+            style={{
+              padding: "0.9rem 1rem",
+              borderRadius: 10,
+              border: `1.5px solid ${orangePalette.accent}`,
+              fontSize: 16,
+              outline: "none",
+              background: orangePalette.white,
+              color: orangePalette.text,
+              fontWeight: 500,
+              boxShadow: "0 1px 4px rgba(255, 167, 38, 0.08)",
+              transition: "border 0.2s, box-shadow 0.2s",
+            }}
             autoComplete="email"
             required
           />
@@ -72,27 +161,59 @@ export default function RegisterPage() {
             placeholder="Password"
             value={form.password}
             onChange={onChange}
-            className="px-4 py-3 rounded-lg border-[1.5px] border-brand bg-brand-bg text-brand-text font-medium text-base outline-none"
+            style={{
+              padding: "0.9rem 1rem",
+              borderRadius: 10,
+              border: `1.5px solid ${orangePalette.accent}`,
+              fontSize: 16,
+              outline: "none",
+              background: orangePalette.white,
+              color: orangePalette.text,
+              fontWeight: 500,
+              boxShadow: "0 1px 4px rgba(255, 167, 38, 0.08)",
+              transition: "border 0.2s, box-shadow 0.2s",
+            }}
             autoComplete="new-password"
             required
           />
           <button
             type="submit"
             disabled={loading}
-            className={`mt-2 py-4 rounded-lg text-white font-bold text-lg shadow-md transition ${
-              loading
-                ? "bg-brand-secondary cursor-not-allowed"
-                : "bg-brand-primary hover:opacity-90 cursor-pointer"
-            }`}
+            style={{
+              background: orangePalette.accent,
+              color: orangePalette.white,
+              fontWeight: 800,
+              fontSize: 18,
+              border: "none",
+              borderRadius: 10,
+              padding: "1rem",
+              marginTop: 8,
+              boxShadow: "0 2px 8px rgba(255, 111, 0, 0.10)",
+              cursor: loading ? "not-allowed" : "pointer",
+              letterSpacing: 1,
+              transition: "background 0.2s, color 0.2s",
+            }}
           >
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
-
-        <div className="mt-5 text-center text-brand-text text-sm">
+        <div
+          style={{
+            marginTop: 18,
+            textAlign: "center",
+            color: orangePalette.white,
+            fontSize: 15,
+          }}
+        >
           Already have an account?{" "}
           <span
-            className="text-brand-primary font-semibold underline cursor-pointer"
+            style={{
+              color: orangePalette.accent,
+              fontWeight: 700,
+              cursor: "pointer",
+              textDecoration: "underline",
+              marginLeft: 2,
+            }}
             onClick={() => navigate("/login")}
           >
             Login
