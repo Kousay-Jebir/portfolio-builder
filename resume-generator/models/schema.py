@@ -59,6 +59,8 @@ class JobTarget(BaseModel):
 
 class ResumeRequest(BaseModel):
     portfolio: str
+class GenerationRequest(BaseModel):
+    profile: str
 class AnalysisResponse(BaseModel):
     missing_fields: List[str]
     questions: List[str]
