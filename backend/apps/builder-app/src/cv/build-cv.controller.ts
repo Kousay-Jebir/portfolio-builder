@@ -41,7 +41,8 @@ export class BuildCvController {
   @Post('generate/portfolio/:portfolioId')
   async generateCv(@ConnectedUser() user:any,@Param('portfolioId')portfolioId : string,@Body()cvDataDto : Partial<CvDataDto>){
 
-    return await this.buildCvService.generateCv(user.id,portfolioId,cvDataDto)
+    return Object.keys(cvDataDto).length === 0?await this.buildCvService.generateCv(user.id,portfolioId): await this.buildCvService.generateCv(user.id,portfolioId,cvDataDto)
+
     
 
 

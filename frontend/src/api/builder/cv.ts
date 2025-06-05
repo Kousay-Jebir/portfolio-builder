@@ -10,15 +10,17 @@ export const getCvQuestions = async (id: string) => {
   }
 };
 
-export const generateCv = async(cvData : any)=>{
-    axiosBuilder.post('/cv/generate').then((res)=>{
-        return res.data
-    })
-    .catch((err)=>{
-        console.log(err)
-        throw err
-    })
-}
+export const generateCv = async (portfolioId: string, cvData?: any) => {
+  try {
+    const cvDataDto = cvData ?? null;
+    const res = await axiosBuilder.post(`/cv/generate/portfolio/${portfolioId}`, cvDataDto);
+    return res.data;
+  } catch (err) {
+    console.error("Error generating CV:", err);
+    throw err;
+  }
+};
+
 
 export const createCv = async(cvData:{title:string,path:string})=>{
     axiosBuilder.post('/cv').then((res)=>{
