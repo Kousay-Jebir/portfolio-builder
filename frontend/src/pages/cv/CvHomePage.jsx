@@ -6,7 +6,8 @@ import { getUserPortfoliosUrls } from "@/api/consulting/consult";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileUp, Wand2, X, Upload, FileText, ChevronDown } from "lucide-react";
 
-import { generateCv, getCvQuestions, uploadCv } from "@/api/builder/cv"; // import uploadCv
+import { generateCv, getCvQuestions, uploadCv } from "@/api/builder/cv"; 
+import LoadingPage from "../LoadingPage";
 
 const CvHomePage = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const CvHomePage = () => {
 
     setLoading(true);
     try {
+      await new Promise(resolve => setTimeout(resolve, 30000));
       const q = await getCvQuestions(selectedPortfolio);
       setQuestions(q);
       if (q && q.length > 0) {
@@ -68,6 +70,7 @@ const CvHomePage = () => {
 
     setUploading(true);
     try {
+
       const response = await uploadCv(selectedFile);
       console.log("Upload success:", response);
       alert("CV uploaded successfully!");
@@ -80,7 +83,9 @@ const CvHomePage = () => {
       setUploading(false);
     }
   };
-
+  if (loading) {
+    return <LoadingPage text="Analyzing Your Portfolio" />;
+  }
   return (
     <div className="min-h-screen bg-gradient-to-t from-[#ffbc8d] to-[#ff8c44] p-4 flex items-center justify-center">
       {" "}
