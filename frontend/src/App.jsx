@@ -14,6 +14,7 @@ import { preparePortfolioSave } from './components/builder/layout/Topbar';
 import useExitPrompt from './hooks/useExitPrompt';
 import SubscriptionPage from './components/subscription/SubscriptionPage';
 import PaymentSuccessPage from './components/subscription/PaymentSuccessPage';
+import RegisterPage from './pages/RegisterPage';
 
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<AuthPage />} />
+          <Route path="/signup" element={<RegisterPage />} />
           <Route
             path="/builder"
             element={
@@ -45,7 +47,7 @@ export default function App() {
             <Route index element={<CvHomePage />} />
             <Route path="questions" element={<QuestionsPage />} />
           </Route>
-            <Route
+          <Route
             path="/subscription"
             element={
               <PrivateRoute>
@@ -53,7 +55,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-            <Route
+          <Route
             path="/payment_success"
             element={
               <PrivateRoute>
