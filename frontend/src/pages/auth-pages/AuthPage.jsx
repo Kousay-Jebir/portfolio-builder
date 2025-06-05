@@ -32,7 +32,7 @@ export default function AuthPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: orangePalette.primary,
+        background: orangePalette.secondary,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
