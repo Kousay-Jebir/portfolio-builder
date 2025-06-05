@@ -21,6 +21,7 @@ import WelcomePage from "./pages/auth-pages/WelcomePage";
 import GoogleRedirect from "./pages/GoogleRedirect";
 import NotLoggedInRoutes from "./context/notLoggedInRoutes";
 import LoadingPage from "./pages/LoadingPage";
+import NotificationsProvider from "./context/notificationContext";
 
 export default function App() {
   /* useAutoSave(() => {
@@ -37,47 +38,49 @@ export default function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/welcome" element={<WelcomePage />} />
           </Route>
-          <Route
-            path="/builder"
-            element={
-              <PrivateRoute>
-                <BuilderPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/cv-generation"
-            element={
-              <PrivateRoute>
-                <CvGenerationLayout />
-              </PrivateRoute>
-            }
-          >
-            <Route index element={<CvHomePage />} />
-            <Route path="questions" element={<QuestionsPage />} />
-          </Route>
-          <Route
-            path="/subscription"
-            element={
-              <PrivateRoute>
-                <SubscriptionPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/payment_success"
-            element={
-              <PrivateRoute>
-                <PaymentSuccessPage />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/loading-resume" element={<LoadingPage />} />
-          <Route
-            path="/loading-analyzing"
-            element={<LoadingPage text="Analyzing Your Portfolio" />}
-          />
-          <Route path="*" element={<p>404</p>} />
+          <NotificationsProvider>
+            <Route
+              path="/builder"
+              element={
+                <PrivateRoute>
+                  <BuilderPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/cv-generation"
+              element={
+                <PrivateRoute>
+                  <CvGenerationLayout />
+                </PrivateRoute>
+              }
+            >
+              <Route index element={<CvHomePage />} />
+              <Route path="questions" element={<QuestionsPage />} />
+            </Route>
+            <Route
+              path="/subscription"
+              element={
+                <PrivateRoute>
+                  <SubscriptionPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/payment_success"
+              element={
+                <PrivateRoute>
+                  <PaymentSuccessPage />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/loading-resume" element={<LoadingPage />} />
+            <Route
+              path="/loading-analyzing"
+              element={<LoadingPage text="Analyzing Your Portfolio" />}
+            />
+            <Route path="*" element={<p>404</p>} />
+          </NotificationsProvider>
         </Routes>
       </Router>
     </AuthProvider>
