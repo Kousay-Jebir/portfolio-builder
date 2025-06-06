@@ -22,8 +22,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { getMostLikedPortfolios, getMostViewedPortfolios } from "@/api/consulting/analytics";
-import { useState,useEffect } from "react";
+import {
+  getMostLikedPortfolios,
+  getMostViewedPortfolios,
+} from "@/api/consulting/analytics";
+import { useState, useEffect } from "react";
 import { MessagePopup } from "./messagePopUp";
 import { getSubscriptionState } from "@/api/main/user";
 
@@ -97,6 +100,7 @@ const profiles = [
 
 export const PopularProfiles = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
+
 
   const [mostViewedItems,setMostViewedItems]=useState([])
   const [mostLikedItems,setMostLikedItems]=useState([])
@@ -230,12 +234,13 @@ useEffect(() => {
 
   return (
     <>
-    <Card className="bg-orange-200 shadow-md border-orange-100">
-      <CardHeader>
-        <CardTitle className="text-orange-700 flex gap-1">
-          <Flame className="h-5 w-5 text-red-500 fill-red-400" />
-          Popular Profiles
-        </CardTitle>
+      <Card className="bg-orange-200 shadow-md border-orange-100">
+        <CardHeader>
+          <CardTitle className="text-orange-700 flex gap-1">
+            <Flame className="h-5 w-5 text-red-500 fill-red-400" />
+            Popular Profiles
+          </CardTitle>
+
 
         <p className="text-sm text-black-700/80">
           Profiles that are poopular right now !
@@ -330,24 +335,26 @@ useEffect(() => {
                     </div>
 
 
-                    <div className="flex justify-between items-center w-full mt-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="bg-orange-600 hover:bg-orange-700 text-white text-xs"
-                      >
-                        View Portfolio
-                      </Button>
-                      <Button 
-                        onClick={() => setSelectedProfile(profile)}
-                        variant="ghost"
-                        size="sm"
-                        className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
-                      >
-                        <MessageCircle className="h-4 w-4 mr-1" />
-                        <span className="text-xs">Message</span>
-                      </Button>
+                      <div className="flex justify-between items-center w-full mt-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="bg-orange-600 hover:bg-orange-700 text-white text-xs"
+                        >
+                          View Portfolio
+                        </Button>
+                        <Button
+                          onClick={() => setSelectedProfile(profile)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                        >
+                          <MessageCircle className="h-4 w-4 mr-1" />
+                          <span className="text-xs">Message</span>
+                        </Button>
+                      </div>
                     </div>
+
                   </div>
                 </CarouselItem>
               ))}
