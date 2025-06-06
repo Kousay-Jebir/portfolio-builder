@@ -27,19 +27,31 @@ import { useAuth } from "@/context/AuthContext";
 import { getPortfoliosOfUser } from "@/api/consulting/user";
 import useExitPrompt from "@/hooks/useExitPrompt";
 
-
 export default function BuilderPage() {
     const { state } = useUI();
     const { user } = useAuth();
+
+    // portfolio JSON (fetched from API)
     const [portfolio, setPortfolio] = useState(null);
-    useExitPrompt(true)
+
+    // the “loaded template” JSON (set via AppLayout’s loadTemplate callback)
+    const [loadedTemplate, setLoadedTemplate] = useState(null);
+
+    // Ask React Router / window to warn about unsaved changes
+    useExitPrompt(true);
+
     useEffect(() => {
         async function fetchPortfolio() {
-            try {
-                if (!user?.id) return; // Early return if no user
+            if (!user?.id) {
+                setPortfolio(null);
+                return;
+            }
 
+            try {
                 const result = await getPortfoliosOfUser(user.id);
-                setPortfolio(result[result.length - 1].content);
+                // assume the last item is the latest portfolio
+                const latest = result[result.length - 1]?.content || null;
+                setPortfolio(latest);
             } catch (error) {
                 console.error("Failed to fetch portfolio:", error);
                 setPortfolio(null);
@@ -48,6 +60,15 @@ export default function BuilderPage() {
 
         fetchPortfolio();
     }, [user]);
+
+    // Decide which data to pass into <Frame>:
+    //  • If a template is loaded, use that.
+    //  • Else if the user has a portfolio, use that.
+    //  • Otherwise, leave data undefined (renders an empty canvas).
+    const isUsingTemplate = !!loadedTemplate;
+    const dataToLoad = loadedTemplate || portfolio;
+    const frameKey = isUsingTemplate ? 'template' : portfolio ? 'portfolio' : 'empty';
+
 
     return (
         <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
@@ -72,17 +93,31 @@ export default function BuilderPage() {
                 }}
             >
                 <BuilderProvider>
-                    <AppLayout>
+                    <AppLayout
+                        loadTemplate={(templateJson) => {
+                            // When a template is selected in AppLayout,
+                            // store its JSON here. That will override portfolio.
+                            setLoadedTemplate(templateJson);
+                        }}
+                    >
                         <FakeWindowWidthProvider>
-                            {portfolio ? <Frame data={portfolio} key='not-empty'>
-                                <Element is={DroppableGridEngine} canvas className="h-full p-4">
-                                    Builder Canvas
-                                </Element>
-                            </Frame> : <Frame key='empty' >
-                                <Element is={DroppableGridEngine} canvas className="h-full p-4">
-                                    Builder Canvas
-                                </Element>
-                            </Frame>}
+                            {/*
+                If dataToLoad is truthy (a non-null object), pass it into <Frame data={…} />.
+                Otherwise render a Frame with no data so it’s blank.
+              */}
+                            {dataToLoad ? (
+                                <Frame data={dataToLoad} key={frameKey}>
+                                    <Element is={DroppableGridEngine} canvas className="h-full p-4">
+                                        {/* The canvas will be populated by the serialized JSON. */}
+                                    </Element>
+                                </Frame>
+                            ) : (
+                                <Frame key="empty">
+                                    <Element is={DroppableGridEngine} canvas className="h-full p-4">
+                                        {/* No data → empty canvas "Builder Canvas" */}
+                                    </Element>
+                                </Frame>
+                            )}
                         </FakeWindowWidthProvider>
                     </AppLayout>
                 </BuilderProvider>

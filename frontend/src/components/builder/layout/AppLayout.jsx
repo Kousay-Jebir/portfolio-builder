@@ -8,7 +8,7 @@ import ToolBox from "../../../builder/user-components/ToolBox";
 import Layers from "../../../builder/Layers";
 import { CustomizationMenu } from "../../../builder/customization-engine/CustomizationMenu";
 
-export default function AppLayout({ children }) {
+export default function AppLayout({ children, loadTemplate }) {
     const { state, ui } = useUI();
     const [layersOpenMap, setLayersOpenMap] = useState({});
     const drawerRef = useRef(null);
@@ -37,7 +37,9 @@ export default function AppLayout({ children }) {
 
     return (
         <>
-            <Topbar />
+            <Topbar sendTemplate={(template) => {
+                loadTemplate(template)
+            }} />
 
             <div className="flex flex-1 overflow-hidden">
 
