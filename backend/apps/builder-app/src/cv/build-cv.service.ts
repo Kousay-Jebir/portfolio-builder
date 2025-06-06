@@ -180,7 +180,7 @@ export class BuildCvService {
     if (!cv) {
       throw new NotFoundException('cv inexistant')
     }
-    return cv.path
+    return cv.filename
   }
 
   async generateCv(ownerId: string, portfolioId: string, cvDataDto?: Partial<CvDataDto>) {

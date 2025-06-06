@@ -48,4 +48,19 @@ export const uploadCv = async (file:any) => {
     console.error('CV upload failed:', error);
     throw error;
   }
+
 };
+
+
+export const getCv=async()=>{
+  try{
+    const response=await axiosBuilder.get('/cv')
+    return response.data
+
+  }
+  catch(error){
+    console.error('CV fetching failed:', error);
+    throw error;
+
+  }
+}

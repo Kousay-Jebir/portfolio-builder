@@ -49,6 +49,8 @@ const CvHomePage = () => {
         // alert("No questions found for the selected portfolio.");
         const result = await generateCv(selectedPortfolio)
         console.log(result)
+        navigate("/resume-ready");
+
       }
     } catch (err) {
       console.error("Error fetching questions", err);
@@ -73,7 +75,9 @@ const CvHomePage = () => {
 
       const response = await uploadCv(selectedFile);
       console.log("Upload success:", response);
-      alert("CV uploaded successfully!");
+      // alert("CV uploaded successfully!");
+      navigate("/resume-ready");
+
       setShowUpload(false);
       setSelectedFile(null);
     } catch (error) {
