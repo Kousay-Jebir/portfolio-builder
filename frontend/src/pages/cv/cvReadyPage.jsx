@@ -1,3 +1,5 @@
+import { getCv } from "@/api/builder/cv";
+import { openFile } from "@/api/main/file";
 import { motion } from "framer-motion";
 import { Download, Eye, FileText, CheckCircle } from "lucide-react";
 
@@ -6,8 +8,11 @@ export default function ResumeReadyPage() {
     console.log("Downloading resume...");
   };
 
-  const handleView = () => {
+  const handleView =async () => {
     console.log("Viewing resume...");
+    const cvName=await getCv()
+    if(!cvName){alert('there is no cv to view for this user')}
+    return await openFile(cvName)
   };
 
   return (
