@@ -72,25 +72,7 @@ export function ButtonSettings() {
                         />
                     </div>
 
-                    {/* Variant */}
-                    <div className="flex flex-col space-y-1">
-                        <Label className="text-xs">Variant</Label>
-                        <Select value={variant} onValueChange={set("variant")}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select variant" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Variants</SelectLabel>
-                                    {["default", "outline", "ghost", "link"].map((v) => (
-                                        <SelectItem key={v} value={v}>
-                                            {v}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
+
 
                     {/* Size */}
                     <div className="flex flex-col space-y-1">
