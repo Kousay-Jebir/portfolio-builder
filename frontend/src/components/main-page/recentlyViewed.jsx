@@ -50,8 +50,8 @@ export const RecentlyViewed = () => {
     const fetchData = async () => {
       try {
         const data = await getRecentlyViewed();
-        console.log(data)
-        console.log(getTimeAgo(data[0].log.createdAt))
+        // console.log(data)
+        // console.log(getTimeAgo(data[0].log.createdAt))
         setItems(data);
       } catch (err) {
         alert('Failed to load recently viewed items');
