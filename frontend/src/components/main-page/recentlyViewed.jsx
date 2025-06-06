@@ -5,33 +5,32 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { getRecentlyViewed } from "@/api/consulting/analytics";
 
-const recentItems = [
-  {
-    id: 1,
-    name: "Marketing Manager Resume",
-    type: "resume",
-    viewed: "2 hours ago",
-    avatar: "/documents/resume.png",
-  },
-  {
-    id: 2,
-    name: "Software Engineer Portfolio",
-    type: "portfolio",
-    viewed: "1 day ago",
-    avatar: "/documents/portfolio.png",
-  },
-  {
-    id: 3,
-    name: "Product Designer Template",
-    type: "template",
-    viewed: "3 days ago",
-    avatar: "/documents/template.png",
-  },
-];
+// const recentItems = [
+//   {
+//     id: 1,
+//     name: "Marketing Manager Resume",
+//     type: "resume",
+//     viewed: "2 hours ago",
+//     avatar: "/documents/resume.png",
+//   },
+//   {
+//     id: 2,
+//     name: "Software Engineer Portfolio",
+//     type: "portfolio",
+//     viewed: "1 day ago",
+//     avatar: "/documents/portfolio.png",
+//   },
+//   {
+//     id: 3,
+//     name: "Product Designer Template",
+//     type: "template",
+//     viewed: "3 days ago",
+//     avatar: "/documents/template.png",
+//   },
+// ];
 
 export const RecentlyViewed = () => {
   const [items,setItems]=useState([])
-  // utils/timeAgo.ts
  const getTimeAgo = (isoDate) => {
   const now = new Date();
   const createdAt = new Date(isoDate);

@@ -18,6 +18,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { getMostViewedPortfolios } from "@/api/consulting/analytics";
+import { useState,useEffect } from "react";
 
 const profiles = [
   {
@@ -88,6 +90,23 @@ const profiles = [
 ];
 
 export const PopularProfiles = () => {
+   const [items,setItems]=useState([])
+  
+  
+    useEffect(()=>{
+      const fetchData = async () => {
+        try {
+          const data = await getMostViewedPortfolios();
+          console.log('most viewed',data)
+          setItems(data);
+        } catch (err) {
+          alert('Failed to load recently viewed items');
+        }
+      };
+  
+      fetchData();
+  
+    },[])
   return (
     <Card className="bg-orange-200 shadow-md border-orange-100">
       <CardHeader>

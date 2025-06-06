@@ -9,3 +9,13 @@ export const getRecentlyViewed = async () => {
     throw error;
   }
 };
+
+export const getMostViewedPortfolios = async () => {
+  try {
+    const response = await axiosConsult.get('/analytics/most-viewed-portfolios');
+    return response.data;
+  } catch (error: any) {
+    console.error('Error fetching recently viewed:', error);
+    throw error;
+  }
+};

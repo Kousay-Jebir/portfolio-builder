@@ -30,13 +30,13 @@ export class AnalyticsService {
     }
 
     async getRecentlyViewed(userId:string){
-        const ownerIds=await this.activityLogService.getRecentViews(userId)
-        console.log(ownerIds)
+        const logs=await this.activityLogService.getRecentViews(userId)
+        console.log(logs)
         const data =await Promise.all(
-            ownerIds.map(async(item)=>{
+            logs.map(async(item)=>{
                const profile=await this.userProfileService.findByCriteria({user:item?.metadata.ownerId})
-               const log = await this.activityLogService.getViewLogByOwner(item?.metadata.ownerId)
-               return {profile:profile,log:log[0]}
+            //    const log = await this.activityLogService.getViewLogByOwner(item?.metadata.ownerId)
+               return {profile:profile,log:item}
 
                
            })
