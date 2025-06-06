@@ -10,7 +10,7 @@ import * as dayjs from 'dayjs';
 @Injectable()
 export class PdfService {
   async generateResumePdf(data: any){
-    const templatePath = path.join(process.cwd(), 'uploads','template.html');
+    const templatePath = path.join(process.cwd(), 'assets','template2.html');
     const templateContent = await fs.readFile(templatePath, 'utf8');
 
     const template = Handlebars.compile(templateContent);
@@ -30,7 +30,7 @@ export class PdfService {
     const date = dayjs().format('YYYY-MM-DD');
     const uniqueId = uuidv4().split('-')[0];
     const fileName = `resume_${date}_${uniqueId}.pdf`;
-    const filePath = path.join(publicDir, fileName);
+    const filePath = `/public/${fileName}`;
 
     await page.pdf({
       path: filePath,

@@ -74,6 +74,13 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --clr-brand-primary: #ff6f00;
+  --clr-brand-secondary: #ff9800;
+  --clr-brand-bg: #fff8f2;
+  --clr-brand-white: #ffffff;
+  --clr-brand-border: #ffd8b2;
+  --clr-brand-error: #d32f2f;
+  --clr-brand-text: #333333;
 }
 
 .dark {
@@ -109,7 +116,33 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-
+.bg-brand-primary {
+  background-color: var(--clr-brand-primary);
+}
+.text-brand-primary {
+  color: var(--clr-brand-primary);
+}
+.bg-brand-secondary {
+  background-color: var(--clr-brand-secondary);
+}
+.text-brand-secondary {
+  color: var(--clr-brand-secondary);
+}
+.bg-brand-bg {
+  background-color: var(--clr-brand-bg);
+}
+.text-brand-error {
+  color: var(--clr-brand-error);
+}
+.text-brand-text {
+  color: var(--clr-brand-text);
+}
+.bg-brand-white {
+  background-color: var(--clr-brand-white);
+}
+.border-brand {
+  border-color: var(--clr-brand-border);
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;

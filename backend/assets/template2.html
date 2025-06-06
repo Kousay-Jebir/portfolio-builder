@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{user.full_name}} - Resume</title>
+    <style>
+      body {
+        font-family: Georgia, serif;
+        background: #fff;
+        color: #000;
+        margin: 40px;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: auto;
+      }
+
+      h1 {
+        font-size: 28px;
+        text-align: center;
+        margin-bottom: 0;
+      }
+
+      .contact {
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        font-size: 18px;
+        border-bottom: 1px solid #000;
+        margin-top: 25px;
+        padding-bottom: 2px;
+      }
+
+      ul.skills,
+      ul.languages {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      ul.skills li,
+      ul.languages li {
+        background-color: #ddd;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 13px;
+      }
+
+      .section {
+        margin-bottom: 20px;
+      }
+
+      .experience,
+      .project,
+      .education-entry,
+      .cert-entry {
+        margin-bottom: 15px;
+      }
+
+      .title-line {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .tech {
+        font-size: 13px;
+      }
+
+      a {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{user.full_name}}</h1>
+      <div class="contact">
+        {{user.location}} | {{user.email}} | {{user.phone}}
+      </div>
+
+      {{#if job_target.title}}
+      <div class="section">
+        <h2>Job Target</h2>
+        <p>
+          <strong>{{job_target.title}}</strong> — {{job_target.description}}
+        </p>
+      </div>
+      {{/if}} {{#if user.summary}}
+      <div class="section">
+        <h2>Summary</h2>
+        <p>{{user.summary}}</p>
+      </div>
+      {{/if}} {{#if portfolio.skills.length}}
+      <div class="section">
+        <h2>Skills</h2>
+        <ul class="skills">
+          {{#each portfolio.skills}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}} {{#if portfolio.experience.length}}
+      <div class="section">
+        <h2>Experience</h2>
+        {{#each portfolio.experience}}
+        <div class="experience">
+          <div class="title-line">
+            <strong>{{position}} — {{company}}</strong>
+            <em>{{start_date}} – {{end_date}}</em>
+          </div>
+          <p>{{description}}</p>
+        </div>
+        {{/each}}
+      </div>
+      {{/if}} {{#if portfolio.education.length}}
+      <div class="section">
+        <h2>Education</h2>
+        {{#each portfolio.education}}
+        <div class="education-entry">
+          <div class="title-line">
+            <strong>{{institution}}</strong>
+            <em>{{start_date}} – {{end_date}}</em>
+          </div>
+          <p>{{field_of_study}}</p>
+          <p>Grade: {{grade}}</p>
+        </div>
+        {{/each}}
+      </div>
+      {{/if}} {{#if portfolio.certifications.length}}
+      <div class="section">
+        <h2>Certifications</h2>
+        {{#each portfolio.certifications}}
+        <div class="cert-entry">
+          <p>
+            <strong>{{name}}</strong> — {{issuer}}, {{date}}<br />
+            {{#if link}}<a href="{{link}}">View Certificate</a>{{/if}}
+          </p>
+        </div>
+        {{/each}}
+      </div>
+      {{/if}} {{#if portfolio.projects.length}}
+      <div class="section">
+        <h2>Projects</h2>
+        {{#each portfolio.projects}}
+        <div class="project">
+          <strong>{{title}}</strong> {{#if link}}<a href="{{link}}">(link)</a
+          >{{/if}}<br />
+          <span>{{description}}</span><br />
+          <span class="tech"
+            ><em>Tech:</em> {{#each tech_stack}}{{this}}{{#unless @last}},
+            {{/unless}}{{/each}}</span
+          >
+        </div>
+        {{/each}}
+      </div>
+      {{/if}} {{#if portfolio.achievements.length}}
+      <div class="section">
+        <h2>Achievements</h2>
+        <ul>
+          {{#each portfolio.achievements}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}} {{#if user.languages.length}}
+      <div class="section">
+        <h2>Languages</h2>
+        <ul class="languages">
+          {{#each user.languages}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}} {{#if portfolio.interests.length}}
+      <div class="section">
+        <h2>Interests</h2>
+        <p>
+          {{#each portfolio.interests}}{{this}}{{#unless @last}},
+          {{/unless}}{{/each}}
+        </p>
+      </div>
+      {{/if}} {{#if portfolio.social_links}}
+      <div class="section">
+        <h2>Social Links</h2>
+        <ul style="list-style: none; padding-left: 0">
+          {{#if portfolio.social_links.github}}
+          <li>GitHub: {{portfolio.social_links.github}}</li>
+          {{/if}} {{#if portfolio.social_links.linkedin}}
+          <li>LinkedIn: {{portfolio.social_links.linkedin}}</li>
+          {{/if}} {{#if portfolio.social_links.website}}
+          <li>Website: {{portfolio.social_links.website}}</li>
+          {{/if}} {{#each portfolio.social_links.other}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}}
+    </div>
+  </body>
+</html>

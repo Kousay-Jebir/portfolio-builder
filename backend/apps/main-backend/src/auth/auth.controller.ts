@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserLoginDto } from '../user/dto/user-login.dto';
 import { User } from '@portfolio-builder/shared';
@@ -6,6 +6,7 @@ import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -35,6 +36,14 @@ export class AuthController {
         
         @Get('google/redirect')
         @UseGuards(AuthGuard('google'))
-        async googleRedirect(@Req() req) {
-          return this.authService.login(req.user);}
+        async googleRedirect(@Req() req,@Res()res:Response) {
+          const result=await this.authService.login(req.user);
+          const token = result.access_token;
+          res.redirect(`http://localhost:5173/google-redirect?token=${token}`);
+
+
+        
+        
+        
+        }
 }

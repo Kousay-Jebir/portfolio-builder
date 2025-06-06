@@ -17,7 +17,11 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
     try {
-      await register(form);
+      await register({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+      });
       setSuccess(true);
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
@@ -31,39 +35,46 @@ export default function RegisterPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: orangePalette.background,
+        background: orangePalette.secondary,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        transition: "background 0.4s",
       }}
     >
       <div
         style={{
-          background: orangePalette.white,
-          borderRadius: 16,
-          boxShadow: "0 8px 32px rgba(255, 111, 0, 0.15)",
+          background: `linear-gradient(135deg, ${orangePalette.secondary} 0%, ${orangePalette.primary} 100%)`,
+          borderRadius: 24,
+          boxShadow: "0 8px 32px rgba(255, 111, 0, 0.18)",
           padding: "2.5rem 2rem",
-          maxWidth: 400,
+          maxWidth: 420,
           width: "100%",
-          border: `2px solid ${orangePalette.border}`,
+          border: `2.5px solid ${orangePalette.accent}`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          transition: "box-shadow 0.3s, border 0.3s",
         }}
       >
         <h1
           style={{
-            color: orangePalette.primary,
-            fontWeight: 800,
-            fontSize: "2.2rem",
+            color: orangePalette.white,
+            fontWeight: 900,
+            fontSize: "2.3rem",
             marginBottom: 8,
             letterSpacing: 1,
+            textShadow: "0 2px 8px rgba(255, 111, 0, 0.15)",
           }}
         >
           Create Account
         </h1>
         <p
           style={{
-            color: orangePalette.secondary,
+            color: orangePalette.accent,
             marginBottom: 24,
             fontWeight: 500,
+            textAlign: "center",
           }}
         >
           Join us and build your portfolio!
@@ -74,6 +85,10 @@ export default function RegisterPage() {
               color: orangePalette.error,
               marginBottom: 12,
               fontWeight: 600,
+              background: orangePalette.white,
+              borderRadius: 8,
+              padding: "0.5rem 1rem",
+              boxShadow: "0 1px 4px rgba(216, 67, 21, 0.08)",
             }}
           >
             {error}
@@ -82,9 +97,13 @@ export default function RegisterPage() {
         {success && (
           <div
             style={{
-              color: orangePalette.primary,
+              color: orangePalette.white,
               marginBottom: 12,
               fontWeight: 600,
+              background: orangePalette.secondary,
+              borderRadius: 8,
+              padding: "0.5rem 1rem",
+              boxShadow: "0 1px 4px rgba(255, 167, 38, 0.08)",
             }}
           >
             Registration successful! Redirecting...
@@ -92,7 +111,12 @@ export default function RegisterPage() {
         )}
         <form
           onSubmit={onSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: 18 }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 18,
+            width: "100%",
+          }}
         >
           <input
             name="username"
@@ -101,13 +125,15 @@ export default function RegisterPage() {
             onChange={onChange}
             style={{
               padding: "0.9rem 1rem",
-              borderRadius: 8,
-              border: `1.5px solid ${orangePalette.border}`,
+              borderRadius: 10,
+              border: `1.5px solid ${orangePalette.accent}`,
               fontSize: 16,
               outline: "none",
-              background: orangePalette.background,
+              background: orangePalette.white,
               color: orangePalette.text,
               fontWeight: 500,
+              boxShadow: "0 1px 4px rgba(255, 167, 38, 0.08)",
+              transition: "border 0.2s, box-shadow 0.2s",
             }}
             autoComplete="username"
             required
@@ -120,13 +146,15 @@ export default function RegisterPage() {
             onChange={onChange}
             style={{
               padding: "0.9rem 1rem",
-              borderRadius: 8,
-              border: `1.5px solid ${orangePalette.border}`,
+              borderRadius: 10,
+              border: `1.5px solid ${orangePalette.accent}`,
               fontSize: 16,
               outline: "none",
-              background: orangePalette.background,
+              background: orangePalette.white,
               color: orangePalette.text,
               fontWeight: 500,
+              boxShadow: "0 1px 4px rgba(255, 167, 38, 0.08)",
+              transition: "border 0.2s, box-shadow 0.2s",
             }}
             autoComplete="email"
             required
@@ -139,13 +167,15 @@ export default function RegisterPage() {
             onChange={onChange}
             style={{
               padding: "0.9rem 1rem",
-              borderRadius: 8,
-              border: `1.5px solid ${orangePalette.border}`,
+              borderRadius: 10,
+              border: `1.5px solid ${orangePalette.accent}`,
               fontSize: 16,
               outline: "none",
-              background: orangePalette.background,
+              background: orangePalette.white,
               color: orangePalette.text,
               fontWeight: 500,
+              boxShadow: "0 1px 4px rgba(255, 167, 38, 0.08)",
+              transition: "border 0.2s, box-shadow 0.2s",
             }}
             autoComplete="new-password"
             required
@@ -154,19 +184,18 @@ export default function RegisterPage() {
             type="submit"
             disabled={loading}
             style={{
-              background: loading
-                ? orangePalette.secondary
-                : orangePalette.primary,
+              background: orangePalette.accent,
               color: orangePalette.white,
-              fontWeight: 700,
+              fontWeight: 800,
               fontSize: 18,
               border: "none",
-              borderRadius: 8,
+              borderRadius: 10,
               padding: "1rem",
               marginTop: 8,
               boxShadow: "0 2px 8px rgba(255, 111, 0, 0.10)",
               cursor: loading ? "not-allowed" : "pointer",
-              transition: "background 0.2s",
+              letterSpacing: 1,
+              transition: "background 0.2s, color 0.2s",
             }}
           >
             {loading ? "Registering..." : "Register"}
@@ -176,17 +205,18 @@ export default function RegisterPage() {
           style={{
             marginTop: 18,
             textAlign: "center",
-            color: orangePalette.text,
+            color: orangePalette.white,
             fontSize: 15,
           }}
         >
           Already have an account?{" "}
           <span
             style={{
-              color: orangePalette.primary,
-              fontWeight: 600,
+              color: orangePalette.accent,
+              fontWeight: 700,
               cursor: "pointer",
               textDecoration: "underline",
+              marginLeft: 2,
             }}
             onClick={() => navigate("/login")}
           >
