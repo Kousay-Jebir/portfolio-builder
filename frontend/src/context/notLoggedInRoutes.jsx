@@ -8,7 +8,7 @@ export default function NotLoggedInRoutes() {
   useEffect(() => {
     const fetchTeams = async () => {
       if (auth.token) {
-        navigate("/builder");
+        navigate("/main");
       }
     };
 
