@@ -17,9 +17,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { MessagePopup } from "./messagePopUp";
-
+import { getSuggestedPortfolios } from "@/api/consulting/analytics";
+import { getSubscriptionState } from "@/api/main/user";
 const profiles = [
   {
     id: 1,
@@ -90,6 +91,39 @@ const profiles = [
 
 export const SuggestedProfiles = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
+  const [items,setItems]=useState([])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getSuggestedPortfolios();
+  
+        // const addSubscriptionStatus = async (items) => {
+        //   return await Promise.all(
+        //     items.map(async (item) => {
+        //       const subStatus = await getSubscriptionState(item.user);
+        //       return {
+        //         ...item,
+        //         isSubscribed: subStatus === 'subscribed',
+        //       };
+        //     })
+        //   );
+        // };
+  
+        // const suggestedWithSub = await addSubscriptionStatus(data);
+  
+        setItems(data);
+      
+  
+      } catch (err) {
+        alert('Failed to load  items');
+      }
+    };
+  
+    fetchData();
+  }, []);
+  useEffect(()=>{
+    console.log('suggested',items)
+  },[items])
   return (
     <>
       <Card className="bg-orange-200 shadow-md border-orange-100">
