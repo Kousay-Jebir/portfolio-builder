@@ -97,21 +97,21 @@ export const SuggestedProfiles = () => {
       try {
         const data = await getSuggestedPortfolios();
   
-        // const addSubscriptionStatus = async (items) => {
-        //   return await Promise.all(
-        //     items.map(async (item) => {
-        //       const subStatus = await getSubscriptionState(item.user);
-        //       return {
-        //         ...item,
-        //         isSubscribed: subStatus === 'subscribed',
-        //       };
-        //     })
-        //   );
-        // };
+        const addSubscriptionStatus = async (items) => {
+          return await Promise.all(
+            items.map(async (item) => {
+              const subStatus = await getSubscriptionState(item.user);
+              return {
+                ...item,
+                isSubscribed: subStatus === 'subscribed',
+              };
+            })
+          );
+        };
   
-        // const suggestedWithSub = await addSubscriptionStatus(data);
+        const suggestedWithSub = await addSubscriptionStatus(data);
   
-        setItems(data);
+        setItems(suggestedWithSub);
       
   
       } catch (err) {
@@ -132,6 +132,7 @@ export const SuggestedProfiles = () => {
           <p className="text-sm text-black-700/80">
             Profiles that match your interests
           </p>
+          <p>field : {items[0].field}</p>
         </CardHeader>
         <CardContent>
           <Carousel
@@ -146,14 +147,14 @@ export const SuggestedProfiles = () => {
                 <ChevronLeft className="h-4 w-4" />
               </CarouselPrevious>
               <CarouselContent className="-ml-1 py-4">
-                {profiles.map((profile) => (
+                {items.map((profile,index) => (
                   <CarouselItem
-                    key={profile.id}
+                    key={index}
                     className="pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/4"
                   >
                     <div className="relative flex flex-col items-center gap-4 p-6 bg-white rounded-xl shadow-sm border border-orange-100 hover:shadow-md transition-all h-full">
                       {/* Premium Crown */}
-                      {profile.premium && (
+                      {profile.isSubscribed && (
                         <div className="absolute top-2 right-2 flex items-center gap-1">
                           <Crown className="text-yellow-500 h-4 w-4 fill-yellow-400" />
                         </div>
@@ -163,20 +164,20 @@ export const SuggestedProfiles = () => {
                         <Avatar className="h-16 w-16 border-2 border-orange-200">
                           <AvatarImage src={profile.avatar} />
                           <AvatarFallback className="bg-orange-200 text-orange-700">
-                            {profile.name.charAt(0)}
+                            {profile.firstName.charAt(0)}
                           </AvatarFallback>
                         </Avatar>
                       </div>
 
                       <div className="text-center space-y-1">
-                        <h3 className="font-semibold text-black-900">
-                          {profile.name}
+                        <h3 className="font-semibold text-black-900 capitalize">
+                          {profile.firstName}{' '}{profile.lastName}
                         </h3>
                         <p className="text-sm text-black-700/80">
-                          {profile.title}
+                          {profile.bio}
                         </p>
                         <p className="text-xs text-black-600/70">
-                          {profile.company}
+                          {profile.location}
                         </p>
                       </div>
 
@@ -190,7 +191,7 @@ export const SuggestedProfiles = () => {
                           <Mail className="h-4 w-4" />
                         </a>
                         <a
-                          href={`https://github.com/${profile.contacts.github}`}
+                          href={`${profile.socialLinks.github}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:text-green-800 transition"
@@ -199,7 +200,7 @@ export const SuggestedProfiles = () => {
                           <Github className="h-4 w-4" />
                         </a>
                         <a
-                          href={`https://linkedin.com/in/${profile.contacts.linkedin}`}
+                          href={`${profile.socialLinks.linkedin}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:text-green-800 transition"
