@@ -19,6 +19,9 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { getUsers } from "@/api/consulting/user";
+import { useState,useEffect } from "react";
+import { getSubscriptionState } from "@/api/main/user";
 
 const allProfiles = [
   {
@@ -55,6 +58,39 @@ const allProfiles = [
 ];
 
 export const ProfileSearchSection = () => {
+   const [items,setItems]=useState([])
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const data = await getUsers();
+    
+          const addSubscriptionStatus = async (items) => {
+            return await Promise.all(
+              items.map(async (item) => {
+                const subStatus = await getSubscriptionState(item.user);
+                return {
+                  ...item,
+                  isSubscribed: subStatus === 'subscribed',
+                };
+              })
+            );
+          };
+    
+          const profilesWithSub = await addSubscriptionStatus(data);
+    
+          setItems(profilesWithSub);
+        
+    
+        } catch (err) {
+          alert('Failed to load  items');
+        }
+      };
+    
+      fetchData();
+    }, []);
+    useEffect(()=>{
+      console.log('users',items)
+    },[items])
   return (
     <Card className="bg-orange-100 shadow-sm">
       <div className="p-6">
@@ -105,29 +141,29 @@ export const ProfileSearchSection = () => {
 
         {/* Profile Cards */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {allProfiles.map((profile) => (
+          {items.map((profile) => (
             <div
               key={profile.id}
               className="relative flex flex-col items-center gap-4 p-6 bg-white rounded-xl shadow-sm border border-orange-100 hover:shadow-md transition-all h-full"
             >
               {/* Premium Crown */}
-              {profile.premium && (
+              {profile.isSubscribed && (
                 <div className="absolute top-2 right-2 flex items-center gap-1">
                   <Crown className="text-yellow-500 h-4 w-4 fill-yellow-400" />
                 </div>
               )}
 
               <Avatar className="h-16 w-16 border-2 border-orange-200">
-                <AvatarImage src={profile.avatar} />
+                <AvatarImage src={`http://localhost:5000${profile.profilePicture}`} />
                 <AvatarFallback className="bg-orange-100 text-orange-700">
-                  {profile.name.charAt(0)}
+                  {profile.firstName.charAt(0)}
                 </AvatarFallback>
               </Avatar>
 
               <div className="text-center space-y-1">
-                <h3 className="font-semibold text-black-900">{profile.name}</h3>
-                <p className="text-sm text-black-700/80">{profile.title}</p>
-                <p className="text-xs text-black-600/70">{profile.company}</p>
+                <h3 className="font-semibold text-black-900 capitalize">{profile.firstName}{' '}{profile.lastName}</h3>
+                <p className="text-sm text-black-700/80">{profile.field}</p>
+                <p className="text-xs text-black-600/70">{profile.location}</p>
               </div>
 
               {/* Skills */}
@@ -151,7 +187,7 @@ export const ProfileSearchSection = () => {
                   <Mail className="h-4 w-4" />
                 </a>
                 <a
-                  href={`https://github.com/${profile.contacts.github}`}
+                  href={`${profile.socialLinks.github}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-green-800 transition"
@@ -159,7 +195,7 @@ export const ProfileSearchSection = () => {
                   <Github className="h-4 w-4" />
                 </a>
                 <a
-                  href={`https://linkedin.com/in/${profile.contacts.linkedin}`}
+                  href={`${profile.socialLinks.linkedin}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-green-800 transition"

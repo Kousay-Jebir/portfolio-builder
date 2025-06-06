@@ -28,3 +28,12 @@ export const createProfile = async (profileData: {
     throw err;
   }
 };
+export const getSubscriptionState = async (userId:string) => {
+  try {
+    const res = await axiosMain.get(`/user/${userId}/subscription`);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};

@@ -14,5 +14,9 @@ export class UserProfileService extends BaseService<UserProfileDocument>{
         return await this.userProfileModel.findOne(criteria).lean()
         
     }
+    async findManyByCriteria(criteria:Partial<UserProfile>){
+      return await this.userProfileModel.find(criteria).lean()
+
+    }
     
 }
