@@ -72,19 +72,20 @@ export const RecentlyViewed = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {recentItems.map((item) => (
+          {items.map((item,index) => (
             <div
-              key={item.id}
+              key={index}
               className="flex items-center gap-4 p-3 rounded-lg hover:bg-accent/50 transition-colors"
             >
               <Avatar className="h-10 w-10">
-                <AvatarImage src={item.avatar} />
-                <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
+                <AvatarImage src={`http://localhost:5000${item.profile.profilePicture}`} />
+                <AvatarFallback>{item.profile.firstName.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
-                <h3 className="font-medium">{item.name}</h3>
+                <h3 className="font-medium uppercase">{item.profile.firstName}{' '}{item.profile.lastName}</h3>
+                <h4 className="font-normal text-sm">{item.profile.bio}</h4>
                 <p className="text-sm text-muted-foreground capitalize">
-                  {item.type} • {item.viewed}
+                  {'portfolio'} • {getTimeAgo(item.log.createdAt)}
                 </p>
               </div>
               <button className="text-sm font-medium text-orange-600 hover:text-orange-800">
