@@ -18,6 +18,7 @@ import NotLoggedInRoutes from "./context/notLoggedInRoutes";
 import LoadingPage from "./pages/LoadingPage";
 
 import ProtectedRoutesLayout from "./context/ProtectedRoutesLayout";
+import ResumeReadyPage from "./pages/cv/cvReadyPage";
 
 export default function App() {
   return (
@@ -74,6 +75,7 @@ export default function App() {
               path="/loading-analyzing"
               element={<LoadingPage text="Analyzing Your Portfolio" />}
             />
+            <Route path="/resume-ready" element={<ResumeReadyPage/>}/>
           </Route>
 
           {/* Fallback */}
