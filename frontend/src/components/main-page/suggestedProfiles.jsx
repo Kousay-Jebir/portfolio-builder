@@ -162,7 +162,7 @@ export const SuggestedProfiles = () => {
 
                       <div className="relative">
                         <Avatar className="h-16 w-16 border-2 border-orange-200">
-                          <AvatarImage src={profile.avatar} />
+                          <AvatarImage src={`http://localhost:5000${profile.profilePicture}`} />
                           <AvatarFallback className="bg-orange-200 text-orange-700">
                             {profile.firstName.charAt(0)}
                           </AvatarFallback>
