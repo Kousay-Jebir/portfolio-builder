@@ -75,7 +75,7 @@ export default function App() {
               path="/loading-analyzing"
               element={<LoadingPage text="Analyzing Your Portfolio" />}
             />
-            <Route path="/resume-ready" element={<ResumeReadyPage/>}/>
+            <Route path="/resume-ready" element={<PrivateRoute><ResumeReadyPage/></PrivateRoute>}/>
           </Route>
 
           {/* Fallback */}
