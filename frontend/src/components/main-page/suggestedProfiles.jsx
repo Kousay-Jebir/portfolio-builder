@@ -90,8 +90,8 @@ export const SuggestedProfiles = () => {
   return (
     <Card className="bg-orange-200 shadow-md border-orange-100">
       <CardHeader>
-        <CardTitle className="text-orange-900">Suggested Profiles</CardTitle>
-        <p className="text-sm text-orange-700/80">
+        <CardTitle className="text-orange-700">Suggested Profiles</CardTitle>
+        <p className="text-sm text-black-700/80">
           Profiles that match your interests
         </p>
       </CardHeader>
