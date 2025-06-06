@@ -88,9 +88,9 @@ export const ProfileSearchSection = () => {
     
       fetchData();
     }, []);
-    useEffect(()=>{
-      console.log('users',items)
-    },[items])
+    // useEffect(()=>{
+    //   console.log('users',items)
+    // },[items])
   return (
     <Card className="bg-orange-100 shadow-sm">
       <div className="p-6">
@@ -141,9 +141,9 @@ export const ProfileSearchSection = () => {
 
         {/* Profile Cards */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((profile) => (
+          {items.map((profile,index) => (
             <div
-              key={profile.id}
+              key={index}
               className="relative flex flex-col items-center gap-4 p-6 bg-white rounded-xl shadow-sm border border-orange-100 hover:shadow-md transition-all h-full"
             >
               {/* Premium Crown */}
