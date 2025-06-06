@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
@@ -7,7 +7,7 @@ export default function AuthPage() {
     const navigate = useNavigate();
     const [form, setForm] = useState({ email: '', password: '' });
     const [error, setError] = useState(null);
-
+    const { user } = useAuth();
     const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
     const onSubmit = async (e) => {
@@ -19,6 +19,14 @@ export default function AuthPage() {
             setError('Invalid credentials');
         }
     };
+    console.log(user)
+
+    useEffect(() => {
+        if (user) {
+            navigate('/builder')
+        }
+    }, [])
+
 
     return (
         <div className="p-4 max-w-md mx-auto">
