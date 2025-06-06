@@ -1,5 +1,7 @@
 import { ActionCards } from "@/components/main-page/actionCards";
 import { Navbar } from "@/components/main-page/navbar";
+import { PopularProfiles } from "@/components/main-page/popularProfiles";
+import { ProfileSearchSection } from "@/components/main-page/profileSearchSection";
 import { RecentlyViewed } from "@/components/main-page/recentlyViewed";
 import { SuggestedProfiles } from "@/components/main-page/suggestedProfiles";
 import { motion } from "framer-motion";
@@ -44,7 +46,45 @@ export default function DashboardPage() {
               <ActionCards />
             </motion.section>
 
-            {/* Suggested profiles with theme-consistent styling */}
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="mb-12"
+            >
+              <ProfileSearchSection />
+            </motion.section>
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="mb-12"
+            >
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="w-8 h-0.5 bg-orange-300"></div>
+                <h2 className="text-xl font-medium text-orange-800 text-center">
+                  Popular Right Now
+                </h2>
+                <div className="w-8 h-0.5 bg-orange-300"></div>
+              </div>
+              <PopularProfiles />
+            </motion.section>
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="mb-12"
+            >
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="w-8 h-0.5 bg-orange-300"></div>
+                <h2 className="text-xl font-medium text-orange-800 text-center">
+                  Your Recently Viewed
+                </h2>
+                <div className="w-8 h-0.5 bg-orange-300"></div>
+              </div>
+              <RecentlyViewed />
+            </motion.section>
+
             <motion.section
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -60,23 +100,6 @@ export default function DashboardPage() {
                 </h2>
               </div>
               <SuggestedProfiles />
-            </motion.section>
-
-            {/* Recently viewed with enhanced header */}
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-              className="mb-12"
-            >
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="w-8 h-0.5 bg-orange-300"></div>
-                <h2 className="text-xl font-medium text-orange-800 text-center">
-                  Your Recently Viewed
-                </h2>
-                <div className="w-8 h-0.5 bg-orange-300"></div>
-              </div>
-              <RecentlyViewed />
             </motion.section>
           </div>
         </div>
