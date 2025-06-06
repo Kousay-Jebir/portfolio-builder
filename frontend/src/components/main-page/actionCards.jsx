@@ -13,7 +13,6 @@ export const ActionCards = () => {
   const navigate = useNavigate();
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
-      {/* Resume Card */}
       <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-xl hover:scale-[1.015] transition-transform border-none">
         <CardHeader>
           <div className="flex items-center gap-3">
