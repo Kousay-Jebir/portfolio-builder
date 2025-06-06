@@ -121,9 +121,9 @@ export const SuggestedProfiles = () => {
   
     fetchData();
   }, []);
-  useEffect(()=>{
-    console.log('suggested',items)
-  },[items])
+  // useEffect(()=>{
+  //   console.log('suggested',items)
+  // },[items])
   return (
     <>
       <Card className="bg-orange-200 shadow-md border-orange-100">
@@ -132,7 +132,7 @@ export const SuggestedProfiles = () => {
           <p className="text-sm text-black-700/80">
             Profiles that match your interests
           </p>
-          <p>field : {items[0].field}</p>
+         
         </CardHeader>
         <CardContent>
           <Carousel
