@@ -1,5 +1,7 @@
+import Cookies from "js-cookie";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { EventSourcePolyfill } from "event-source-polyfill"; 
 
 const NotificationsContext = createContext({});
 
@@ -7,16 +9,16 @@ export function useNotifications() {
   return useContext(NotificationsContext);
 }
 
-export default function NotificationsProvider(children) {
-  const [eventSource, setEventSource] =
-    (useState < EventSource) | (null > null);
+export default function NotificationsProvider({ children }) {
+  const [eventSource, setEventSource] = useState(null); 
 
   useEffect(() => {
-    const es = new EventSourcePolyfill(`http://localhost:5000/sse`, {
+    const es = new EventSourcePolyfill(`http://localhost:5000/main/event`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${Cookies.get('auth-token')}`,
       },
       heartbeatTimeout: 300000,
+      withCredentials: true,
     });
 
     setEventSource(es);
@@ -30,21 +32,15 @@ export default function NotificationsProvider(children) {
     if (!eventSource) return;
 
     const eventHandler = (event) => {
-      toast("New Event", {
-        description: `description`,
+      toast("New Notification", {
+        description: event,
       });
     };
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log(data);
-      switch (data.event) {
-        case "event-type":
-          eventHandler(data.message.data);
-          break;
-        default:
-          return;
-      }
+      eventHandler(data.message);
     };
 
     return () => {};
