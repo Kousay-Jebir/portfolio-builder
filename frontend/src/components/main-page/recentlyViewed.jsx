@@ -2,6 +2,8 @@
 import { Clock } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import { getRecentlyViewed } from "@/api/consulting/analytics";
 
 const recentItems = [
   {
@@ -28,6 +30,38 @@ const recentItems = [
 ];
 
 export const RecentlyViewed = () => {
+  const [items,setItems]=useState([])
+  // utils/timeAgo.ts
+ const getTimeAgo = (isoDate) => {
+  const now = new Date();
+  const createdAt = new Date(isoDate);
+  const diffInMs = now.getTime() - createdAt.getTime();
+
+  const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+  if (diffInMinutes < 1) return 'just now';
+  if (diffInMinutes < 60) return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+  if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+  return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+};
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const data = await getRecentlyViewed();
+        console.log(data)
+        console.log(getTimeAgo(data[0].log.createdAt))
+        setItems(data);
+      } catch (err) {
+        alert('Failed to load recently viewed items');
+      }
+    };
+
+    fetchData();
+
+  },[])
   return (
     <Card>
       <CardHeader>

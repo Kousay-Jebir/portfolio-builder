@@ -34,8 +34,9 @@ export class AnalyticsService {
         console.log(ownerIds)
         const data =await Promise.all(
             ownerIds.map(async(item)=>{
-               const profile=await this.userProfileService.findByCriteria({user:item})
-               return profile
+               const profile=await this.userProfileService.findByCriteria({user:item?.metadata.ownerId})
+               const log = await this.activityLogService.getViewLogByOwner(item?.metadata.ownerId)
+               return {profile:profile,log:log[0]}
 
                
            })
