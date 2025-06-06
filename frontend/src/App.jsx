@@ -80,7 +80,7 @@ export default function App() {
               element={<LoadingPage text="Analyzing Your Portfolio" />}
             />
 
-            <Route path="/main" element={<DashboardPage />} />
+            <Route path="/main" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
 
             <Route path="/resume-ready" element={<PrivateRoute><ResumeReadyPage /></PrivateRoute>} />
 
