@@ -1,4 +1,4 @@
-import { Body, Controller, NotFoundException, Post, Req,Get, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Body, Controller, NotFoundException, Post, Req,Get, UseGuards, UseInterceptors, UploadedFile, Param } from '@nestjs/common';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -53,8 +53,10 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard,BlacklistGuard)
     @ApiBearerAuth('JWT-auth')
-    @Get('subscription')
-    async getSubscription(@ConnectedUser() user : any){
+    @Get(':userId/subscription')
+    async getSubscription(@Param('userId')userId :string){
+      const user = await this.userService.findById(userId)
+      if(!user){throw new NotFoundException('user not found')}
       return user.role
 
     }
