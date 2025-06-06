@@ -16,17 +16,17 @@ export default function AuthPage() {
     e.preventDefault();
     try {
       await handleLogin(form);
-      navigate("/builder");
+      navigate("/main");
     } catch (err) {
       setError("Invalid credentials");
     }
   };
 
-  const connectWithGoogle=async()=>{
+  const connectWithGoogle = async () => {
     // await loginWithGoogle()
     // console.log('google')
-    window.location.href='http://localhost:5000/main/auth/google'
-  }
+    window.location.href = "http://localhost:5000/main/auth/google";
+  };
 
   return (
     <div
