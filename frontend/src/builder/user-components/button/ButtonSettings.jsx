@@ -5,36 +5,38 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
-    Select, SelectGroup, SelectLabel, SelectTrigger, SelectValue, SelectContent, SelectItem
+    Select,
+    SelectGroup,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
 } from "@/components/ui/select";
 
 import { handlers } from "./Button";
 
-
 export function ButtonSettings() {
-    // Now track: style, variant, size, text, actionKey, downloadFile, onClick
+    // Now track: style, variant, size, text, actionKey, downloadFile, onClick, textColor
     const { values, updateProp } = usePropSettings(
-        ["style", "variant", "size", "text", "actionKey", "downloadFile", "onClick"],
+        ["style", "variant", "size", "text", "actionKey", "downloadFile", "onClick", "textColor"],
         false
     );
-    const {
-        style, variant, size,
-        text, actionKey
-    } = values;
+    const { style, variant, size, text, actionKey, textColor } = values;
 
     const set = (k) => (v) => updateProp(k, v);
 
-    // When user picks an action, immediately write both actionKey *and* onClick:
+    // When user picks an action, immediately write both actionKey *and* onClick
     function onActionChange(key) {
         set("actionKey")(key);
-        // choose handler function; for download we wrap the file
-        const fn = key === "download"
-            ? () => handlers.download(values.downloadFile)
-            : handlers[key];
+        const fn =
+            key === "download"
+                ? () => handlers.download(values.downloadFile)
+                : handlers[key];
         updateProp("onClick", fn);
     }
 
-    // When user uploads a file, save it and update the download handler:
+    // When user uploads a file, save it and update the download handler
     function onFileChange(e) {
         const file = e.target.files?.[0] || null;
         set("downloadFile")(file);
@@ -44,10 +46,11 @@ export function ButtonSettings() {
     }
 
     return (
-
         <CommonStyleSettings>
             <Card className="shadow-none rounded-xs">
-                <CardHeader><CardTitle>Button Settings</CardTitle></CardHeader>
+                <CardHeader>
+                    <CardTitle>Button Settings</CardTitle>
+                </CardHeader>
                 <CardContent className="space-y-4">
                     {/* Label */}
                     <div className="flex flex-col space-y-1">
@@ -58,16 +61,31 @@ export function ButtonSettings() {
                         />
                     </div>
 
+                    {/* Text Color */}
+                    <div className="flex flex-col space-y-1">
+                        <Label className="text-xs">Text Color</Label>
+                        <Input
+                            type="color"
+                            value={textColor || "#000000"}
+                            onChange={(e) => set("textColor")(e.target.value)}
+                            className="h-8 w-8 p-0 border-none"
+                        />
+                    </div>
+
                     {/* Variant */}
                     <div className="flex flex-col space-y-1">
                         <Label className="text-xs">Variant</Label>
                         <Select value={variant} onValueChange={set("variant")}>
-                            <SelectTrigger><SelectValue placeholder="Select variant" /></SelectTrigger>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select variant" />
+                            </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Variants</SelectLabel>
-                                    {["default", "outline", "ghost", "link"].map(v => (
-                                        <SelectItem key={v} value={v}>{v}</SelectItem>
+                                    {["default", "outline", "ghost", "link"].map((v) => (
+                                        <SelectItem key={v} value={v}>
+                                            {v}
+                                        </SelectItem>
                                     ))}
                                 </SelectGroup>
                             </SelectContent>
@@ -78,12 +96,16 @@ export function ButtonSettings() {
                     <div className="flex flex-col space-y-1">
                         <Label className="text-xs">Size</Label>
                         <Select value={size} onValueChange={set("size")}>
-                            <SelectTrigger><SelectValue placeholder="Select size" /></SelectTrigger>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select size" />
+                            </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Sizes</SelectLabel>
-                                    {["sm", "lg"].map(s => (
-                                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                                    {["sm", "lg"].map((s) => (
+                                        <SelectItem key={s} value={s}>
+                                            {s}
+                                        </SelectItem>
                                     ))}
                                 </SelectGroup>
                             </SelectContent>
@@ -94,7 +116,9 @@ export function ButtonSettings() {
                     <div className="flex flex-col space-y-1">
                         <Label className="text-xs">Action</Label>
                         <Select value={actionKey} onValueChange={onActionChange}>
-                            <SelectTrigger><SelectValue placeholder="Select action" /></SelectTrigger>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select action" />
+                            </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Actions</SelectLabel>
@@ -114,8 +138,7 @@ export function ButtonSettings() {
                         </div>
                     )}
                 </CardContent>
-            </Card >
+            </Card>
         </CommonStyleSettings>
-
     );
 }

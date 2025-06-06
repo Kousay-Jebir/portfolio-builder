@@ -1,8 +1,7 @@
-import { withEditableContent } from "../../layout-engine/utils/hocs/editable-content-hoc"
+import { withEditableContent } from "../../layout-engine/utils/hocs/editable-content-hoc";
 import { ButtonSettings } from "./ButtonSettings";
 import Draggable from "../../layout-engine/utils/components/Draggable";
 import { Button as ShadcnButton } from "@/components/ui/button";
-
 
 export const handlers = {
     none: () => { },
@@ -18,13 +17,44 @@ export const handlers = {
     },
 };
 
-export function EditableButton({ style, onClick, text, variant, size, actionKey, downloadFile, ...props }) {
+export function EditableButton({
+    style,
+    onClick,
+    text,
+    variant,
+    size,
+    actionKey,
+    downloadFile,
+    textColor,
+    ...props
+}) {
     return (
-        <Draggable style={style} element={ShadcnButton} variant={variant} size={size} actionKey={actionKey} downloadFile={downloadFile} {...props} onClick={onClick} text={text}>{text}</Draggable>
-    )
+        <Draggable
+            style={{
+                ...style,
+                color: textColor,
+            }}
+            element={ShadcnButton}
+            variant={variant}
+            size={size}
+            actionKey={actionKey}
+            downloadFile={downloadFile}
+            {...props}
+            onClick={onClick}
+            className={`
+        bg-white           /* light‐mode background */
+        dark:bg-white      /* force white in dark mode */
+        border             /* give it a border so it doesn’t look flat */
+        border-gray-300    /* light‐mode border */
+        dark:border-gray-300 /* same border in dark mode */
+        hover:bg-gray-50   /* still get a hover state in light mode */
+        dark:hover:bg-gray-50 /* and same hover in dark mode */
+      `}
+        >
+            {text}
+        </Draggable>
+    );
 }
-
-
 
 EditableButton.craft = {
     props: {
@@ -34,10 +64,11 @@ EditableButton.craft = {
         actionKey: "none",
         text: "Click me!",
         downloadFile: null,
-        onClick: () => { }
+        textColor: "#000000",
+        onClick: () => { },
     },
     name: "Button",
     related: {
-        settings: ButtonSettings
-    }
-}
+        settings: ButtonSettings,
+    },
+};
