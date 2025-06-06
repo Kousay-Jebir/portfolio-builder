@@ -50,7 +50,7 @@ const QuestionsPage = () => {
 
       const res = await generateCv(portfolioId, answers);
       console.log(res);
-      navigate("/cv-generation");
+      navigate("/resume-ready");
     }
   };
 
