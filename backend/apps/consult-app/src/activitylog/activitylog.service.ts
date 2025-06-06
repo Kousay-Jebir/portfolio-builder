@@ -66,11 +66,9 @@ export class ActivitylogService {
   }
 
   async getRecentViews(userId: string) {
-    const logs = await this.activityLogModel.find({ user: userId });
-    const owners = logs.map((item) => {
-      if (item.type == ActivityTypeEnum.VIEW) return item.metadata.ownerId;
-    });
-    return owners;
+    const logs = await this.activityLogModel.find({ user: userId ,type:ActivityTypeEnum.VIEW});
+   
+    return logs;
   }
 
   async getMostSearchedCategory(userId: string) {
@@ -105,4 +103,9 @@ export class ActivitylogService {
     }
     return results[0].category
   }
+
+  // async getViewLogByOwner(ownerId:string){
+  //   const log = await this.activityLogModel.find({'metadata.ownerId':ownerId})
+  //   return log
+  // }
 }

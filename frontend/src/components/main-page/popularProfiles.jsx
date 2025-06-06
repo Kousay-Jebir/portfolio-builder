@@ -18,6 +18,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { getMostLikedPortfolios, getMostViewedPortfolios } from "@/api/consulting/analytics";
+import { useState,useEffect } from "react";
+import { MessagePopup } from "./messagePopUp";
 
 const profiles = [
   {
@@ -88,7 +91,29 @@ const profiles = [
 ];
 
 export const PopularProfiles = () => {
+  const [selectedProfile, setSelectedProfile] = useState(null);
+
+   const [mostViewedItems,setMostViewedItems]=useState([])
+  
+  
+    useEffect(()=>{
+      const fetchData = async () => {
+        try {
+          const data = await getMostViewedPortfolios();
+          console.log('most viewed',data)
+          setMostViewedItems(data);
+          const res=await getMostLikedPortfolios()
+          console.log('most liked',res)
+        } catch (err) {
+          alert('Failed to load recently viewed items');
+        }
+      };
+  
+      fetchData();
+  
+    },[])
   return (
+    <>
     <Card className="bg-orange-200 shadow-md border-orange-100">
       <CardHeader>
         <CardTitle className="text-orange-700 flex gap-1">
@@ -184,7 +209,8 @@ export const PopularProfiles = () => {
                       >
                         View Portfolio
                       </Button>
-                      <Button
+                      <Button 
+                        onClick={() => setSelectedProfile(profile)}
                         variant="ghost"
                         size="sm"
                         className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
@@ -204,5 +230,12 @@ export const PopularProfiles = () => {
         </Carousel>
       </CardContent>
     </Card>
+    {selectedProfile && (
+            <MessagePopup
+              profile={selectedProfile}
+              onClose={() => setSelectedProfile(null)}
+            />
+          )}
+    </>
   );
 };
