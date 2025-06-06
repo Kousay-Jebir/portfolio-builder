@@ -224,9 +224,9 @@ useEffect(() => {
 
   fetchData();
 }, []);
-useEffect(()=>{
-  console.log('final combined',finalCombinedItems)
-},[finalCombinedItems])
+// useEffect(()=>{
+//   console.log('final combined',finalCombinedItems)
+// },[finalCombinedItems])
 
   return (
     <>

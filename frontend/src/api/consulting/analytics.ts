@@ -29,3 +29,14 @@ export const getMostLikedPortfolios = async () => {
     throw error;
   }
 };
+
+export const getSuggestedPortfolios = async () => {
+  try {
+    const response = await axiosConsult.get('/analytics/based-on-search');
+    return response.data;
+  } catch (error: any) {
+    console.error('Error fetching recently viewed:', error);
+    throw error;
+  }
+};
+
