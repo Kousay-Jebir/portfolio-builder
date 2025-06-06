@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { getUsers } from "@/api/consulting/user";
+import { getUsers, searchUser } from "@/api/consulting/user";
 import { useState,useEffect } from "react";
 import { getSubscriptionState } from "@/api/main/user";
 
@@ -59,10 +59,12 @@ const allProfiles = [
 
 export const ProfileSearchSection = () => {
    const [items,setItems]=useState([])
-    useEffect(() => {
-      const fetchData = async () => {
+   const [selectedField, setSelectedField] = useState("");
+   const [searched,setSearched]=useState(false)
+    const fetchData = async () => {
         try {
-          const data = await getUsers();
+    const valueToSearch = selectedField == "all" ? "" : selectedField;
+          const data = await getUsers(valueToSearch);
     
           const addSubscriptionStatus = async (items) => {
             return await Promise.all(
@@ -85,6 +87,21 @@ export const ProfileSearchSection = () => {
           alert('Failed to load  items');
         }
       };
+   const handleSearch=async()=>{
+    try{
+      await fetchData()
+
+
+      console.log(selectedField)
+      return selectedField == "all"?true: await searchUser(selectedField)
+
+    }catch(err){
+      alert('failed')
+    }
+   }
+
+    useEffect(() => {
+     
     
       fetchData();
     }, []);
@@ -116,7 +133,7 @@ export const ProfileSearchSection = () => {
           </div>
 
           <div className="flex gap-2">
-            <Select>
+            <Select onValueChange={(val) => setSelectedField(val)}>
               <SelectTrigger className="w-[180px] bg-white border-orange-200 focus:ring-orange-500">
                 <div className="flex items-center gap-2">
                   <Filter className="h-4 w-4 text-orange-400" />
@@ -125,15 +142,15 @@ export const ProfileSearchSection = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Fields</SelectItem>
-                <SelectItem value="design">Design</SelectItem>
-                <SelectItem value="development">Development</SelectItem>
+                <SelectItem value="computer_science">Computer_Science</SelectItem>
+                <SelectItem value="engineering">Engineering</SelectItem>
                 <SelectItem value="data">Data Science</SelectItem>
                 <SelectItem value="management">Management</SelectItem>
                 <SelectItem value="devops">DevOps</SelectItem>
               </SelectContent>
             </Select>
 
-            <Button className="bg-orange-600 hover:bg-orange-700">
+            <Button className="bg-orange-600 hover:bg-orange-700" onClick={handleSearch}>
               Search
             </Button>
           </div>
