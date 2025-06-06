@@ -277,8 +277,8 @@ useEffect(()=>{
                     </div>
 
                     <div className="text-center space-y-1">
-                      <h3 className="font-semibold text-black-900">
-                        {profile.firstName}
+                      <h3 className="font-semibold text-black-900 capitalize">
+                        {profile.firstName}{' '}{profile.lastName}
                       </h3>
                       <p className="text-sm text-black-700/80">
                         {profile.field}
