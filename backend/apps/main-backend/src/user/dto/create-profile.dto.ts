@@ -19,14 +19,13 @@ export class CreateProfileDto {
   @ApiProperty({enum:FieldTypeEnum})
   @IsEnum(FieldTypeEnum, { message: 'field must be a valid FieldTypeEnum value' })
   field: FieldTypeEnum;
-@ApiPropertyOptional({
+@ApiProperty({
   type: [String],
   description: 'List of user skills',
   example: ['JavaScript', 'Node.js', 'MongoDB'],
 })
-  @IsOptional()
   @IsArray()
-  @ArrayUnique()
+ 
   @IsString({ each: true })
   skills?: string[];
   @ApiProperty({ example: { "email": 'x' } })
