@@ -71,19 +71,20 @@ export class ConsultAppService {
       if (recentNotif) {
         await this.notificationService.delete(recentNotif.id);
       }
-      await this.notificationService.create({
+      if (receiverId!=viewer.id)await this.notificationService.create({
         message,
         viewer: viewer.id,
         portfolio: id,
         receiver: portfolio.user,
       });
       console.log('viewed')
-      axios.post(`http://localhost:5000/main/event/notify-user`, {
+
+      if(receiverId!=viewer.id)axios.post(`http://localhost:5000/main/event/notify-user`, {
                   userId: receiverId as string,
                   message: message,
                   eventType:'portfolio_view'
                 })
-      await this.activityLogService.logActivity(viewer.id,ActivityTypeEnum.VIEW,{
+      if(receiverId!=viewer.id)await this.activityLogService.logActivity(viewer.id,ActivityTypeEnum.VIEW,{
         portfolio:id,ownerId:receiverId
       })
       // this.eventService.notifyUser(receiverId as string, message,'portfolio_view');

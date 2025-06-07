@@ -2,10 +2,32 @@ import { Rocket, FileText, User, Home, Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { getUserPortfoliosUrls } from "@/api/consulting/consult";
+import { useEffect, useState } from "react";
 
 export const Navbar = () => {
+  const [portfolioId,setPortfolioId]=useState("")
   const navigate = useNavigate();
   const auth = useAuth();
+const fetchPortfolio = async () => {
+  const data = await getUserPortfoliosUrls();
+  console.log(data);
+
+  if (data && data.length > 0) {
+    const latestPortfolio = data.sort(
+      (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+    )[0];
+
+    setPortfolioId(latestPortfolio.id);
+  } else {
+    console.warn("No portfolio data found.");
+  }
+};
+
+  useEffect(()=>{
+    fetchPortfolio()
+  },[])
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-orange-300 bg-gradient-to-r from-orange-600 to-orange-400 text-white shadow-md">
       <div className="container flex h-16 items-center justify-between px-4">
@@ -21,10 +43,10 @@ export const Navbar = () => {
             variant="ghost"
             className="gap-2 px-4 text-white hover:text-orange-100 hover:bg-white/10 transition-colors"
           >
-            <Link to="/resumes">
+            <Link to="/resume-ready">
               <FileText className="h-4 w-4" />
               <span className="relative">
-                My Resumes
+                My Resume
                 <span className="absolute -top-1 -right-3 w-2 h-2 bg-white rounded-full animate-ping"></span>
                 <span className="absolute -top-1 -right-3 w-2 h-2 bg-white rounded-full"></span>
               </span>
@@ -36,10 +58,10 @@ export const Navbar = () => {
             variant="ghost"
             className="gap-2 px-4 text-white hover:text-orange-100 hover:bg-white/10 transition-colors"
           >
-            <Link to="/portfolios">
+            <Link to={`/portfolio/${portfolioId}`}>
               <Rocket className="h-4 w-4" />
               <span className="relative">
-                My Portfolios
+                My Portfolio
                 <span className="absolute -top-1 -right-3 w-2 h-2 bg-white rounded-full animate-ping"></span>
                 <span className="absolute -top-1 -right-3 w-2 h-2 bg-white rounded-full"></span>
               </span>
