@@ -22,8 +22,8 @@ import ProtectedRoutesLayout from "./context/ProtectedRoutesLayout";
 import DashboardPage from "./pages/mainPage";
 
 import ResumeReadyPage from "./pages/cv/cvReadyPage";
-import { CreateProfileForm } from "./pages/profileForm";
-import ProfilePage from "./pages/profilePage";
+import { CreateProfileForm } from "./pages/profile/profileForm";
+import ProfilePage from "./pages/profile/profilePage";
 
 export default function App() {
   return (
