@@ -12,7 +12,9 @@ export const getConnectedUser = async () => {
 
 export const createProfile = async (profileData: any) => {
   try {
-    const res = await axiosMain.post('/user/profile', profileData);
+    const res = await axiosMain.post('/user/profile', profileData,{ headers: {
+        'Content-Type': 'multipart/form-data',
+      },});
     return res.data;
   } catch (err) {
     console.error(err);
