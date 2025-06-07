@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProfileDisplay } from "./profileDisplay";
 import { FieldTypeEnum } from "@/lib/enums";
+import { getProfile } from "@/api/main/user";
 export default function ProfilePage() {
   const [profile, setProfile] = useState({
     firstName: "Alex",
@@ -26,6 +27,22 @@ export default function ProfilePage() {
     ],
     file: null, // This would be a File object in reality
   });
+  const fetchData=async()=>{
+    try{
+      const data = await getProfile()
+      setProfile(data)
+
+    }
+    catch(err){
+      alert('failed')
+    }
+
+  }
+
+  useEffect(()=>{
+    fetchData()
+
+  },[])
 
   return <ProfileDisplay profile={profile} />;
 }

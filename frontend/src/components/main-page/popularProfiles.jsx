@@ -27,7 +27,7 @@ import {
   getMostViewedPortfolios,
 } from "@/api/consulting/analytics";
 import { useState, useEffect } from "react";
-import { MessagePopup } from "./messagePopup";
+import { MessagePopup } from "./messageDialog";
 import { getSubscriptionState } from "@/api/main/user";
 
 // const profiles = [
