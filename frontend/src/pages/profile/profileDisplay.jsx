@@ -15,23 +15,23 @@ export function ProfileDisplay({ profile }) {
           {/* Name and Title Section */}
           <div className="text-center mb-8 flex gap-3 items-center justify-evenly">
             <div className="h-48 w-48 rounded-full border-4 border-white shadow-lg bg-white p-1">
-              {profile.file ? (
+              {profile.profilePicture ? (
                 <Avatar className="h-full w-full">
-                  <AvatarImage src={URL.createObjectURL(profile.file)} />
+                  <AvatarImage src={`http://localhost:5000${profile.profilePicture}`} />
                   <AvatarFallback className="bg-orange-100 text-orange-800 text-5xl">
                     {profile.firstName.charAt(0)}
                     {profile.lastName.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
               ) : (
-                <div className="h-full w-full rounded-full bg-orange-100 flex items-center justify-center text-5xl text-orange-800">
+                <div className="h-full w-full rounded-full bg-orange-100 flex items-center justify-center text-5xl text-orange-800 uppercase">
                   {profile.firstName.charAt(0)}
                   {profile.lastName.charAt(0)}
                 </div>
               )}
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 capitalize">
                 {profile.firstName} {profile.lastName}
               </h1>
               <div className="flex items-center justify-center gap-2 mt-3">

@@ -13,12 +13,11 @@ export const MessagePopup = ({ profile, onClose }) => {
             <Avatar className="h-10 w-10">
               <AvatarImage src={profile.avatar} />
               <AvatarFallback className="bg-orange-100">
-                {profile.name.charAt(0)}
+                {profile.firstName.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="font-medium text-orange-900">{profile.name}</h3>
-              <p className="text-xs text-orange-600">{profile.title}</p>
+              <h3 className="font-medium text-orange-900">{profile.firstName}</h3>
             </div>
           </div>
           <Button
