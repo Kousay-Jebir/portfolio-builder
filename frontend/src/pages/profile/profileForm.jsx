@@ -49,7 +49,11 @@ const formSchema = z.object({
   }),
 });
 
-export function CreateProfileForm({ onSubmit }) {
+export function CreateProfileForm() {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -80,6 +84,54 @@ export function CreateProfileForm({ onSubmit }) {
       "skills",
       currentSkills.filter((_, i) => i !== index)
     );
+  };
+
+  const onSubmit = async (values) => {
+    setIsSubmitting(true);
+    try {
+      const formData = new FormData();
+
+      // Append all fields to formData
+      formData.append("firstName", values.firstName);
+      formData.append("lastName", values.lastName);
+      formData.append("bio", values.bio);
+      formData.append("location", values.location);
+      formData.append("field", values.field);
+      formData.append("contacts", JSON.stringify(values.contacts));
+      formData.append("socialLinks", JSON.stringify(values.socialLinks));
+      formData.append("skills", JSON.stringify(values.skills));
+
+      if (values.file) {
+        formData.append("file", values.file);
+      }
+
+      const response = await fetch("/main/user/profile", {
+        method: "POST",
+        body: formData,
+        // Don't set Content-Type header - let the browser set it with the boundary
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create profile");
+      }
+
+      const data = await response.json();
+
+      toast({
+        title: "Profile created successfully",
+        description: "Your profile has been created.",
+      });
+
+      navigate("/profile"); // or wherever you want to redirect after success
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create profile",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
