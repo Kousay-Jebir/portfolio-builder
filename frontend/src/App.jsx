@@ -24,6 +24,7 @@ import DashboardPage from "./pages/mainPage";
 import ResumeReadyPage from "./pages/cv/cvReadyPage";
 import { CreateProfileForm } from "./pages/profile/profileForm";
 import ProfilePage from "./pages/profile/profilePage";
+import PortfolioConsultPage from "./pages/PortfolioConsultPage";
 
 export default function App() {
   return (
@@ -111,6 +112,15 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <ResumeReadyPage />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/portfolio/:id"
+              element={
+                <PrivateRoute>
+                  <PortfolioConsultPage />
                 </PrivateRoute>
               }
             />
