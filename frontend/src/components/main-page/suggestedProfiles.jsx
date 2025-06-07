@@ -18,7 +18,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useState,useEffect } from "react";
-import { MessagePopup } from "./messagePopup";
+import { MessagePopup } from "./messageDialog";
 import { getSuggestedPortfolios } from "@/api/consulting/analytics";
 import { getSubscriptionState } from "@/api/main/user";
 const profiles = [

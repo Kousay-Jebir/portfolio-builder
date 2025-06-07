@@ -22,7 +22,7 @@ import { Card } from "@/components/ui/card";
 import { getUsers, searchUser } from "@/api/consulting/user";
 import { useState,useEffect } from "react";
 import { getSubscriptionState } from "@/api/main/user";
-import { MessagePopup } from "./messagePopup";
+import { MessagePopup } from "./messageDialog";
 
 const allProfiles = [
   {
