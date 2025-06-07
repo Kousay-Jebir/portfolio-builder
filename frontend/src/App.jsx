@@ -119,7 +119,9 @@ export default function App() {
             <Route
               path="/portfolio/:id"
               element={
+                <PrivateRoute>
                 <PortfolioConsultPage />
+                </PrivateRoute>
               }
             />
           </Route>
