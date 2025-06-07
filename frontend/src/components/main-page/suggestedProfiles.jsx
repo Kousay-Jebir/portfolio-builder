@@ -71,7 +71,8 @@ export const SuggestedProfiles = () => {
       
   
       } catch (err) {
-        alert('Failed to load  items');
+        // alert('Failed to load  items');
+        console.log('err')
       }
     };
   

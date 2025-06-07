@@ -41,7 +41,8 @@ useEffect(() => {
 
       setItems(Array.from(latestByUser.values()));
     } catch (err) {
-      alert('Failed to load recently viewed items');
+      // alert('Failed to load recently viewed items');
+      console.log('Failed to load recently viewed items')
     }
   };
 
