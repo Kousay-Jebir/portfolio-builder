@@ -27,76 +27,76 @@ import {
   getMostViewedPortfolios,
 } from "@/api/consulting/analytics";
 import { useState, useEffect } from "react";
-import { MessagePopup } from "./messagePopUp";
+import { MessagePopup } from "./messagePopup";
 import { getSubscriptionState } from "@/api/main/user";
 
-const profiles = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    title: "Senior UX Designer",
-    company: "TechCorp",
-    avatar: "/avatars/01.png",
-    premium: true,
-    contacts: {
-      email: "alex@techcorp.com",
-      github: "alexjohnson",
-      linkedin: "alex-johnson",
-    },
-  },
-  {
-    id: 2,
-    name: "Sarah Miller",
-    title: "Frontend Developer",
-    company: "WebSolutions",
-    avatar: "/avatars/02.png",
-    premium: false,
-    contacts: {
-      email: "sarah@websolutions.com",
-      github: "sarahmiller",
-      linkedin: "sarah-miller",
-    },
-  },
-  {
-    id: 3,
-    name: "Michael Chen",
-    title: "Data Scientist",
-    company: "DataInsights",
-    avatar: "/avatars/03.png",
-    premium: true,
-    contacts: {
-      email: "michael@datainsights.com",
-      github: "michaelchen",
-      linkedin: "michael-chen",
-    },
-  },
-  {
-    id: 4,
-    name: "Emma Wilson",
-    title: "Product Manager",
-    company: "InnovateCo",
-    avatar: "/avatars/04.png",
-    premium: false,
-    contacts: {
-      email: "emma@innovateco.com",
-      github: "emmawilson",
-      linkedin: "emma-wilson",
-    },
-  },
-  {
-    id: 5,
-    name: "David Kim",
-    title: "DevOps Engineer",
-    company: "CloudScale",
-    avatar: "/avatars/05.png",
-    premium: true,
-    contacts: {
-      email: "david@cloudscale.com",
-      github: "davidkim",
-      linkedin: "david-kim",
-    },
-  },
-];
+// const profiles = [
+//   {
+//     id: 1,
+//     name: "Alex Johnson",
+//     title: "Senior UX Designer",
+//     company: "TechCorp",
+//     avatar: "/avatars/01.png",
+//     premium: true,
+//     contacts: {
+//       email: "alex@techcorp.com",
+//       github: "alexjohnson",
+//       linkedin: "alex-johnson",
+//     },
+//   },
+//   {
+//     id: 2,
+//     name: "Sarah Miller",
+//     title: "Frontend Developer",
+//     company: "WebSolutions",
+//     avatar: "/avatars/02.png",
+//     premium: false,
+//     contacts: {
+//       email: "sarah@websolutions.com",
+//       github: "sarahmiller",
+//       linkedin: "sarah-miller",
+//     },
+//   },
+//   {
+//     id: 3,
+//     name: "Michael Chen",
+//     title: "Data Scientist",
+//     company: "DataInsights",
+//     avatar: "/avatars/03.png",
+//     premium: true,
+//     contacts: {
+//       email: "michael@datainsights.com",
+//       github: "michaelchen",
+//       linkedin: "michael-chen",
+//     },
+//   },
+//   {
+//     id: 4,
+//     name: "Emma Wilson",
+//     title: "Product Manager",
+//     company: "InnovateCo",
+//     avatar: "/avatars/04.png",
+//     premium: false,
+//     contacts: {
+//       email: "emma@innovateco.com",
+//       github: "emmawilson",
+//       linkedin: "emma-wilson",
+//     },
+//   },
+//   {
+//     id: 5,
+//     name: "David Kim",
+//     title: "DevOps Engineer",
+//     company: "CloudScale",
+//     avatar: "/avatars/05.png",
+//     premium: true,
+//     contacts: {
+//       email: "david@cloudscale.com",
+//       github: "davidkim",
+//       linkedin: "david-kim",
+//     },
+//   },
+// ];
 
 export const PopularProfiles = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
