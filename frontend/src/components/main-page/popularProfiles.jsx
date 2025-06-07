@@ -56,7 +56,7 @@ export const PopularProfiles = () => {
         navigate(`/portfolio/${latestPortfolio.id}`);
       } catch (error) {
         console.error("Error fetching portfolio:", error);
-        alert("Failed to fetch portfolio");
+        // alert("Failed to fetch portfolio");
       }
     };
   useEffect(() => {
