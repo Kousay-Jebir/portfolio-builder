@@ -22,6 +22,7 @@ import { Card } from "@/components/ui/card";
 import { getUsers, searchUser } from "@/api/consulting/user";
 import { useState,useEffect } from "react";
 import { getSubscriptionState } from "@/api/main/user";
+import { MessagePopup } from "./messagePopup";
 
 const allProfiles = [
   {
@@ -58,6 +59,8 @@ const allProfiles = [
 ];
 
 export const ProfileSearchSection = () => {
+    const [selectedProfile, setSelectedProfile] = useState(null);
+
    const [items,setItems]=useState([])
    const [selectedField, setSelectedField] = useState("");
    const [searched,setSearched]=useState(false)
@@ -109,6 +112,7 @@ export const ProfileSearchSection = () => {
     //   console.log('users',items)
     // },[items])
   return (
+    <>
     <Card className="bg-orange-100 shadow-sm">
       <div className="p-6">
         <h2 className="text-2xl font-semibold text-orange-900 mb-6 text-center">
@@ -231,6 +235,8 @@ export const ProfileSearchSection = () => {
                 variant="ghost"
                 size="sm"
                 className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                onClick={() => setSelectedProfile(profile)}
+
               >
                 <MessageCircle className="h-4 w-4 mr-1" />
                 <span className="text-xs">Message</span>
@@ -260,5 +266,12 @@ export const ProfileSearchSection = () => {
         </div>
       </div>
     </Card>
+    {selectedProfile && (
+            <MessagePopup
+              profile={selectedProfile}
+              onClose={() => setSelectedProfile(null)}
+            />
+          )}
+    </>
   );
 };
