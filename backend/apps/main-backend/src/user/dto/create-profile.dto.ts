@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { FieldTypeEnum } from '@portfolio-builder/shared';
 import { Transform } from 'class-transformer';
-import { ArrayUnique, IsArray, IsEnum, IsObject, IsOptional, IsString } from 'class-validator';
+import { ArrayUnique, IsArray, IsEnum, IsNotEmpty, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateProfileDto {
   @ApiProperty()
@@ -24,10 +24,20 @@ export class CreateProfileDto {
   description: 'List of user skills',
   example: ['JavaScript', 'Node.js', 'MongoDB'],
 })
-  @IsArray()
- 
-  @IsString({ each: true })
-  skills?: string[];
+@IsArray()
+@ArrayUnique()
+@IsString({ each: true })
+@Transform(({ value }) => {
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return [];
+    }
+  }
+  return value;
+})
+skills: string[];
   @ApiProperty({ example: { "email": 'x' } })
   @IsObject()
   @Transform(({ value }) => {
