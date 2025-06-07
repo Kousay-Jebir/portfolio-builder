@@ -35,7 +35,7 @@ export default function RegisterPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: orangePalette.secondary,
+        background: orangePalette.border,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -71,7 +71,7 @@ export default function RegisterPage() {
         </h1>
         <p
           style={{
-            color: orangePalette.accent,
+            color: orangePalette.white,
             marginBottom: 24,
             fontWeight: 500,
             textAlign: "center",
