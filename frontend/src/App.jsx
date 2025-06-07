@@ -22,7 +22,8 @@ import ProtectedRoutesLayout from "./context/ProtectedRoutesLayout";
 import DashboardPage from "./pages/mainPage";
 
 import ResumeReadyPage from "./pages/cv/cvReadyPage";
-
+import { CreateProfileForm } from "./pages/profileForm";
+import ProfilePage from "./pages/profilePage";
 
 export default function App() {
   return (
@@ -44,6 +45,22 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <BuilderPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile-form"
+              element={
+                <PrivateRoute>
+                  <CreateProfileForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <ProfilePage />
                 </PrivateRoute>
               }
             />
@@ -80,10 +97,23 @@ export default function App() {
               element={<LoadingPage text="Analyzing Your Portfolio" />}
             />
 
-            <Route path="/main" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+            <Route
+              path="/main"
+              element={
+                <PrivateRoute>
+                  <DashboardPage />
+                </PrivateRoute>
+              }
+            />
 
-            <Route path="/resume-ready" element={<PrivateRoute><ResumeReadyPage /></PrivateRoute>} />
-
+            <Route
+              path="/resume-ready"
+              element={
+                <PrivateRoute>
+                  <ResumeReadyPage />
+                </PrivateRoute>
+              }
+            />
           </Route>
 
           {/* Fallback */}
