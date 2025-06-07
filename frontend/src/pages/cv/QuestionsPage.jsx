@@ -9,11 +9,11 @@ const QuestionsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const questionsData = location.state?.questions;
-  const portfolioId= location.state?.portfolioId
+  const portfolioId = location.state?.portfolioId;
 
   const [sectionIndex, setSectionIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (!questionsData) {
       navigate("/cv-generation");
@@ -46,7 +46,7 @@ const QuestionsPage = () => {
     if (sectionIndex < questionsData.length - 1) {
       setSectionIndex((prev) => prev + 1);
     } else {
-      setLoading(true)
+      setLoading(true);
       console.log("Final answers:", answers);
       //  await new Promise(resolve => setTimeout(resolve, 30000));
 
@@ -61,9 +61,9 @@ const QuestionsPage = () => {
       setSectionIndex((prev) => prev - 1);
     }
   };
-    if (loading) {
-      return <LoadingPage/>;
-    }
+  if (loading) {
+    return <LoadingPage />;
+  }
   return (
     <>
       <BackToMainArrow />

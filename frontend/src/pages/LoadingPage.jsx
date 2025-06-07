@@ -32,7 +32,8 @@ export default function LoadingPage({ text }) {
             {text || "Generating Your Resume"}
           </h2>
           <p className="text-[#212121] mt-3 text-center text-base leading-relaxed">
-            Hang tight — we’re preparing your awesome showcase. It won’t be long!
+            Hang tight — we’re preparing your awesome showcase. It won’t be
+            long!
           </p>
         </div>
 

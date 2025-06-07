@@ -137,7 +137,9 @@ const SubscriptionPage = () => {
                   </ul>
 
                   <Button
-                    onClick={() => handleSubscribe(sub.description, sub.duration)}
+                    onClick={() =>
+                      handleSubscribe(sub.description, sub.duration)
+                    }
                     className={`w-full ${
                       sub.popular
                         ? "bg-orange-600 hover:bg-orange-700"

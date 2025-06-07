@@ -269,7 +269,9 @@ export function CreateProfileForm() {
                 </SelectContent>
               </Select>
               {errors.field && (
-                <p className="text-sm font-medium text-red-500">{errors.field}</p>
+                <p className="text-sm font-medium text-red-500">
+                  {errors.field}
+                </p>
               )}
             </div>
 

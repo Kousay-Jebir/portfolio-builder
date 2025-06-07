@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserPortfoliosUrls } from "@/api/consulting/consult";
 
-
 import { motion, AnimatePresence } from "framer-motion";
 import { FileUp, Wand2, X, Upload, FileText, ChevronDown } from "lucide-react";
 
-import { generateCv, getCvQuestions, uploadCv } from "@/api/builder/cv"; 
+import { generateCv, getCvQuestions, uploadCv } from "@/api/builder/cv";
 import LoadingPage from "../LoadingPage";
 import BackToMainArrow from "@/components/BackToMainArrow";
 
@@ -41,17 +40,18 @@ const CvHomePage = () => {
 
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 30000));
+      await new Promise((resolve) => setTimeout(resolve, 30000));
       const q = await getCvQuestions(selectedPortfolio);
       setQuestions(q);
       if (q && q.length > 0) {
-        navigate("/cv-generation/questions", { state: { questions: q,portfolioId:selectedPortfolio } });
+        navigate("/cv-generation/questions", {
+          state: { questions: q, portfolioId: selectedPortfolio },
+        });
       } else {
         // alert("No questions found for the selected portfolio.");
-        const result = await generateCv(selectedPortfolio)
-        console.log(result)
+        const result = await generateCv(selectedPortfolio);
+        console.log(result);
         navigate("/resume-ready");
-
       }
     } catch (err) {
       console.error("Error fetching questions", err);
@@ -73,7 +73,6 @@ const CvHomePage = () => {
 
     setUploading(true);
     try {
-
       const response = await uploadCv(selectedFile);
       console.log("Upload success:", response);
       // alert("CV uploaded successfully!");
