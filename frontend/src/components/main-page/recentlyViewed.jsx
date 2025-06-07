@@ -1,33 +1,10 @@
-// components/RecentlyViewed.tsx
 import { Clock } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { getRecentlyViewed } from "@/api/consulting/analytics";
 
-// const recentItems = [
-//   {
-//     id: 1,
-//     name: "Marketing Manager Resume",
-//     type: "resume",
-//     viewed: "2 hours ago",
-//     avatar: "/documents/resume.png",
-//   },
-//   {
-//     id: 2,
-//     name: "Software Engineer Portfolio",
-//     type: "portfolio",
-//     viewed: "1 day ago",
-//     avatar: "/documents/portfolio.png",
-//   },
-//   {
-//     id: 3,
-//     name: "Product Designer Template",
-//     type: "template",
-//     viewed: "3 days ago",
-//     avatar: "/documents/template.png",
-//   },
-// ];
+
 
 export const RecentlyViewed = () => {
   const [items,setItems]=useState([])
@@ -46,21 +23,31 @@ export const RecentlyViewed = () => {
   return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
 };
 
-  useEffect(()=>{
-    const fetchData = async () => {
-      try {
-        const data = await getRecentlyViewed();
-        // console.log(data)
-        // console.log(getTimeAgo(data[0].log.createdAt))
-        setItems(data);
-      } catch (err) {
-        alert('Failed to load recently viewed items');
-      }
-    };
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const data = await getRecentlyViewed();
 
-    fetchData();
+      const latestByUser = new Map();
 
-  },[])
+      data.forEach(item => {
+        const userId = item.profile.user;
+        const existing = latestByUser.get(userId);
+
+        if (!existing || new Date(item.log.createdAt) > new Date(existing.log.createdAt)) {
+          latestByUser.set(userId, item);
+        }
+      });
+
+      setItems(Array.from(latestByUser.values()));
+    } catch (err) {
+      alert('Failed to load recently viewed items');
+    }
+  };
+
+  fetchData();
+}, []);
+
   return (
     <Card>
       <CardHeader>

@@ -21,77 +21,33 @@ import { useState,useEffect } from "react";
 import { MessagePopup } from "./messageDialog";
 import { getSuggestedPortfolios } from "@/api/consulting/analytics";
 import { getSubscriptionState } from "@/api/main/user";
-const profiles = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    title: "Senior UX Designer",
-    company: "TechCorp",
-    avatar: "/avatars/01.png",
-    premium: true,
-    contacts: {
-      email: "alex@techcorp.com",
-      github: "alexjohnson",
-      linkedin: "alex-johnson",
-    },
-  },
-  {
-    id: 2,
-    name: "Sarah Miller",
-    title: "Frontend Developer",
-    company: "WebSolutions",
-    avatar: "/avatars/02.png",
-    premium: false,
-    contacts: {
-      email: "sarah@websolutions.com",
-      github: "sarahmiller",
-      linkedin: "sarah-miller",
-    },
-  },
-  {
-    id: 3,
-    name: "Michael Chen",
-    title: "Data Scientist",
-    company: "DataInsights",
-    avatar: "/avatars/03.png",
-    premium: true,
-    contacts: {
-      email: "michael@datainsights.com",
-      github: "michaelchen",
-      linkedin: "michael-chen",
-    },
-  },
-  {
-    id: 4,
-    name: "Emma Wilson",
-    title: "Product Manager",
-    company: "InnovateCo",
-    avatar: "/avatars/04.png",
-    premium: false,
-    contacts: {
-      email: "emma@innovateco.com",
-      github: "emmawilson",
-      linkedin: "emma-wilson",
-    },
-  },
-  {
-    id: 5,
-    name: "David Kim",
-    title: "DevOps Engineer",
-    company: "CloudScale",
-    avatar: "/avatars/05.png",
-    premium: true,
-    contacts: {
-      email: "david@cloudscale.com",
-      github: "davidkim",
-      linkedin: "david-kim",
-    },
-  },
-];
+import { useNavigate } from "react-router";
+import { getPortfoliosOfUser } from "@/api/consulting/user";
 
 export const SuggestedProfiles = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [items,setItems]=useState([])
+  const navigate=useNavigate()
+
+  const handleViewPortfolio = async (userId) => {
+      try {
+        console.log("viewing", userId);
+        const data = await getPortfoliosOfUser(userId);
+        if (!data || data.length === 0) {
+          alert("No portfolios found.");
+          return;
+        }
+  
+        const latestPortfolio = data.sort(
+          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+        )[0];
+  
+        navigate(`/portfolio/${latestPortfolio.id}`);
+      } catch (error) {
+        console.error("Error fetching portfolio:", error);
+        alert("Failed to fetch portfolio");
+      }
+    };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -212,6 +168,7 @@ export const SuggestedProfiles = () => {
 
                       <div className="flex justify-between items-center w-full mt-3">
                         <Button
+                        onClick={()=>{handleViewPortfolio(profile.user)}}
                           variant="outline"
                           size="sm"
                           className="bg-orange-600 hover:bg-orange-700 text-white text-xs"
