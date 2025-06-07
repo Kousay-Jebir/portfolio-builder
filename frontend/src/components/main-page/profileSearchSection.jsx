@@ -28,40 +28,8 @@ import { useState, useEffect } from "react";
 import { getSubscriptionState } from "@/api/main/user";
 import { MessagePopup } from "./messageDialog";
 import { useNavigate } from "react-router";
-
-const allProfiles = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    title: "Senior UX Designer",
-    field: "Design",
-    company: "TechCorp",
-    avatar: "/avatars/01.png",
-    skills: ["Figma", "User Research", "Prototyping"],
-    premium: true,
-    contacts: {
-      email: "alex@techcorp.com",
-      github: "alexjohnson",
-      linkedin: "alex-johnson",
-    },
-  },
-  {
-    id: 2,
-    name: "Sarah Miller",
-    title: "Frontend Developer",
-    field: "Development",
-    company: "WebSolutions",
-    avatar: "/avatars/02.png",
-    skills: ["React", "TypeScript", "CSS"],
-    premium: false,
-    contacts: {
-      email: "sarah@websolutions.com",
-      github: "sarahmiller",
-      linkedin: "sarah-miller",
-    },
-  },
-  // ... continue for others
-];
+import { getCvByUser } from "@/api/builder/cv";
+import { openFile } from "@/api/main/file";
 
 export const ProfileSearchSection = () => {
   const navigate = useNavigate();
@@ -71,6 +39,23 @@ export const ProfileSearchSection = () => {
   const [items, setItems] = useState([]);
   const [selectedField, setSelectedField] = useState("");
   const [searched, setSearched] = useState(false);
+
+
+  const handleResumeView = async(profile)=>{
+    const cvName = await getCvByUser(profile.user)
+    if (!cvName) {
+          alert("there is no cv to view for this user");
+        }
+    return await openFile(cvName);
+
+
+
+  }
+
+
+
+
+
   const handleViewPortfolio = async (userId) => {
     try {
       console.log("viewing", userId);
@@ -84,8 +69,7 @@ export const ProfileSearchSection = () => {
         (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
       )[0];
 
-      navigate(`/portfolio/${latestPortfolio.id}`)
-
+      navigate(`/portfolio/${latestPortfolio.id}`);
     } catch (error) {
       console.error("Error fetching portfolio:", error);
       alert("Failed to fetch portfolio");
@@ -266,15 +250,27 @@ export const ProfileSearchSection = () => {
                 >
                   View Portfolio
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
-                  onClick={() => setSelectedProfile(profile)}
-                >
-                  <MessageCircle className="h-4 w-4 mr-1" />
-                  <span className="text-xs">Message</span>
-                </Button>
+                <div className="flex items-center gap-2 mt-2">
+  <Button
+    variant="ghost"
+    size="sm"
+    className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+    onClick={() => setSelectedProfile(profile)}
+  >
+    <MessageCircle className="h-4 w-4 mr-1" />
+    <span className="text-xs">Message</span>
+  </Button>
+
+  <a
+    onClick={()=>{handleResumeView(profile)}}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-xs text-blue-600 hover:underline hover:text-orange-800 font-medium"
+  >
+    resume.pdf
+  </a>
+</div>
+
               </div>
             ))}
           </div>
