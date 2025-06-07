@@ -20,12 +20,22 @@ export class MessageController{
 
     @UseGuards(JwtAuthGuard,BlacklistGuard)
     @ApiBearerAuth('JWT-auth')
-    @Get(':id')
-    async getConversation(@ConnectedUser() user :any,@Param('id') receiverId : string){
+    @Get('sent/:id')
+    async getSentMessages(@ConnectedUser() user :any,@Param('id') receiverId : string){
 
         return await this.messageService.getMessagesOrdered(user.id,receiverId)
         
     }
+    
+    @UseGuards(JwtAuthGuard,BlacklistGuard)
+    @ApiBearerAuth('JWT-auth')
+    @Get('received/:id')
+    async getReceivedMessages(@ConnectedUser() user :any,@Param('id') senderId : string){
+
+        return await this.messageService.getMessagesOrdered(senderId,user.id)
+        
+    }
+    
     
     @UseGuards(JwtAuthGuard,BlacklistGuard)
     @ApiBearerAuth('JWT-auth')
