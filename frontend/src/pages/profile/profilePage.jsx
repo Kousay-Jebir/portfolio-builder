@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ProfileDisplay } from "./profileDisplay";
 import { FieldTypeEnum } from "@/lib/enums";
+import BackToMainArrow from "@/components/BackToMainArrow";
+
 export default function ProfilePage() {
   const [profile, setProfile] = useState({
     firstName: "Alex",
@@ -27,5 +29,10 @@ export default function ProfilePage() {
     file: null, // This would be a File object in reality
   });
 
-  return <ProfileDisplay profile={profile} />;
+  return (
+    <>
+      <BackToMainArrow />
+      <ProfileDisplay profile={profile} />
+    </>
+  );
 }

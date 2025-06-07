@@ -16,6 +16,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 import test from "@/../test.json";
+import BackToMainArrow from "@/components/BackToMainArrow";
+import { ArrowLeft } from "lucide-react";
 
 export function preparePortfolioSave() {
   return query.serialize();
@@ -34,6 +36,14 @@ export function Topbar({ sendTemplate }) {
     <>
       <header className="flex items-center justify-between h-12 px-4 bg-orange-500 text-white shadow-md border-b border-orange-600 dark:bg-orange-600">
         <div className="flex items-center space-x-3">
+          <Button
+            onClick={() => navigate("/main")}
+            size="xs"
+            className=" text-orange-500 p-2 bg-white hover:bg-orange-400"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span className="hidden sm:inline">Main</span>
+          </Button>
           <Button
             size="xs"
             variant="ghost"
