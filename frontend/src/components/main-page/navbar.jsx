@@ -1,8 +1,9 @@
 import { Rocket, FileText, User, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <header className="sticky top-0 z-50 w-full border-b border-orange-300 bg-gradient-to-r from-orange-600 to-orange-400 text-white shadow-md">
       <div className="container flex h-16 items-center justify-between px-4">
@@ -55,6 +56,7 @@ export const Navbar = () => {
           </Button>
 
           <Button
+            onClick={() => navigate("/profile")}
             variant="secondary"
             className="gap-2 ml-2 text-orange-600 bg-white hover:bg-orange-50 hover:text-orange-700 transition-colors border-none"
           >

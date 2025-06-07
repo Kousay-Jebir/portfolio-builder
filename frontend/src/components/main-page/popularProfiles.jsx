@@ -11,8 +11,6 @@ import {
   ChevronRight,
   Flame,
   Heart,
-  View,
-  ViewIcon,
   Eye,
 } from "lucide-react";
 import {
@@ -27,7 +25,7 @@ import {
   getMostViewedPortfolios,
 } from "@/api/consulting/analytics";
 import { useState, useEffect } from "react";
-import { MessagePopup } from "./messagePopup";
+import { MessagePopup } from "./messagePopUp";
 import { getSubscriptionState } from "@/api/main/user";
 
 // const profiles = [
