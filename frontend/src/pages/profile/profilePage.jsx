@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { ProfileDisplay } from "./profileDisplay";
 import { FieldTypeEnum } from "@/lib/enums";
+
+import BackToMainArrow from "@/components/BackToMainArrow";
+
+
 import { getProfile } from "@/api/main/user";
+
 export default function ProfilePage() {
   const [profile, setProfile] = useState({
     firstName: "Alex",
@@ -44,5 +49,10 @@ export default function ProfilePage() {
 
   },[])
 
-  return <ProfileDisplay profile={profile} />;
+  return (
+    <>
+      <BackToMainArrow />
+      <ProfileDisplay profile={profile} />
+    </>
+  );
 }
