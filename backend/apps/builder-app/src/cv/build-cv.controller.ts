@@ -98,5 +98,16 @@ export class BuildCvController {
 
   }
 
+    @UseGuards(JwtAuthGuard, BlacklistGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Get('user/:userId')
+  async getCvByUser(@Param('userId') userId : string):Promise<String>{
+    return await this.buildCvService.getCv(userId)
+
+
+  }
+
+
+
 
 }
