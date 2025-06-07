@@ -10,16 +10,7 @@ export const getConnectedUser = async () => {
   }
 };
 
-export const createProfile = async (profileData: {
-  firstName: string;
-  lastName: string;
-  bio: string;
-  location: string;
-  status: string;
-  contacts: object;
-  socialLinks: object;
-  file: any;
-}) => {
+export const createProfile = async (profileData: any) => {
   try {
     const res = await axiosMain.post('/user/profile', profileData);
     return res.data;

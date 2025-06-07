@@ -26,6 +26,7 @@ import DroppableGridEngine from "../builder/layout-engine/grid/GridEngine";
 import { useAuth } from "@/context/AuthContext";
 import { getPortfoliosOfUser } from "@/api/consulting/user";
 import useExitPrompt from "@/hooks/useExitPrompt";
+import resolver from "@/builder/resolver";
 
 export default function BuilderPage() {
   const { state } = useUI();
@@ -70,30 +71,13 @@ export default function BuilderPage() {
   const frameKey = isUsingTemplate
     ? "template"
     : portfolio
-    ? "portfolio"
-    : "empty";
+      ? "portfolio"
+      : "empty";
 
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
       <Editor
-        resolver={{
-          EditableTypography,
-          Section,
-          GridRow,
-          GridColumn,
-          Image,
-          BaseGridContainer,
-          DroppableGridEngine,
-          BuilderEditableSection,
-          BuilderEditableGridColumn,
-          BuilderEditableGridRow,
-          AspectRatio,
-          Carousel,
-          CarouselItem,
-          EditableButton,
-          Container,
-          GenericContainer,
-        }}
+        resolver={resolver}
       >
         <BuilderProvider>
           <AppLayout

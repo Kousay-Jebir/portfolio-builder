@@ -4,7 +4,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { mergeStyles } from "./utils";
 import { useUI } from "@/DrawerContext";
 
-const BUILDER_MODE = {
+export const BUILDER_MODE = {
     EDIT: "EDIT",
     PREVIEW: "PREVIEW",
 };
