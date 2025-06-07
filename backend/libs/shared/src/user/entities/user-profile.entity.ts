@@ -28,6 +28,9 @@ export class UserProfile {
   @Prop({ type: String, enum: FieldTypeEnum, required: true })
   
   field: FieldTypeEnum;
+  @Prop({ type: [String], default: [] })
+  skills: string[];
+
 
  
 

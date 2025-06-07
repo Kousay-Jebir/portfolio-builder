@@ -2,7 +2,7 @@ import { Body, Controller, NotFoundException, Post, Req,Get, UseGuards, UseInter
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '@portfolio-builder/shared';
+import { User, UserProfileService } from '@portfolio-builder/shared';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from '../auth/auth.service';
 import { Request } from 'express';
@@ -19,7 +19,7 @@ import { diskStorage } from 'multer';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService : UserService){}
+    constructor(private readonly userService : UserService,private readonly profileService : UserProfileService){}
 
     @UseGuards(JwtAuthGuard,BlacklistGuard,RolesGuard)
     @ApiBearerAuth('JWT-auth')
@@ -60,6 +60,14 @@ export class UserController {
       return user.role
 
     }
+    @UseGuards(JwtAuthGuard,BlacklistGuard)
+    @ApiBearerAuth('JWT-auth')
+    @Get('profile')
+    async getProfile(@ConnectedUser()user :any){
+      return await this.profileService.findByCriteria({user:user.id})
+
+    }
+
 
 
   

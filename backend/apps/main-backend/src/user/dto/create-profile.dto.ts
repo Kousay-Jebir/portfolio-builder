@@ -1,7 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { FieldTypeEnum } from '@portfolio-builder/shared';
 import { Transform } from 'class-transformer';
-import { IsArray, IsEnum, IsObject, IsString } from 'class-validator';
+import { ArrayUnique, IsArray, IsEnum, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateProfileDto {
   @ApiProperty()
@@ -19,6 +19,15 @@ export class CreateProfileDto {
   @ApiProperty({enum:FieldTypeEnum})
   @IsEnum(FieldTypeEnum, { message: 'field must be a valid FieldTypeEnum value' })
   field: FieldTypeEnum;
+@ApiProperty({
+  type: [String],
+  description: 'List of user skills',
+  example: ['JavaScript', 'Node.js', 'MongoDB'],
+})
+  @IsArray()
+ 
+  @IsString({ each: true })
+  skills?: string[];
   @ApiProperty({ example: { "email": 'x' } })
   @IsObject()
   @Transform(({ value }) => {
