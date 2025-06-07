@@ -1,11 +1,11 @@
 // Orange palette for RegisterPage
 export const orangePalette = {
-  primary: "#FF6F00", // Deep Orange
-  secondary: "#FFA040", // Lighter Orange
-  accent: "#FFD180", // Accent Orange
-  background: "#FFF3E0", // Very light orange
-  border: "#FFB300", // Border orange
-  error: "#D84315", // Error red-orange
-  text: "#212121", // Main text
-  white: "#FFFFFF",
+  primary: "#ea580c", // orange-600 (main brand color)
+  secondary: "#f97316", // orange-500 (secondary color)
+  accent: "#fb923c", // orange-400 (accent color)
+  background: "#ffedd5", // orange-100 (background)
+  border: "#fdba74", // orange-300 (borders)
+  error: "#9a3412", // orange-800 (error/dark)
+  text: "#431407", // orange-950 (dark text)
+  white: "#ffffff", // white
 };
