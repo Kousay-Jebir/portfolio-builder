@@ -37,3 +37,12 @@ export const getSubscriptionState = async (userId:string) => {
     throw err;
   }
 };
+export const getProfile = async () => {
+  try {
+    const res = await axiosMain.get(`/user/profile`);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
