@@ -1,6 +1,6 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Carousel } from "@/components/ui/carousel";
-import { CarouselItem } from "@/components/ui/carousel";
+import { Carousel } from "./user-components/showcase/Carousel";
+import { CarouselItem } from "./user-components/showcase/CarouselItem";
 import { EditableButton } from "@/builder/user-components/button/Button";
 import { Container } from "react-grid-system";
 import { GenericContainer } from "@/builder/user-components/generic/GenericContainer";
@@ -12,6 +12,7 @@ import { BaseGridContainer } from "@/builder/user-components/layout/Section";
 import DroppableGridEngine from "@/builder/layout-engine/grid/GridEngine";
 import { BuilderEditableSection } from "@/builder/user-components/layout/Section";
 import { BuilderEditableGridColumn, BuilderEditableGridRow } from "@/builder/user-components/layout/Section";
+
 const resolver = {
     EditableTypography,
     Section,
