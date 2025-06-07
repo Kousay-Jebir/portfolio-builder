@@ -42,7 +42,6 @@ export const ProfileSearchSection = () => {
 
 
   const handleResumeView = async(profile)=>{
-    console.log('profile',profile)
     const cvName = await getCvByUser(profile.user)
     if (!cvName) {
           alert("there is no cv to view for this user");
