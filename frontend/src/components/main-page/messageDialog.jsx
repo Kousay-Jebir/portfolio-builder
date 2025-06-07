@@ -2,14 +2,21 @@ import { X, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getReceivedMessages, getSentMessages, sendMessage } from "@/api/consulting/message";
+import Cookies from "js-cookie";
+import io from "socket.io-client";
+
+const SOCKET_URL = "http://localhost:5002";
 
 export const MessagePopup = ({ profile, onClose }) => {
-  const [sentMessages, setSentMessages] = useState([]);
-  const [receivedMessages, setReceivedMessages] = useState([]);
+  const token = Cookies.get('auth-token');
+  const userId = Cookies.get('user-id');
   const [mergedMessages, setMergedMessages] = useState([]);
-  const [currentMessage,setCurrentMessage]=useState('')
+  const [currentMessage, setCurrentMessage] = useState('');
+  const socketRef = useRef(null);
+  const messagesEndRef = useRef(null);
+
   const getTimeAgo = (isoDate) => {
     const now = new Date();
     const createdAt = new Date(isoDate);
@@ -24,21 +31,40 @@ export const MessagePopup = ({ profile, onClose }) => {
     if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
     return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
   };
-  const handleSend=async()=>{
 
-    console.log('senddd')
-    console.log(currentMessage)
-    if(currentMessage!=""){
+  const handleSend = async () => {
+    if (currentMessage.trim() === "") return;
 
-      await sendMessage({message:currentMessage,receiver:profile.user})
-      await fetchConversation()
+    try {
+      const newMessage = {
+        content: currentMessage,
+        createdAt: new Date().toISOString(),
+        type: "sent",
+        sender: userId,
+        receiver: profile.user
+      };
+      
+      setMergedMessages(prev => [...prev, newMessage]);
+      setCurrentMessage("");
+
+      socketRef.current?.emit('message', {
+        to: profile.user,
+        message: currentMessage
+      });
+
+    } catch (err) {
+      console.error("Failed to send message:", err);
+      setMergedMessages(prev => prev.slice(0, -1));
+      setCurrentMessage(currentMessage); // Restore message
     }
-  }
+  };
 
   const fetchConversation = async () => {
     try {
-      const sentData = await getSentMessages(profile.user);
-      const receivedData = await getReceivedMessages(profile.user);
+      const [sentData, receivedData] = await Promise.all([
+        getSentMessages(profile.user),
+        getReceivedMessages(profile.user)
+      ]);
 
       const taggedSent = sentData.map(msg => ({ ...msg, type: "sent" }));
       const taggedReceived = receivedData.map(msg => ({ ...msg, type: "received" }));
@@ -47,17 +73,51 @@ export const MessagePopup = ({ profile, onClose }) => {
         (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
       );
 
-      setSentMessages(sentData);
-      setReceivedMessages(receivedData);
       setMergedMessages(combined);
     } catch (err) {
-      alert(err);
+      console.error("Failed to fetch messages:", err);
     }
   };
 
   useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [mergedMessages]);
+
+  useEffect(() => {
     fetchConversation();
-  }, []);
+
+    socketRef.current = io(SOCKET_URL, {
+      query: { token },
+      transports: ["websocket"],
+      autoConnect: true
+    });
+
+    socketRef.current.on("connect", () => {
+      console.log("Socket connected");
+    });
+
+    socketRef.current.on("message", (message) => {
+      setMergedMessages(prev => [
+        ...prev,
+        {
+          content: message,
+          createdAt: new Date().toISOString(),
+          type: "received",
+          sender: profile.user,
+          receiver: userId
+        }
+      ]);
+    });
+
+    socketRef.current.on("connect_error", (err) => {
+      console.error("Socket connection error:", err);
+    });
+
+    return () => {
+      socketRef.current.off("message");
+      socketRef.current.disconnect();
+    };
+  }, [profile.user, token, userId]);
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -88,23 +148,18 @@ export const MessagePopup = ({ profile, onClose }) => {
           {mergedMessages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.type === "received" ? "justify-start" : "justify-end"}`}>
               <div
-                className={`max-w-[75%] ${
-                  msg.type === "received"
-                    ? "bg-orange-50 text-black"
-                    : "bg-orange-600 text-white"
-                } rounded-lg p-3`}
+                className={`max-w-[75%] ${msg.type === "received"
+                  ? "bg-orange-50 text-black"
+                  : "bg-orange-600 text-white"} rounded-lg p-3`}
               >
                 <p className="text-sm">{msg.content}</p>
-                <p
-                  className={`text-xs mt-1 ${
-                    msg.type === "received" ? "text-orange-500" : "text-orange-200"
-                  }`}
-                >
+                <p className={`text-xs mt-1 ${msg.type === "received" ? "text-orange-500" : "text-orange-200"}`}>
                   {getTimeAgo(msg.createdAt)}
                 </p>
               </div>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
 
         <div className="border-t border-orange-100 p-4">
@@ -112,7 +167,9 @@ export const MessagePopup = ({ profile, onClose }) => {
             <Input
               placeholder="Type your message..."
               className="pr-12 border-orange-200 focus:ring-orange-500"
-              onChange={(e)=>{setCurrentMessage(e.target.value)}}
+              value={currentMessage}
+              onChange={(e) => setCurrentMessage(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSend()}
             />
             <Button
               size="icon"
