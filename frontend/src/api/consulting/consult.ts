@@ -31,3 +31,13 @@ export const makeSeen = async (id: string) => {
     })
 
 } 
+
+export const likePortfolio = async (portfolioId:string) => {
+  try {
+    const res = await axiosConsult.post(`/portfolio/like/${portfolioId}`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

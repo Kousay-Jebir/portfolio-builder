@@ -105,6 +105,16 @@ export class ConsultAppService {
     if(!portfolio){
       throw new NotFoundException('portfolio not found')
     }
+    const portfolioOwner = await this.userModel.findById(portfolio.user)
+    if(!portfolioOwner){throw new NotFoundException}
+    const message = portfolioOwner.role === UserRole.VIP
+        ? `${portfolioOwner.username} liked your profile`
+        : 'One user liked your profile';
+    axios.post(`http://localhost:5000/main/event/notify-user`, {
+                  userId: portfolio.user as string,
+                  message: message,
+                  eventType:'portfolio_like'
+                })
     return await this.activityLogService.logActivity(userId,ActivityTypeEnum.LIKE,{
       portfolio:id,
       ownerId:portfolio.user
