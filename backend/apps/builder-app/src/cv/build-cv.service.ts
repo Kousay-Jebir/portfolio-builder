@@ -1,16 +1,19 @@
 import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { BlacklistGuard, CvService, JwtAuthGuard, PdfService, PortfolioService } from '@portfolio-builder/shared';
+import { BlacklistGuard, CvService, JwtAuthGuard, PdfService, PortfolioService, UserProfileService } from '@portfolio-builder/shared';
 import axios from 'axios';
 import { CvDataDto } from '../dto/cv-data.dto';
 import { CreateCvDto } from '../dto/create-cv.dto';
+import { UserService } from 'apps/main-backend/src/user/user.service';
+import { profile } from 'console';
 
 @Injectable()
 export class BuildCvService {
   constructor(
     private readonly portfolioService: PortfolioService,
     private readonly cvService: CvService,
-    private readonly pdfService: PdfService
+    private readonly pdfService: PdfService,
+    private readonly userProfileService : UserProfileService
   ) { }
 
   private extractPortfolioText(rawPortfolioContent) {
@@ -31,18 +34,21 @@ export class BuildCvService {
   async getQuestions(portfolioId: string, userId: string) {
     const portfolio = await this.portfolioService.findById(portfolioId);
     console.log(this.extractPortfolioText(portfolio?.content))
-    const textContent = this.extractPortfolioText(portfolio?.content)
+    const textContent = this.extractPortfolioText(portfolio?.content)+'  '
     if (!portfolio) {
       return new NotFoundException('portfolio not found');
     }
+    console.log('data to send ',{portfolio:textContent})
     try {
-      // const questions = await axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_QUESTIONS_ENDPOINT}`, {
-      //   portfolio: textContent
-      //   // userId: userId,
-      // });
-      const questions = await this.generateQuestions(['skills','projects'])
-      // const questions=[]
-         return questions
+      const missing = await axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_QUESTIONS_ENDPOINT}`, {
+        portfolio: textContent
+        
+      });
+
+      const questions = await this.generateQuestions(missing.data.missing)
+      // // const questions=[]
+      console.log('questions',questions)
+      return questions
 }
      
 
@@ -52,10 +58,15 @@ export class BuildCvService {
 
   }
   async sendResponse(data: any) {
-    axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_RESUME_GENERATION}`, { data }).then((res) => { return res.data }).catch((err) => { return new Error(err.meesage) })
+    try{
+      console.log('data in send response ',data)
+      // const structurdData= JSON.stringify({profile:data}, null, 2)
+      const res =await axios.post(`${process.env.AI_BASE_URL}/${process.env.AI_RESUME_GENERATION}`, { profile:data })
+      return res.data 
 
-
-
+    }catch(err){
+      console.log('error')
+    }
   }
   async createCv(createCvDto: CreateCvDto, userId: string) {
     return await this.cvService.create({ title: createCvDto.title, path: createCvDto.path, filename: createCvDto.filename, user: userId })
@@ -185,20 +196,14 @@ export class BuildCvService {
 
   async generateCv(ownerId: string, portfolioId: string, cvDataDto?: Partial<CvDataDto>) {
     const portfolio = await this.portfolioService.findById(portfolioId)
+    const profile = await this.userProfileService.findByCriteria({user:ownerId})
     const portfolioTextContent= this.extractPortfolioText(portfolio?.content)
     const finalData=cvDataDto? portfolioTextContent+'  '+this.extractAnswersWithSections(cvDataDto):portfolioTextContent
-    return finalData
-    // const result = await this.sendResponse(finalData)
+    // return finalData
+    const data = await this.sendResponse(finalData)
+    
     // const data = {
-    //   "user": {
-    //     "id": "1",
-    //     "full_name": "Jane Doe",
-    //     "email": "jane.doe@example.com",
-    //     "phone": "+1 555 123 4567",
-    //     "location": "San Francisco, CA",
-    //     "summary": "A results-driven software engineer with 5+ years of experience in building web applications using modern technologies. Passionate about clean code, agile development, and user-focused design.",
-    //     "languages": ["English", "Spanish", "French"]
-    //   },
+      
     //   "portfolio": {
     //     "skills": ["JavaScript", "TypeScript", "React", "Node.js", "MongoDB", "Docker", "AWS", "GraphQL"],
     //     "projects": [
@@ -275,9 +280,23 @@ export class BuildCvService {
     //     "description": "Seeking a challenging role in a fast-paced tech company to build scalable web applications."
     //   }
     // }
+    const results = {...data,"user": {
+        "id": `${profile?._id}`,
+        "full_name": `${profile?.firstName}  ${profile?.lastName}`,
+        "email": `${profile?.contacts.email}`,
+        "phone": `${profile?.contacts.phone}`,
+        "location": `${profile?.location}`,
+        "summary": `${profile?.bio}`,
+        "languages": ["English", "Spanish", "French"]
+      },}
+    const jsonString = JSON.stringify(results, null, 2);
+        console.log('results',jsonString)
 
-    // const { filePath, filename } = await this.pdfService.generateResumePdf(data)
-    // return this.cvService.create({ title: 'cv', user: ownerId, path: filePath, filename })
+
+    // // return finalData
+
+    const { filePath, filename } = await this.pdfService.generateResumePdf(results)
+    return this.cvService.create({ title: 'cv', user: ownerId, path: filePath, filename })
   }
   private extractAnswersWithSections(data: any): string {
   return data

@@ -30,7 +30,7 @@ export class PdfService {
     const date = dayjs().format('YYYY-MM-DD');
     const uniqueId = uuidv4().split('-')[0];
     const fileName = `resume_${date}_${uniqueId}.pdf`;
-    const filePath = `/public/${fileName}`;
+    const filePath = path.join(process.cwd(), 'public',`${fileName}`);
 
     await page.pdf({
       path: filePath,
@@ -39,6 +39,6 @@ export class PdfService {
     });
 
     await browser.close();
-    return {filePath:filePath,filename:fileName};
+    return {filePath:`/public/${fileName}`,filename:fileName};
   }
 }
