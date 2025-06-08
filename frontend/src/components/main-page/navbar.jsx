@@ -31,7 +31,7 @@ const fetchPortfolio = async () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-orange-300 bg-gradient-to-r from-orange-600 to-orange-400 text-white shadow-md">
       <div className="container flex h-16 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2 group">
+        <Link to="/main" className="flex items-center gap-2 group">
           <span className="text-2xl font-bold bg-white/90 bg-clip-text text-transparent group-hover:opacity-90 transition-all">
             ProFolio
           </span>
