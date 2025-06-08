@@ -32,48 +32,15 @@ export default function BuilderPage() {
   const { state } = useUI();
   const { user } = useAuth();
 
-  // portfolio JSON (fetched from API)
-  const [portfolio, setPortfolio] = useState(null);
-
   // the “loaded template” JSON (set via AppLayout’s loadTemplate callback)
   const [loadedTemplate, setLoadedTemplate] = useState(null);
 
   // Ask React Router / window to warn about unsaved changes
   useExitPrompt(true);
 
-  useEffect(() => {
-    async function fetchPortfolio() {
-      if (!user?.id) {
-        setPortfolio(null);
-        return;
-      }
-
-      try {
-        const result = await getPortfoliosOfUser(user.id);
-        // assume the last item is the latest portfolio
-        const latest = result[result.length - 1]?.content || null;
-        setPortfolio(latest);
-      } catch (error) {
-        console.error("Failed to fetch portfolio:", error);
-        setPortfolio(null);
-      }
-    }
-
-    fetchPortfolio();
-  }, [user]);
-
-  // Decide which data to pass into <Frame>:
-  //  • If a template is loaded, use that.
-  //  • Else if the user has a portfolio, use that.
-  //  • Otherwise, leave data undefined (renders an empty canvas).
   const isUsingTemplate = !!loadedTemplate;
-  const dataToLoad = loadedTemplate || portfolio;
-  const frameKey = isUsingTemplate
-    ? "template"
-    : portfolio
-      ? "portfolio"
-      : "empty";
-
+  const dataToLoad = loadedTemplate;
+  const frameKey = "full"
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
       <Editor

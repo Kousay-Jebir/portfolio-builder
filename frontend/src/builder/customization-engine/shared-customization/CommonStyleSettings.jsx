@@ -147,7 +147,7 @@ export function CommonStyleSettings({ showBackground = true, customs = false, ch
                 {children}
                 {showBackground && (
 
-                    <Card className="shadow-none rounded-xs dark:bg-slate-900">
+                    <Card className="shadow-none rounded-xs dark:bg-slate-900 bg-orange-200">
                         <CardHeader>
                             <Label className="text-sm">Background</Label>
                         </CardHeader>
@@ -188,7 +188,7 @@ export function CommonStyleSettings({ showBackground = true, customs = false, ch
                     const label = prop.charAt(0).toUpperCase() + prop.slice(1);
                     const mode = modes[prop];
                     return (
-                        <Card className="shadow-none rounded-xs dark:bg-slate-900" key={prop}>
+                        <Card className="shadow-none rounded-xs bg-orange-200" key={prop}>
                             <CardHeader className="flex items-center justify-between">
                                 <Label className="text-sm">{label}</Label>
                                 <div className="flex items-center space-x-1">
@@ -223,7 +223,7 @@ export function CommonStyleSettings({ showBackground = true, customs = false, ch
                     );
                 })}
 
-                <Card className="shadow-none rounded-xs dark:bg-slate-900">
+                <Card className="shadow-none rounded-xs  bg-orange-200">
                     <CardHeader>
                         <Label className="text-sm">Border</Label>
                     </CardHeader>
@@ -263,7 +263,7 @@ export function CommonStyleSettings({ showBackground = true, customs = false, ch
                     </CardContent>
                 </Card>
 
-                <Card className="shadow-none rounded-xs dark:bg-slate-900">
+                <Card className="shadow-none rounded-xs  bg-orange-200">
                     <CardHeader>
                         <Label className="text-sm">Box Shadow</Label>
                     </CardHeader>

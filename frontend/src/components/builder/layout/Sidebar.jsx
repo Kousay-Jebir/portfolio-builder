@@ -7,7 +7,7 @@ export default function Sidebar({ width, side, onResize, children }) {
 
   return (
     <div
-      className={`relative hidden lg:flex flex-col bg-gray-50 dark:bg-gray-800 ${borderClass} bg-orange-200`}
+      className={`relative hidden lg:flex flex-col bg-gray-50 dark:bg-gray-800 ${borderClass} bg-orange-100`}
       style={{ width, overflow: "auto" }}
     >
       {children}

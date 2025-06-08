@@ -73,7 +73,7 @@ export function GenericContainerSettings() {
     return (
         <CommonStyleSettings>
             {/* Width & Height Section */}
-            <Card className="shadow-none rounded-xs dark:bg-slate-900">
+            <Card className="shadow-none rounded-xs dark:bg-slate-900 bg-orange-200">
                 <CardHeader>
                     <Label className="text-sm">Size</Label>
                 </CardHeader>
@@ -92,7 +92,7 @@ export function GenericContainerSettings() {
             </Card>
 
             {/* Display Section */}
-            <Card className="shadow-none rounded-xs dark:bg-slate-900">
+            <Card className="shadow-none rounded-xs dark:bg-slate-900 bg-orange-200">
                 <CardHeader>
                     <Label className="text-sm">Display</Label>
                 </CardHeader>

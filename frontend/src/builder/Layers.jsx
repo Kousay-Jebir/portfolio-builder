@@ -171,7 +171,7 @@ export default function Layers({ openMap, setOpenMap }) {
   if (!root.children.length) return null;
 
   return (
-    <Card className="shadow-none rounded-md dark:bg-slate-900 bg-orange-300 ">
+    <Card className="shadow-none rounded-none dark:bg-slate-900 bg-orange-200 ">
       <CardContent>
         <Accordion
           type="multiple"

@@ -76,9 +76,9 @@ export default function ToolBox() {
   }
 
   return (
-    <Card className="rounded-md shadow-none dark:bg-slate-900 bg-orange-300">
+    <Card className="rounded-none shadow-none dark:bg-slate-900 bg-orange-200">
       <CardHeader className="border-b px-0 py-1">
-        <CardTitle className="text-sm font-medium text-white tracking-wide px-2">
+        <CardTitle className="text-sm font-medium  tracking-wide px-2">
           Toolbox
         </CardTitle>
       </CardHeader>

@@ -47,7 +47,7 @@ export function ButtonSettings() {
 
     return (
         <CommonStyleSettings>
-            <Card className="shadow-none rounded-xs">
+            <Card className="shadow-none rounded-xs bg-orange-200">
                 <CardHeader>
                     <CardTitle>Button Settings</CardTitle>
                 </CardHeader>
