@@ -16,11 +16,17 @@ export default function ResumeReadyPage() {
 
   const handleView = async () => {
     console.log("Viewing resume...");
-    const cvName = await getCv();
+    try{
+      const cvName = await getCv();
     if (!cvName) {
       alert("there is no cv to view for this user");
     }
     return await openFile(cvName);
+    }
+    catch(err){
+      alert('there is no cv to view for this user')
+    }
+    
   };
 
   return (
