@@ -64,3 +64,16 @@ export const getCv=async()=>{
 
   }
 }
+
+export const getCvByUser=async(userId:string)=>{
+  try{
+    const response=await axiosBuilder.get(`/cv/user/${userId}`)
+    return response.data
+
+  }
+  catch(error){
+    console.error('CV fetching failed:', error);
+    throw error;
+
+  }
+}

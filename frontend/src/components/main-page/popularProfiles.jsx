@@ -29,138 +29,36 @@ import { useState, useEffect } from "react";
 import { MessagePopup } from "./messageDialog";
 
 import { getSubscriptionState } from "@/api/main/user";
+import { getPortfoliosOfUser } from "@/api/consulting/user";
+import { useNavigate } from "react-router";
 
-// const profiles = [
-//   {
-//     id: 1,
-//     name: "Alex Johnson",
-//     title: "Senior UX Designer",
-//     company: "TechCorp",
-//     avatar: "/avatars/01.png",
-//     premium: true,
-//     contacts: {
-//       email: "alex@techcorp.com",
-//       github: "alexjohnson",
-//       linkedin: "alex-johnson",
-//     },
-//   },
-//   {
-//     id: 2,
-//     name: "Sarah Miller",
-//     title: "Frontend Developer",
-//     company: "WebSolutions",
-//     avatar: "/avatars/02.png",
-//     premium: false,
-//     contacts: {
-//       email: "sarah@websolutions.com",
-//       github: "sarahmiller",
-//       linkedin: "sarah-miller",
-//     },
-//   },
-//   {
-//     id: 3,
-//     name: "Michael Chen",
-//     title: "Data Scientist",
-//     company: "DataInsights",
-//     avatar: "/avatars/03.png",
-//     premium: true,
-//     contacts: {
-//       email: "michael@datainsights.com",
-//       github: "michaelchen",
-//       linkedin: "michael-chen",
-//     },
-//   },
-//   {
-//     id: 4,
-//     name: "Emma Wilson",
-//     title: "Product Manager",
-//     company: "InnovateCo",
-//     avatar: "/avatars/04.png",
-//     premium: false,
-//     contacts: {
-//       email: "emma@innovateco.com",
-//       github: "emmawilson",
-//       linkedin: "emma-wilson",
-//     },
-//   },
-//   {
-//     id: 5,
-//     name: "David Kim",
-//     title: "DevOps Engineer",
-//     company: "CloudScale",
-//     avatar: "/avatars/05.png",
-//     premium: true,
-//     contacts: {
-//       email: "david@cloudscale.com",
-//       github: "davidkim",
-//       linkedin: "david-kim",
-//     },
-//   },
-// ];
 
 export const PopularProfiles = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [mostViewedItems, setMostViewedItems] = useState([]);
   const [mostLikedItems, setMostLikedItems] = useState([]);
   const [finalCombinedItems, setFinalCombinedItems] = useState([]);
+  const navigate=useNavigate()
 
-  // useEffect(()=>{
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await getMostViewedPortfolios();
-  //       console.log('most viewed',data)
-  //       setMostViewedItems(data);
-  //       const res=await getMostLikedPortfolios()
-  //       console.log('most liked',res)
-  //       setMostLikedItems(res)
-  //     } catch (err) {
-  //       alert('Failed to load recently viewed items');
-  //     }
-  //   };
-
-  //   fetchData();
-
-  // },[])
-  //   useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await getMostViewedPortfolios();
-  //       // console.log('mostviewed',data)
-  //       const res = await getMostLikedPortfolios();
-  //       // console.log('most liked',res)
-
-  //       const addSubscriptionStatus = async (items) => {
-  //         return await Promise.all(
-  //           items.map(async (item) => {
-  //             const subStatus = await getSubscriptionState(item.user);
-  //             // console.log('subStatus',subStatus)
-  //             return {
-  //               ...item,
-  //               isSubscribed: subStatus === 'subscribed',
-  //             };
-  //           })
-  //         );
-  //       };
-
-  //       const mostViewedWithSub = await addSubscriptionStatus(data);
-  //       // console.log('mostViewedwith subs',mostViewedWithSub)
-  //       const mostLikedWithSub = await addSubscriptionStatus(res);
-  //       // console.log('most liked subs',mostLikedWithSub)
-
-  //       setMostViewedItems(mostViewedWithSub);
-  //       // console.log(mostViewedItems)
-  //       setMostLikedItems(mostLikedWithSub);
-
-  //       const finalCombined = [...mostViewedWithSub, ...mostLikedWithSub];
-  //       setFinalCombinedItems(finalCombined);
-  //       // console.log('final',finalCombinedItems)
-  //     } catch (err) {
-  //       alert('Failed to load recently viewed items');
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+  const handleViewPortfolio = async (userId) => {
+      try {
+        console.log("viewing", userId);
+        const data = await getPortfoliosOfUser(userId);
+        if (!data || data.length === 0) {
+          alert("No portfolios found.");
+          return;
+        }
+  
+        const latestPortfolio = data.sort(
+          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+        )[0];
+  
+        navigate(`/portfolio/${latestPortfolio.id}`);
+      } catch (error) {
+        console.error("Error fetching portfolio:", error);
+        // alert("Failed to fetch portfolio");
+      }
+    };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -332,6 +230,7 @@ export const PopularProfiles = () => {
                           variant="outline"
                           size="sm"
                           className="bg-orange-600 hover:bg-orange-700 text-white text-xs"
+                          onClick={()=>{handleViewPortfolio(profile.user)}}
                         >
                           View Portfolio
                         </Button>
